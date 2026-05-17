@@ -1,6 +1,8 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
+import { Toaster } from '@/components/ui/toaster';
+
 const MainLayout: React.FC = () => {
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-[#16171d]">
@@ -10,11 +12,12 @@ const MainLayout: React.FC = () => {
         </nav>
       </header>
       <main className="flex-grow">
-        <Outlet />
+        <Outlet/>
       </main>
       <footer className="border-t border-gray-100 p-4 text-center text-sm text-gray-500 dark:border-gray-800">
         © {new Date().getFullYear()} Memory Trip
       </footer>
+      <Toaster/>
     </div>
   );
 };

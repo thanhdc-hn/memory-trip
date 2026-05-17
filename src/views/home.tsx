@@ -12,10 +12,21 @@ import { ImageFrame } from '@/components/ui/image-frame';
 import { Divider } from '@/components/ui/divider';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
 import { useTheme } from '@/components/theme/theme-provider';
 
 const Home: React.FC = () => {
   const { theme, setTheme } = useTheme();
+  const { toast } = useToast();
 
   return (
     <AppLayout
@@ -231,6 +242,99 @@ const Home: React.FC = () => {
                   <MessageCircle className="w-4 h-4"/>
                 </Button>
               </div>
+            </div>
+          </section>
+
+          {/* Interactions & Feedback */}
+          <section className="space-y-6">
+            <h3 className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Interactions & Feedback</h3>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Modal Example */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Modals & Dialogs</CardTitle>
+                  <CardDescription>Overlays for focused interactions.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex gap-4">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline">Open Simple Modal</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Are you sure?</DialogTitle>
+                        <DialogDescription>
+                          This will permanently delete your memory and remove it from our servers.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button variant="outline">Cancel</Button>
+                        <Button className="bg-red-500 hover:bg-red-600 text-white">Delete</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button>Add Memory Modal</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Add New Memory</DialogTitle>
+                        <DialogDescription>
+                          Share a special moment from your trip.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                          <label htmlFor="name" className="text-sm font-medium">Memory Title</label>
+                          <Input id="name" placeholder="Summer sunset..."/>
+                        </div>
+                        <div className="grid gap-2">
+                          <label htmlFor="description" className="text-sm font-medium">Description</label>
+                          <Textarea id="description" placeholder="It was amazing..."/>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit">Save changes</Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </CardContent>
+              </Card>
+
+              {/* Toast Example */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Toasts & Notifications</CardTitle>
+                  <CardDescription>Brief messages about app processes.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-wrap gap-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      toast({
+                        title: "Memory Saved!",
+                        description: "Your new memory has been added to the scrapbook.",
+                      })
+                    }}
+                  >
+                    Default Toast
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description: "There was a problem with your request.",
+                      })
+                    }}
+                  >
+                    Destructive Toast
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
           </section>
         </div>

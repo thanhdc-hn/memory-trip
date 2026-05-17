@@ -21,9 +21,12 @@ mục tiêu tối ưu cho thiết bị di động (Mobile First) và cung cấp 
 ```text
 src/
 ├── assets/             # Tài nguyên tĩnh (hình ảnh, fonts, v.v.)
-├── components/         # Các component dùng chung (button, loading, error-boundary, v.v.)
-├── hoc/                # Higher-Order Components (ví dụ: with-suspense)
-├── hooks/              # Custom React Hooks
+├── components/         # Các component dùng chung
+│   ├── ui/             # Các component UI (Toast, Dialog, v.v. - shadcn style)
+│   ├── error-boundary.tsx
+│   └── loading.tsx
+├── hoc/                # Higher-Order Components
+├── hooks/              # Custom React Hooks (use-toast, v.v.)
 ├── layouts/            # Các layout bao quanh trang (main-layout, v.v.)
 ├── lib/                # Cấu hình các thư viện bên thứ ba (supabase.ts)
 ├── routes/             # Cấu hình hệ thống định tuyến (index.tsx)

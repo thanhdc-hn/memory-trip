@@ -30,7 +30,7 @@ const Home: React.FC = () => {
       <p className="mb-8 text-gray-600 dark:text-gray-400">
         Chào mừng bạn đến với Memory Trip - Nơi lưu giữ những kỷ niệm đáng nhớ!
       </p>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mt-8">
         <Link
           to="/about"
           className="rounded-xl bg-[#aa3bff] px-6 py-3 font-semibold text-white transition hover:bg-[#932ee0]"

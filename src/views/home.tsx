@@ -95,8 +95,8 @@ const Home: React.FC = () => {
               rotation={-3}
             />
             <MemoryPostCard
-              imageUrl="https://images.unsplash.com/photo-1506929197914-5306c39a8fd2?auto=format&fit=crop&w=800&q=80"
-              title="Chilling by the pool 🌊"
+              imageUrl="https://plus.unsplash.com/premium_photo-1766850624403-5aa9935778ef?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+              title="Blue Sky"
               author="Sam"
               date="Aug 14, 2026"
               tags={["pool", "chill"]}
@@ -255,7 +255,7 @@ const Home: React.FC = () => {
                   <CardTitle>Modals & Dialogs</CardTitle>
                   <CardDescription>Overlays for focused interactions.</CardDescription>
                 </CardHeader>
-                <CardContent className="flex gap-4">
+                <CardContent className="flex flex-wrap gap-4">
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="outline">Open Simple Modal</Button>
@@ -278,7 +278,7 @@ const Home: React.FC = () => {
                     <DialogTrigger asChild>
                       <Button>Add Memory Modal</Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-106.25">
                       <DialogHeader>
                         <DialogTitle>Add New Memory</DialogTitle>
                         <DialogDescription>

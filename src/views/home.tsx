@@ -95,8 +95,8 @@ const Home: React.FC = () => {
               rotation={-3}
             />
             <MemoryPostCard
-              imageUrl="https://plus.unsplash.com/premium_photo-1766850624403-5aa9935778ef?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              title="Blue Sky"
+              imageUrl="https://images.unsplash.com/photo-1550254478-ead40cc54513?auto=format&fit=crop&w=800&q=80"
+              title="My lovely room ^^ I love sunshine"
               author="Sam"
               date="Aug 14, 2026"
               tags={["pool", "chill"]}

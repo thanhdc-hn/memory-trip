@@ -5,7 +5,7 @@ import { registerSW } from 'virtual:pwa-register';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import App from './app';
+import App from './App';
 import './style.css';
 
 // Register Service Worker

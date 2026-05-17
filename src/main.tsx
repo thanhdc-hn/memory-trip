@@ -5,7 +5,7 @@ import { registerSW } from 'virtual:pwa-register';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import App from './App';
+import App from './app';
 import './style.css';
 
 // Register Service Worker
@@ -24,8 +24,8 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <App />
-      <ReactQueryDevtools initialIsOpen={false} />
+      <App/>
+      <ReactQueryDevtools initialIsOpen={false}/>
     </QueryClientProvider>
   </StrictMode>,
 );

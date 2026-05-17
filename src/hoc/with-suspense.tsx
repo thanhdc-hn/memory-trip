@@ -1,10 +1,10 @@
 import { ComponentType, Suspense } from 'react';
 
-import Loading from '@/components/Loading';
+import Loading from '@/components/loading';
 
 export const withSuspense = <P extends object>(Component: ComponentType<P>) => {
   return (props: P) => (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading/>}>
       <Component {...props} />
     </Suspense>
   );

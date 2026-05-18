@@ -108,6 +108,21 @@ Hàm `clear` có hỗ trợ tùy chọn `keep` để giữ lại các key cần 
   để đảm bảo tính linh hoạt và phong cách thiết kế của ứng dụng.
 - Lối vào bí mật cho Admin: Nhấp/chạm 10 lần liên tiếp vào bất kỳ đâu trên màn hình để truy cập trang `/admin`.
 
+### 7. Cấu trúc Database & Bảo mật (Supabase)
+
+Dự án sử dụng Supabase với các bảng chính sau:
+
+- **Bảng `teams`**: Quản lý thông tin nhóm (id, tên, mật khẩu mời, trạng thái khóa).
+- **Bảng `posts`**: Lưu trữ bài viết (id, team_id, tên tác giả, nội dung, link ảnh). `team_id` liên kết với bảng
+  `teams` (xóa team sẽ xóa toàn bộ bài viết).
+- **Bảng `admins`**: Lưu trữ mật khẩu quản trị.
+
+**Quy tắc bảo mật (Row Level Security - RLS):**
+
+- Khi truy vấn (SELECT) hoặc tạo mới (INSERT) bài viết trong bảng `posts`, bạn **bắt buộc** phải gửi kèm header
+  `x-team-id` trong request. Giá trị của header này phải khớp với `team_id` của bài viết.
+- Không thể thêm bài viết mới nếu nhóm đó đang ở trạng thái khóa (`is_locked = true`).
+
 ## 📱 PWA (Progressive Web App)
 
 Dự án đã tích hợp Service Worker để hỗ trợ cài đặt ứng dụng và chạy offline. Cấu hình chi tiết nằm trong

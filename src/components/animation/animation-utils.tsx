@@ -1,8 +1,8 @@
-import * as React from "react"
+import { type ReactNode } from "react"
 import { cn } from "@/lib/utils"
 
 export function Float({ children, className, delay = 0 }: {
-  children: React.ReactNode,
+  children: ReactNode,
   className?: string,
   delay?: number
 }) {
@@ -17,7 +17,7 @@ export function Float({ children, className, delay = 0 }: {
 }
 
 export function Pop({ children, className, trigger = true }: {
-  children: React.ReactNode,
+  children: ReactNode,
   className?: string,
   trigger?: boolean
 }) {

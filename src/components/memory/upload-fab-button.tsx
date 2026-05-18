@@ -1,9 +1,9 @@
-import * as React from "react"
+import { type ButtonHTMLAttributes } from "react"
 import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-interface UploadFabButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface UploadFabButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string
 }
 

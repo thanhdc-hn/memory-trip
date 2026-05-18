@@ -1,4 +1,10 @@
-import * as React from "react"
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  type ReactNode
+} from "react"
 
 type Theme = 'summer' | 'sunset'
 
@@ -7,12 +13,12 @@ interface ThemeContextType {
   setTheme: (theme: Theme) => void
 }
 
-const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined)
+const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = React.useState<Theme>('summer')
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<Theme>('summer')
 
-  React.useEffect(() => {
+  useEffect(() => {
     const root = window.document.documentElement
     if (theme === 'sunset') {
       root.setAttribute('data-theme', 'sunset')
@@ -29,7 +35,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useTheme() {
-  const context = React.useContext(ThemeContext)
+  const context = useContext(ThemeContext)
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider')
   }

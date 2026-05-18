@@ -22,9 +22,9 @@ const NotFound = () => {
             4
           </div>
         </div>
-        <h2 className="mb-4 text-2xl font-bold text-[#222] uppercase sm:text-3xl dark:text-white">
+        <div className="mb-4 text-2xl font-bold text-[#222] uppercase sm:text-3xl dark:text-white">
           Oops! Page Not Found
-        </h2>
+        </div>
         <p className="mb-8 text-sm font-medium text-[#222] sm:text-base dark:text-gray-400">
           Sorry but the page you are looking for does not exist, have been
           removed, name changed or is temporarily unavailable

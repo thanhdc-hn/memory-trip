@@ -1,6 +1,11 @@
 "use client"
 
-import * as React from "react"
+import {
+  forwardRef,
+  type ElementRef,
+  type ComponentPropsWithoutRef,
+  type HTMLAttributes
+} from "react"
 import * as DialogPrimitives from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
@@ -14,9 +19,9 @@ const DialogPortal = DialogPrimitives.Portal
 
 const DialogClose = DialogPrimitives.Close
 
-const DialogOverlay = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitives.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitives.Overlay>
+const DialogOverlay = forwardRef<
+  ElementRef<typeof DialogPrimitives.Overlay>,
+  ComponentPropsWithoutRef<typeof DialogPrimitives.Overlay>
 >(({ className, ...props }, ref) => (
   <DialogPrimitives.Overlay
     ref={ref}
@@ -29,9 +34,9 @@ const DialogOverlay = React.forwardRef<
 ))
 DialogOverlay.displayName = DialogPrimitives.Overlay.displayName
 
-const DialogContent = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitives.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitives.Content>
+const DialogContent = forwardRef<
+  ElementRef<typeof DialogPrimitives.Content>,
+  ComponentPropsWithoutRef<typeof DialogPrimitives.Content>
 >(({ className, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay/>
@@ -57,7 +62,7 @@ DialogContent.displayName = DialogPrimitives.Content.displayName
 const DialogHeader = ({
                         className,
                         ...props
-                      }: React.HTMLAttributes<HTMLDivElement>) => (
+                      }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-col space-y-1.5 text-center sm:text-left",
@@ -71,7 +76,7 @@ DialogHeader.displayName = "DialogHeader"
 const DialogFooter = ({
                         className,
                         ...props
-                      }: React.HTMLAttributes<HTMLDivElement>) => (
+                      }: HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
@@ -82,9 +87,9 @@ const DialogFooter = ({
 )
 DialogFooter.displayName = "DialogFooter"
 
-const DialogTitle = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitives.Title>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitives.Title>
+const DialogTitle = forwardRef<
+  ElementRef<typeof DialogPrimitives.Title>,
+  ComponentPropsWithoutRef<typeof DialogPrimitives.Title>
 >(({ className, ...props }, ref) => (
   <DialogPrimitives.Title
     ref={ref}
@@ -97,9 +102,9 @@ const DialogTitle = React.forwardRef<
 ))
 DialogTitle.displayName = DialogPrimitives.Title.displayName
 
-const DialogDescription = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitives.Description>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitives.Description>
+const DialogDescription = forwardRef<
+  ElementRef<typeof DialogPrimitives.Description>,
+  ComponentPropsWithoutRef<typeof DialogPrimitives.Description>
 >(({ className, ...props }, ref) => (
   <DialogPrimitives.Description
     ref={ref}

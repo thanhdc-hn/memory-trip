@@ -1,4 +1,4 @@
-import React from 'react';
+import { type FC } from 'react';
 import { Camera, MapPin, Sun, Moon, Heart, MessageCircle, Share2, Star } from 'lucide-react';
 import { AppLayout, MasonryGrid } from '@/components/layout/layout-primitives';
 import { MemoryPostCard } from '@/components/memory/memory-post-card';
@@ -12,19 +12,11 @@ import { ImageFrame } from '@/components/ui/image-frame';
 import { Divider } from '@/components/ui/divider';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Modal } from '@/components/ui/modal';
 import { useToast } from '@/hooks/use-toast';
 import { useTheme } from '@/components/theme/theme-provider';
 
-const Home: React.FC = () => {
+const Home: FC = () => {
   const { theme, setTheme } = useTheme();
   const { toast } = useToast();
 
@@ -45,9 +37,9 @@ const Home: React.FC = () => {
           <Float>
             <div className="inline-block relative">
               <Tape rotation={-3}/>
-              <h1 className="text-5xl md:text-7xl font-bold text-accent drop-shadow-sm">
+              <div className="text-5xl md:text-7xl font-bold text-accent drop-shadow-sm">
                 Memory Trip
-              </h1>
+              </div>
             </div>
           </Float>
           <p className="font-handwritten text-2xl text-text max-w-md mx-auto">
@@ -74,9 +66,9 @@ const Home: React.FC = () => {
     >
       <section className="space-y-12">
         <div>
-          <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
+          <div className="text-3xl font-bold mb-6 flex items-center gap-2">
             <Star className="text-accent fill-accent"/> Recent Memories
-          </h2>
+          </div>
           <MasonryGrid>
             <MemoryPostCard
               imageUrl="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
@@ -110,13 +102,13 @@ const Home: React.FC = () => {
         <div className="space-y-16 pb-20">
           <header className="text-center">
             <Badge variant="nickname" className="mb-2">UI Component Library</Badge>
-            <h2 className="text-4xl font-bold">Design System Showcase</h2>
+            <div className="text-4xl font-bold">Design System Showcase</div>
             <p className="font-handwritten text-xl text-text/60 mt-2">Check out all our cute summer components!</p>
           </header>
 
           {/* Buttons Section */}
           <section className="space-y-6">
-            <h3 className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Buttons & Interaction</h3>
+            <div className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Buttons & Interaction</div>
             <div className="flex flex-wrap gap-4 items-center">
               <Button>Default Button</Button>
               <Button variant="secondary">Secondary</Button>
@@ -131,7 +123,7 @@ const Home: React.FC = () => {
           {/* Badges & Avatars */}
           <section className="grid md:grid-cols-2 gap-12">
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Badges</h3>
+              <div className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Badges</div>
               <div className="flex flex-wrap gap-3">
                 <Badge>Default</Badge>
                 <Badge variant="secondary">Secondary</Badge>
@@ -142,7 +134,7 @@ const Home: React.FC = () => {
               </div>
             </div>
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Avatars</h3>
+              <div className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Avatars</div>
               <div className="flex flex-wrap gap-4 items-end">
                 <Avatar className="h-16 w-16">
                   <AvatarImage src="https://github.com/shadcn.png"/>
@@ -160,7 +152,7 @@ const Home: React.FC = () => {
 
           {/* Cards & Frames */}
           <section className="space-y-8">
-            <h3 className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Cards & Scrapbook Elements</h3>
+            <div className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Cards & Scrapbook Elements</div>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               <Card>
                 <CardHeader>
@@ -189,14 +181,14 @@ const Home: React.FC = () => {
                   className="aspect-square bg-sand/10 rounded-sm mb-4 flex items-center justify-center border-2 border-dashed border-border">
                   <Camera className="w-12 h-12 text-border"/>
                 </div>
-                <h4 className="font-handwritten text-xl text-center">Polaroid Variant</h4>
+                <div className="font-handwritten text-xl text-center">Polaroid Variant</div>
               </Card>
             </div>
           </section>
 
           {/* Inputs Section */}
           <section className="space-y-6">
-            <h3 className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Forms & Inputs</h3>
+            <div className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Forms & Inputs</div>
             <div className="grid md:grid-cols-2 gap-8 max-w-3xl">
               <div className="space-y-4">
                 <label className="font-bold text-sm ml-2">Your Nickname</label>
@@ -211,7 +203,7 @@ const Home: React.FC = () => {
 
           {/* Animations & Decorations */}
           <section className="space-y-6">
-            <h3 className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Animations & Decorations</h3>
+            <div className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Animations & Decorations</div>
             <div
               className="flex flex-wrap gap-12 items-center justify-around p-8 bg-white/30 rounded-3xl border-2 border-dashed border-border">
               <Float>
@@ -247,7 +239,7 @@ const Home: React.FC = () => {
 
           {/* Interactions & Feedback */}
           <section className="space-y-6">
-            <h3 className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Interactions & Feedback</h3>
+            <div className="text-2xl font-bold border-b-2 border-accent/20 pb-2">Interactions & Feedback</div>
             <div className="grid md:grid-cols-2 gap-8">
               {/* Modal Example */}
               <Card>
@@ -256,50 +248,36 @@ const Home: React.FC = () => {
                   <CardDescription>Overlays for focused interactions.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-wrap gap-4">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline">Open Simple Modal</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Are you sure?</DialogTitle>
-                        <DialogDescription>
-                          This will permanently delete your memory and remove it from our servers.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <DialogFooter>
+                  <Modal
+                    trigger={<Button variant="outline">Open Simple Modal</Button>}
+                    title="Are you sure?"
+                    description="This will permanently delete your memory and remove it from our servers."
+                    footer={
+                      <>
                         <Button variant="outline">Cancel</Button>
                         <Button className="bg-red-500 hover:bg-red-600 text-white">Delete</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                      </>
+                    }
+                  />
 
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button>Add Memory Modal</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-106.25">
-                      <DialogHeader>
-                        <DialogTitle>Add New Memory</DialogTitle>
-                        <DialogDescription>
-                          Share a special moment from your trip.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-4 py-4">
-                        <div className="grid gap-2">
-                          <label htmlFor="name" className="text-sm font-medium">Memory Title</label>
-                          <Input id="name" placeholder="Summer sunset..."/>
-                        </div>
-                        <div className="grid gap-2">
-                          <label htmlFor="description" className="text-sm font-medium">Description</label>
-                          <Textarea id="description" placeholder="It was amazing..."/>
-                        </div>
+                  <Modal
+                    trigger={<Button>Add Memory Modal</Button>}
+                    title="Add New Memory"
+                    description="Share a special moment from your trip."
+                    contentClassName="sm:max-w-106.25"
+                    footer={<Button type="submit">Save changes</Button>}
+                  >
+                    <div className="grid gap-4 py-4">
+                      <div className="grid gap-2">
+                        <label htmlFor="name" className="text-sm font-medium">Memory Title</label>
+                        <Input id="name" placeholder="Summer sunset..."/>
                       </div>
-                      <DialogFooter>
-                        <Button type="submit">Save changes</Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                      <div className="grid gap-2">
+                        <label htmlFor="description" className="text-sm font-medium">Description</label>
+                        <Textarea id="description" placeholder="It was amazing..."/>
+                      </div>
+                    </div>
+                  </Modal>
                 </CardContent>
               </Card>
 

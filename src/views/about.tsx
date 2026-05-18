@@ -1,10 +1,10 @@
-import React from 'react';
+import { type FC } from 'react';
 import { Link } from 'react-router-dom';
 
-const About: React.FC = () => {
+const About: FC = () => {
   return (
     <section className="p-8 text-center">
-      <h1 className="mb-4 text-4xl font-bold text-[#aa3bff]">Về Chúng Tôi</h1>
+      <div className="mb-4 text-4xl font-bold text-[#aa3bff]">Về Chúng Tôi</div>
       <p className="mx-auto mb-8 max-w-2xl text-gray-600 dark:text-gray-400">
         Memory Trip là ứng dụng giúp bạn lưu giữ những kỷ niệm đáng nhớ trong
         mỗi chuyến đi. Với giao diện hiện đại, tối ưu cho di động và công nghệ

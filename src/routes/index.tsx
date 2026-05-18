@@ -7,6 +7,7 @@ import MainLayout from '@/layouts/main-layout';
 
 const Home = withSuspense(lazy(() => import('@/views/home')));
 const About = withSuspense(lazy(() => import('@/views/about')));
+const AdminDashboard = withSuspense(lazy(() => import('@/views/admin/dashboard')));
 const NotFound = withSuspense(
   lazy(() => import('../views/not-found/not-found')),
 );
@@ -24,6 +25,10 @@ export const routes = [
       {
         path: 'about',
         element: <About/>,
+      },
+      {
+        path: 'admin',
+        element: <AdminDashboard/>,
       },
     ],
   },

@@ -1,14 +1,14 @@
-import * as React from "react"
+import { forwardRef, type HTMLAttributes } from "react"
 import { cn } from "@/lib/utils"
 
-interface ImageFrameProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ImageFrameProps extends HTMLAttributes<HTMLDivElement> {
   src: string
   alt?: string
   caption?: string
   rotation?: number
 }
 
-const ImageFrame = React.forwardRef<HTMLDivElement, ImageFrameProps>(
+const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
   ({ className, src, alt, caption, rotation = 0, children, ...props }, ref) => {
     return (
       <div

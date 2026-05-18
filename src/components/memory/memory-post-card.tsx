@@ -1,11 +1,11 @@
-import * as React from "react"
+import { forwardRef, type HTMLAttributes } from "react"
 import { Heart } from "lucide-react"
 import { ImageFrame } from "@/components/ui/image-frame"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-interface MemoryPostCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface MemoryPostCardProps extends HTMLAttributes<HTMLDivElement> {
   imageUrl: string
   title: string
   author: string
@@ -17,7 +17,7 @@ interface MemoryPostCardProps extends React.HTMLAttributes<HTMLDivElement> {
   rotation?: number
 }
 
-export const MemoryPostCard = React.forwardRef<HTMLDivElement, MemoryPostCardProps>(
+export const MemoryPostCard = forwardRef<HTMLDivElement, MemoryPostCardProps>(
   ({
      imageUrl,
      title,

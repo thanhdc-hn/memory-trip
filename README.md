@@ -100,6 +100,14 @@ Hàm `clear` có hỗ trợ tùy chọn `keep` để giữ lại các key cần 
 - Các class Tailwind CSS cũng được tự động sắp xếp lại theo chuẩn.
 - Husky sẽ chạy `lint` và `format` trước mỗi lần commit.
 
+### 6. Các quy tắc phát triển tốt nhất (React Best Practices)
+
+- Sử dụng named imports cho React (ví dụ: `import { useState, useEffect } from 'react'`) thay vì `React.useState`.
+- Sử dụng `src/utils/storage.ts` cho tất cả các thao tác với `localStorage`.
+- Tránh sử dụng các thẻ tiêu đề như `h1`, `h2`, v.v. Ưu tiên sử dụng `div`, `span`, hoặc `p` với định dạng CSS phù hợp
+  để đảm bảo tính linh hoạt và phong cách thiết kế của ứng dụng.
+- Lối vào bí mật cho Admin: Nhấp/chạm 10 lần liên tiếp vào bất kỳ đâu trên màn hình để truy cập trang `/admin`.
+
 ## 📱 PWA (Progressive Web App)
 
 Dự án đã tích hợp Service Worker để hỗ trợ cài đặt ứng dụng và chạy offline. Cấu hình chi tiết nằm trong

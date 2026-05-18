@@ -1,9 +1,12 @@
-import React from 'react';
+import { type FC } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Toaster } from '@/components/ui/toaster';
+import { useAdminSecret } from '@/hooks/use-admin-secret';
 
-const MainLayout: React.FC = () => {
+const MainLayout: FC = () => {
+  useAdminSecret();
+
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-[#16171d]">
       <header className="border-b border-gray-100 p-4 dark:border-gray-800">
@@ -11,7 +14,7 @@ const MainLayout: React.FC = () => {
           <span className="text-xl font-bold text-[#aa3bff]">Memory Trip</span>
         </nav>
       </header>
-      <main className="flex-grow">
+      <main className="grow">
         <Outlet/>
       </main>
       <footer className="border-t border-gray-100 p-4 text-center text-sm text-gray-500 dark:border-gray-800">

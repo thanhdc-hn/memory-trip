@@ -1,10 +1,10 @@
-import * as React from "react"
+import { type ReactNode } from "react"
 import { cn } from "@/lib/utils"
 
 export function AppLayout({ children, header, footer }: {
-  children: React.ReactNode,
-  header?: React.ReactNode,
-  footer?: React.ReactNode
+  children: ReactNode,
+  header?: ReactNode,
+  footer?: ReactNode
 }) {
   return (
     <div className="min-h-screen bg-surface selection:bg-primary/30 flex flex-col items-center">
@@ -19,7 +19,7 @@ export function AppLayout({ children, header, footer }: {
   )
 }
 
-export function MasonryGrid({ children, className }: { children: React.ReactNode, className?: string }) {
+export function MasonryGrid({ children, className }: { children: ReactNode, className?: string }) {
   return (
     <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12", className)}>
       {children}
@@ -27,7 +27,7 @@ export function MasonryGrid({ children, className }: { children: React.ReactNode
   )
 }
 
-export function CenteredContent({ children, className }: { children: React.ReactNode, className?: string }) {
+export function CenteredContent({ children, className }: { children: ReactNode, className?: string }) {
   return (
     <div className={cn("flex flex-col items-center text-center gap-6", className)}>
       {children}

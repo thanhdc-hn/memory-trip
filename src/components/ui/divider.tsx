@@ -1,9 +1,9 @@
-import * as React from "react"
+import { forwardRef, type HTMLAttributes } from "react"
 import { cn } from "@/lib/utils"
 
-const Divider = React.forwardRef<
+const Divider = forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { variant?: 'solid' | 'dashed' }
+  HTMLAttributes<HTMLDivElement> & { variant?: 'solid' | 'dashed' }
 >(({ className, variant = 'solid', ...props }, ref) => (
   <div
     ref={ref}

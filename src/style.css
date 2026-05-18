@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Indie+Flower&family=Playwrite+DE+Grund:wght@100..400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Pangolin&family=Playwrite+VN:wght@100..400&display=swap');
 @import 'tailwindcss';
 
 @theme {
@@ -16,8 +16,8 @@
     --color-border: #F0EAD6;
 
     --font-rounded: 'Varela Round', sans-serif;
-    --font-handwritten: 'Indie Flower', cursive;
-    --font-playwrite: 'Playwrite DE Grund', cursive;
+    --font-handwritten: 'Pangolin', cursive;
+    --font-playwrite: 'Playwrite VN', cursive;
 
     --radius-sm: 4px;
     --radius-md: 8px;
@@ -33,6 +33,22 @@
     --animate-float: float 4s ease-in-out infinite;
     --animate-bounce-slow: bounce-slow 2s infinite;
     --animate-pop: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --animate-shake: shake 0.5s cubic-bezier(.36, .07, .19, .97) both;
+
+    @keyframes shake {
+        10%, 90% {
+            transform: translate3d(-1px, 0, 0);
+        }
+        20%, 80% {
+            transform: translate3d(2px, 0, 0);
+        }
+        30%, 50%, 70% {
+            transform: translate3d(-4px, 0, 0);
+        }
+        40%, 60% {
+            transform: translate3d(4px, 0, 0);
+        }
+    }
 }
 
 :root {
@@ -45,7 +61,7 @@
     --border: #F0EAD6;
 
     --sans: 'Varela Round', system-ui, sans-serif;
-    --hand: 'Indie Flower', cursive;
+    --hand: 'Pangolin', cursive;
 
     font: 18px/160% var(--sans);
     letter-spacing: 0.02em;
@@ -72,14 +88,15 @@ body {
     background-size: 40px 40px; /* Subtle scrapbook grid/dots */
 }
 
-h1, h2, h3 {
+/* Heading style applied to semantic divs/ps with heading classes or by context if needed */
+h1, h2, h3, .h1, .h2, .h3 {
     font-family: var(--sans);
     font-weight: 700;
     color: var(--text-h);
     line-height: 1.2;
 }
 
-h1 {
+h1, .h1 {
     font-size: 3rem;
     margin-bottom: 1.5rem;
 }

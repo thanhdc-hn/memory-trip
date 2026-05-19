@@ -1,13 +1,4 @@
-import {
-  Calendar,
-  Copy,
-  Image as ImageIcon,
-  Key,
-  Lock,
-  MessageSquare,
-  Trash2,
-  Unlock,
-} from 'lucide-react';
+import { Calendar, Copy, Lock, MessageSquare, Unlock } from 'lucide-react';
 
 import { type MouseEvent } from 'react';
 
@@ -22,14 +13,11 @@ export type { Team };
 export function TeamCard({
   team,
   onToggleLock,
-  onResetPassword,
-  onDelete,
+
   onClick,
 }: {
   team: Team;
   onToggleLock: (id: string) => void;
-  onResetPassword: (id: string) => void;
-  onDelete: (id: string) => void;
   onClick: (id: string) => void;
 }) {
   const copyInviteLink = (e: MouseEvent) => {
@@ -71,7 +59,7 @@ export function TeamCard({
           </Badge>
         </div>
 
-        <div className="mb-5 grid grid-cols-2 gap-3">
+        <div className="mb-5 grid grid-cols-1 gap-3">
           <div className="flex flex-col items-center justify-center gap-1 rounded-xl bg-gray-50 p-3">
             <MessageSquare className="h-4 w-4 text-gray-400" />
             <span className="text-sm font-bold text-gray-700">
@@ -79,15 +67,6 @@ export function TeamCard({
             </span>
             <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
               Posts
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center gap-1 rounded-xl bg-gray-50 p-3">
-            <ImageIcon className="h-4 w-4 text-gray-400" />
-            <span className="text-sm font-bold text-gray-700">
-              {Math.floor((team.post_count || 0) * 1.5)}
-            </span>
-            <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
-              Images
             </span>
           </div>
         </div>
@@ -118,30 +97,6 @@ export function TeamCard({
               ) : (
                 <Lock className="h-4 w-4" />
               )}
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="hover:text-primary h-9 w-9 rounded-xl text-gray-400"
-              onClick={(e) => {
-                e.stopPropagation();
-                onResetPassword(team.id);
-              }}
-              title="Reset Password"
-            >
-              <Key className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className="h-9 w-9 rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-500"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(team.id);
-              }}
-              title="Delete Team"
-            >
-              <Trash2 className="h-4 w-4" />
             </Button>
           </div>
         </div>

@@ -3,7 +3,6 @@ import { type FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Modal } from '@/components/ui/modal';
-import { Textarea } from '@/components/ui/textarea';
 
 export function CreateTeamSheet({
   open,
@@ -12,23 +11,17 @@ export function CreateTeamSheet({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreate: (data: {
-    name: string;
-    password?: string;
-    welcomeText?: string;
-  }) => void;
+  onCreate: (data: { name: string; password?: string }) => void;
 }) {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [welcomeText, setWelcomeText] = useState('');
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!name) return;
-    onCreate({ name, password, welcomeText });
+    onCreate({ name, password });
     setName('');
     setPassword('');
-    setWelcomeText('');
     onOpenChange(false);
   };
 
@@ -64,17 +57,6 @@ export function CreateTeamSheet({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="rounded-xl"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="ml-1 text-sm font-bold text-gray-700">
-              Welcome Text (optional)
-            </label>
-            <Textarea
-              placeholder="Welcome to our trip memories!"
-              value={welcomeText}
-              onChange={(e) => setWelcomeText(e.target.value)}
-              className="min-h-[80px] rounded-xl"
             />
           </div>
         </div>

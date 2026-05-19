@@ -3,10 +3,8 @@ import {
   Heart,
   MapPin,
   MessageCircle,
-  Moon,
   Share2,
   Star,
-  Sun,
 } from 'lucide-react';
 
 import { type FC } from 'react';
@@ -15,7 +13,6 @@ import { Float, Pop, Tape } from '@/components/animation/animation-utils';
 import { AppLayout, MasonryGrid } from '@/components/layout/layout-primitives';
 import { MemoryPostCard } from '@/components/memory/memory-post-card';
 import { UploadFabButton } from '@/components/memory/upload-fab-button';
-import { useTheme } from '@/components/theme/theme-provider';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -35,27 +32,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 
 const Home: FC = () => {
-  const { theme, setTheme } = useTheme();
   const { toast } = useToast();
 
   return (
     <AppLayout
       header={
         <header className="relative space-y-4 text-center">
-          <div className="absolute top-0 right-0">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setTheme(theme === 'summer' ? 'sunset' : 'summer')}
-              className="rounded-full"
-            >
-              {theme === 'summer' ? (
-                <Moon className="h-4 w-4" />
-              ) : (
-                <Sun className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
           <Float>
             <div className="relative inline-block">
               <Tape rotation={-3} />

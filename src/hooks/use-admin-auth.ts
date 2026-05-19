@@ -1,27 +1,31 @@
 import { useState, useCallback, useEffect } from "react"
-import storage from "@/utils/storage"
+import { encode, decode } from "@/utils/crypto"
+import { teamService } from "@/services/team.service"
 
-const EXPIRE_ADMIN = 60 // minutes
-const AUTH_KEY = "admin_auth_expire"
+const ADMIN_AUTH_KEY = 'admin_auth_token'
 
 export function useAdminAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const checkAuth = useCallback(() => {
-    const expire = storage.get<string>(AUTH_KEY)
-    if (!expire) {
+    const token = localStorage.getItem(ADMIN_AUTH_KEY)
+    if (!token) {
       setIsAuthenticated(false)
+      setIsLoading(false)
       return false
     }
 
-    const now = new Date().getTime()
-    if (now > parseInt(expire)) {
-      storage.remove(AUTH_KEY)
+    const decoded = decode(token)
+    if (!decoded) {
+      localStorage.removeItem(ADMIN_AUTH_KEY)
       setIsAuthenticated(false)
+      setIsLoading(false)
       return false
     }
 
     setIsAuthenticated(true)
+    setIsLoading(false)
     return true
   }, [])
 
@@ -29,34 +33,31 @@ export function useAdminAuth() {
     checkAuth()
   }, [checkAuth])
 
-  const login = (password: string) => {
-    const ADMIN_PASSWORD = import.meta.env.VITE_SUPABASE_ADMIN_PASSWORD
+  const login = async (password: string) => {
+    const token = encode(password)
+    localStorage.setItem(ADMIN_AUTH_KEY, token)
 
-    if (password === ADMIN_PASSWORD) {
-      const expireTime = new Date().getTime() + EXPIRE_ADMIN * 30 * 1000
-      storage.set(AUTH_KEY, expireTime.toString())
+    try {
+      await teamService.getTeams()
       setIsAuthenticated(true)
       return true
+    } catch {
+      localStorage.removeItem(ADMIN_AUTH_KEY)
+      setIsAuthenticated(false)
+      return false
     }
-    return false
   }
 
   const logout = () => {
-    storage.remove(AUTH_KEY)
+    localStorage.removeItem(ADMIN_AUTH_KEY)
     setIsAuthenticated(false)
-  }
-
-  const getTimeRemaining = () => {
-    const expire = storage.get<string>(AUTH_KEY)
-    if (!expire) return 0
-    return Math.max(0, parseInt(expire) - new Date().getTime())
   }
 
   return {
     isAuthenticated,
+    isLoading,
     login,
     logout,
-    checkAuth,
-    getTimeRemaining
+    checkAuth
   }
 }

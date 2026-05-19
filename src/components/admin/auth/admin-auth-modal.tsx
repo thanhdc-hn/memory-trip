@@ -4,28 +4,25 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
-export function AdminAuthModal({ onLogin }: { onLogin: (password: string) => boolean }) {
+export function AdminAuthModal({ onLogin }: { onLogin: (password: string) => Promise<boolean> }) {
   const [password, setPassword] = useState("")
   const [error, setError] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
     if (!password) return
 
     setIsSubmitting(true)
     setError(false)
 
-    // Simulate a tiny delay for feel
-    setTimeout(() => {
-      const success = onLogin(password)
-      if (!success) {
-        setError(true)
-        setIsSubmitting(false)
-        // Reset shake after animation
-        setTimeout(() => setError(false), 500)
-      }
-    }, 300)
+    const success = await onLogin(password)
+    if (!success) {
+      setError(true)
+      setIsSubmitting(false)
+      // Reset shake after animation
+      setTimeout(() => setError(false), 500)
+    }
   }
 
   return (
@@ -46,11 +43,10 @@ export function AdminAuthModal({ onLogin }: { onLogin: (password: string) => boo
         <form onSubmit={handleSubmit} className="w-full space-y-4">
           <Input
             type="password"
-            placeholder="Enter password"
+            placeholder="Admin Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className={cn(
-              "text-center text-lg tracking-widest",
               error && "border-red-500 focus-visible:ring-red-500"
             )}
             autoFocus
@@ -66,7 +62,7 @@ export function AdminAuthModal({ onLogin }: { onLogin: (password: string) => boo
 
         {error && (
           <p className="text-red-500 text-sm font-medium animate-in fade-in slide-in-from-top-1">
-            Incorrect password. Please try again.
+            Invalid credentials. Please try again.
           </p>
         )}
       </div>

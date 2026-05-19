@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { StatBadge } from "@/components/admin/ui/admin-ui"
 import { DangerZone } from "@/components/admin/ui/danger-zone"
-import type { Team } from "@/components/admin/team/team-card"
+import type { Team } from "@/services/team.service"
 
 export function TeamDetailView({
                                  team,
@@ -40,14 +40,14 @@ export function TeamDetailView({
           <Card className="bg-primary/5 border-primary/10">
             <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-1">
               <MessageSquare className="w-5 h-5 text-primary"/>
-              <span className="text-xl font-bold text-gray-900">{team.post_count}</span>
+              <span className="text-xl font-bold text-gray-900">{team.post_count || 0}</span>
               <span className="text-[10px] uppercase font-bold text-gray-400">Total Posts</span>
             </CardContent>
           </Card>
           <Card className="bg-secondary/5 border-secondary/10">
             <CardContent className="p-4 flex flex-col items-center justify-center text-center gap-1">
               <ImageIcon className="w-5 h-5 text-secondary"/>
-              <span className="text-xl font-bold text-gray-900">{Math.floor(team.post_count * 1.5)}</span>
+              <span className="text-xl font-bold text-gray-900">{Math.floor((team.post_count || 0) * 1.5)}</span>
               <span className="text-[10px] uppercase font-bold text-gray-400">Total Images</span>
             </CardContent>
           </Card>

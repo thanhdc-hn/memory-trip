@@ -108,20 +108,30 @@ Hàm `clear` có hỗ trợ tùy chọn `keep` để giữ lại các key cần 
   để đảm bảo tính linh hoạt và phong cách thiết kế của ứng dụng.
 - Lối vào bí mật cho Admin: Nhấp/chạm 10 lần liên tiếp vào bất kỳ đâu trên màn hình để truy cập trang `/admin`.
 
-### 7. Cấu trúc Database & Bảo mật (Supabase)
+### 7. Cấu trúc Database & Bảo mật (Supabase & Netlify Functions)
 
-Dự án sử dụng Supabase với các bảng chính sau:
+Dự án sử dụng kiến trúc bảo mật nhiều lớp:
 
 - **Bảng `teams`**: Quản lý thông tin nhóm (id, tên, mật khẩu mời, trạng thái khóa).
-- **Bảng `posts`**: Lưu trữ bài viết (id, team_id, tên tác giả, nội dung, link ảnh). `team_id` liên kết với bảng
-  `teams` (xóa team sẽ xóa toàn bộ bài viết).
+- **Bảng `posts`**: Lưu trữ bài viết.
 - **Bảng `admins`**: Lưu trữ mật khẩu quản trị.
 
-**Quy tắc bảo mật (Row Level Security - RLS):**
+**Quy tắc bảo mật:**
 
-- Khi truy vấn (SELECT) hoặc tạo mới (INSERT) bài viết trong bảng `posts`, bạn **bắt buộc** phải gửi kèm header
-  `x-team-id` trong request. Giá trị của header này phải khớp với `team_id` của bài viết.
-- Không thể thêm bài viết mới nếu nhóm đó đang ở trạng thái khóa (`is_locked = true`).
+1. **Client Side (Posts)**: Khi truy vấn bài viết, bắt buộc gửi header `x-team-id`.
+2. **Admin Side (Teams CRUD)**: Mọi thao tác quản trị (Tạo/Sửa/Xóa Team) **không được** gọi trực tiếp đến Supabase từ frontend. Thay vào đó, phải sử dụng **Netlify Functions** (`/netlify/functions/admin-*`).
+   - Các function này sử dụng `SUPABASE_SERVICE_ROLE_KEY` (chỉ có ở server) để thực hiện thao tác bypass RLS.
+   - Mỗi request phải gửi kèm header `x-admin-auth` chứa mật khẩu admin.
+
+### 8. Netlify Functions (Backend Layer)
+
+Các API quản trị được đặt tại `netlify/functions/`:
+- `admin-teams-list`: Lấy danh sách team.
+- `admin-teams-create`: Tạo team mới.
+- `admin-teams-update`: Cập nhật thông tin/trạng thái khóa team.
+- `admin-teams-delete`: Xóa team.
+
+Sử dụng `src/services/team.service.ts` để gọi các API này từ giao diện.
 
 ## 📱 PWA (Progressive Web App)
 

@@ -13,16 +13,9 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { toast } from "@/hooks/use-toast"
+import type { Team } from "@/services/team.service"
 
-export interface Team {
-  id: string
-  name: string
-  created_at: string
-  is_locked: boolean
-  post_count: number
-  last_activity?: string
-  latest_post_preview?: string
-}
+export type { Team }
 
 export function TeamCard({
                            team,
@@ -72,12 +65,12 @@ export function TeamCard({
         <div className="grid grid-cols-2 gap-3 mb-5">
           <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center gap-1">
             <MessageSquare className="w-4 h-4 text-gray-400"/>
-            <span className="text-sm font-bold text-gray-700">{team.post_count}</span>
+            <span className="text-sm font-bold text-gray-700">{team.post_count || 0}</span>
             <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Posts</span>
           </div>
           <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center gap-1">
             <ImageIcon className="w-4 h-4 text-gray-400"/>
-            <span className="text-sm font-bold text-gray-700">{Math.floor(team.post_count * 1.5)}</span>
+            <span className="text-sm font-bold text-gray-700">{Math.floor((team.post_count || 0) * 1.5)}</span>
             <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Images</span>
           </div>
         </div>

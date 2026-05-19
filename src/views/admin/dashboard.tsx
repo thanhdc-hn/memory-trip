@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
-import { Plus, Search, HardDrive, Clock } from "lucide-react"
+import { Plus, Search, HardDrive } from "lucide-react"
 import { AdminLayout, AdminHeader } from "@/components/admin/layout/admin-layout"
 import { AdminAuthModal } from "@/components/admin/auth/admin-auth-modal"
-import { TeamCard, type Team } from "@/components/admin/team/team-card"
+import { TeamCard } from "@/components/admin/team/team-card"
 import { TeamDetailView } from "@/components/admin/team/team-detail-view"
 import { CreateTeamSheet } from "@/components/admin/team/create-team-sheet"
 import { EmptyState, LoadingSkeleton } from "@/components/admin/ui/admin-ui"
@@ -10,54 +10,44 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAdminAuth } from "@/hooks/use-admin-auth"
-import { toast } from "@/hooks/use-toast"
-
-// Mock data for initial implementation
-const MOCK_TEAMS: Team[] = [
-  { id: "1", name: "Family Vacation 2024", created_at: "2024-05-01", is_locked: false, post_count: 24 },
-  { id: "2", name: "Road Trip to Alps", created_at: "2024-04-15", is_locked: true, post_count: 56 },
-  { id: "3", name: "Beach Weekend", created_at: "2024-05-10", is_locked: false, post_count: 8 },
-]
+import { useTeams } from "@/hooks/use-teams"
+import { teamService } from "@/services/team.service"
+import { toast } from '@/hooks/use-toast.ts';
 
 export default function AdminDashboard() {
-  const { isAuthenticated, login, logout, getTimeRemaining } = useAdminAuth()
-  const [teams, setTeams] = useState<Team[]>(MOCK_TEAMS)
+  const { isAuthenticated, isLoading, login, logout, checkAuth } = useAdminAuth()
+  const { 
+    teams,
+    createTeam, 
+    updateTeam,
+    deleteTeam, 
+    toggleTeamLock 
+  } = useTeams()
+  
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null)
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
-  const [timeLeft, setTimeLeft] = useState<number>(0)
-  const [warned, setWarned] = useState(false)
+  const [storageSize, setStorageSize] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!isAuthenticated) return
+    teamService.getStorageUsage().then(d => setStorageSize(d.total_size)).catch(() => {})
+  }, [isAuthenticated])
 
   useEffect(() => {
     if (!isAuthenticated) return
 
-    const interval = setInterval(() => {
-      const remaining = getTimeRemaining()
-      setTimeLeft(remaining)
+    const checkInterval = setInterval(() => {
+      checkAuth()
+    }, 10000) // check session every 10s
 
-      // Auto logout warning 1 min before expire
-      if (remaining > 0 && remaining < 60000 && !warned) {
-        toast({
-          title: "Session Expiring",
-          description: "You will be logged out in less than a minute.",
-        })
-        setWarned(true)
-      }
-    }, 1000)
+    return () => {
+      clearInterval(checkInterval)
+    }
+  }, [isAuthenticated, checkAuth])
 
-    return () => clearInterval(interval)
-  }, [isAuthenticated, getTimeRemaining, warned])
 
-  useEffect(() => {
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-    return () => clearTimeout(timer)
-  }, [])
-
-  if (isAuthenticated === null) return null // Initial check
+  if (isAuthenticated === null || isLoading) return null // Initial check
 
   if (!isAuthenticated) {
     return <AdminAuthModal onLogin={login}/>
@@ -69,42 +59,35 @@ export default function AdminDashboard() {
     t.name.toLowerCase().includes(searchQuery.toLowerCase())
   ).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
-  const handleCreateTeam = (data: { name: string }) => {
-    const newTeam: Team = {
-      id: Math.random().toString(36).substr(2, 9),
-      name: data.name,
-      created_at: new Date().toISOString(),
-      is_locked: false,
-      post_count: 0
-    }
-    setTeams([newTeam, ...teams])
-    toast({ title: "Team Created!", description: `${data.name} is ready.` })
+  const handleCreateTeam = async (data: { name: string, password?: string }) => {
+    await createTeam({ name: data.name, invite_password: data.password })
   }
 
-  const handleToggleLock = (id: string) => {
-    setTeams(teams.map(t => t.id === id ? { ...t, is_locked: !t.is_locked } : t))
-    const team = teams.find(t => t.id === id)
+  const handleResetPassword = async (id: string) => {
+    const newPassword = Math.random().toString(36).slice(-8)
+    await updateTeam({ id, input: { invite_password: newPassword } })
     toast({
-      title: team?.is_locked ? "Team Unlocked" : "Team Locked",
-      description: `${team?.name} status updated.`
+      title: "Password Reset",
+      description: `New password: ${newPassword}`,
     })
   }
 
-  const handleDeleteTeam = (id: string) => {
-    setTeams(teams.filter(t => t.id !== id))
+  const handleToggleLock = async (id: string) => {
+    const team = teams.find(t => t.id === id)
+    if (team) {
+      await toggleTeamLock(id, !team.is_locked)
+    }
+  }
+
+  const handleDeleteTeam = async (id: string) => {
+    await deleteTeam(id)
     setSelectedTeamId(null)
-    toast({ variant: "destructive", title: "Team Deleted", description: "All data has been removed." })
   }
 
   const handleClearData = (id: string) => {
-    setTeams(teams.map(t => t.id === id ? { ...t, post_count: 0 } : t))
+    // This could be implemented in teamService if needed
+    console.log("Clear data for team:", id)
     toast({ title: "Data Cleared", description: "Posts and images removed." })
-  }
-
-  const formatTime = (ms: number) => {
-    const mins = Math.floor(ms / 60000)
-    const secs = Math.floor((ms % 60000) / 1000)
-    return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
   return (
@@ -116,13 +99,7 @@ export default function AdminDashboard() {
             onBack={selectedTeam ? () => setSelectedTeamId(null) : undefined}
             onLogout={logout}
           />
-          {isAuthenticated && (
-            <div className="bg-primary/5 px-4 py-1.5 flex justify-center items-center gap-2 border-b border-gray-100">
-              <Clock className="w-3.5 h-3.5 text-primary"/>
-              <span
-                className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Session expires in {formatTime(timeLeft)}</span>
-            </div>
-          )}
+
         </div>
       }
     >
@@ -145,10 +122,15 @@ export default function AdminDashboard() {
               <div className="flex-1">
                 <div className="flex justify-between items-end mb-1">
                   <span className="text-xs font-bold text-primary/70 uppercase tracking-wider">Storage Usage</span>
-                  <span className="text-xs font-bold text-gray-500">1.2 GB / 5 GB</span>
+                  <span className="text-xs font-bold text-gray-500">
+                    {storageSize !== null ? `${(storageSize / 1024 / 1024 / 1024).toFixed(2)} GB` : '...'} / 5 GB
+                  </span>
                 </div>
                 <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-primary rounded-full w-[24%]"/>
+                  <div
+                    className="h-full bg-primary rounded-full transition-all"
+                    style={{ width: `${storageSize !== null ? Math.min((storageSize / (5 * 1024 * 1024 * 1024)) * 100, 100) : 0}%` }}
+                  />
                 </div>
               </div>
             </CardContent>
@@ -189,10 +171,7 @@ export default function AdminDashboard() {
                   onClick={(id) => setSelectedTeamId(id)}
                   onToggleLock={handleToggleLock}
                   onDelete={handleDeleteTeam}
-                  onResetPassword={() => toast({
-                    title: "Password Reset",
-                    description: "Invite password has been updated."
-                  })}
+                  onResetPassword={handleResetPassword}
                 />
               ))}
             </div>

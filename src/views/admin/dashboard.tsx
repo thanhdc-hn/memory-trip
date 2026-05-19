@@ -22,8 +22,7 @@ import { teamService } from '@/services/team.service';
 export default function AdminDashboard() {
   const { isAuthenticated, isLoading, login, logout, checkAuth } =
     useAdminAuth();
-  const { teams, createTeam, updateTeam, deleteTeam, toggleTeamLock } =
-    useTeams();
+  const { teams, createTeam, deleteTeam, toggleTeamLock } = useTeams();
 
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -70,15 +69,6 @@ export default function AdminDashboard() {
     password?: string;
   }) => {
     await createTeam({ name: data.name, invite_password: data.password });
-  };
-
-  const handleResetPassword = async (id: string) => {
-    const newPassword = Math.random().toString(36).slice(-8);
-    await updateTeam({ id, input: { invite_password: newPassword } });
-    toast({
-      title: 'Password Reset',
-      description: `New password: ${newPassword}`,
-    });
   };
 
   const handleToggleLock = async (id: string) => {
@@ -190,8 +180,6 @@ export default function AdminDashboard() {
                   team={team}
                   onClick={(id) => setSelectedTeamId(id)}
                   onToggleLock={handleToggleLock}
-                  onDelete={handleDeleteTeam}
-                  onResetPassword={handleResetPassword}
                 />
               ))}
             </div>

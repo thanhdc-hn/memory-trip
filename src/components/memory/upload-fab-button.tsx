@@ -1,24 +1,33 @@
-import { type ButtonHTMLAttributes } from "react"
-import { Plus } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Plus } from 'lucide-react';
+
+import { type ButtonHTMLAttributes } from 'react';
+
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface UploadFabButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  label?: string
+  label?: string;
 }
 
-export function UploadFabButton({ label = "Post Memory", className, ...props }: UploadFabButtonProps) {
+export function UploadFabButton({
+  label = 'Post Memory',
+  className,
+  ...props
+}: UploadFabButtonProps) {
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-bounce-slow hover:pause">
+    <div className="animate-bounce-slow hover:pause fixed bottom-8 left-1/2 z-50 -translate-x-1/2">
       <Button
         variant="sticker"
         size="sticker"
-        className={cn("rounded-full h-16 px-8 flex gap-2 items-center", className)}
+        className={cn(
+          'flex h-16 items-center gap-2 rounded-full px-8',
+          className,
+        )}
         {...props}
       >
-        <Plus className="h-6 w-6 stroke-[3px]"/>
+        <Plus className="h-6 w-6 stroke-[3px]" />
         <span className="mt-1">{label}</span>
       </Button>
     </div>
-  )
+  );
 }

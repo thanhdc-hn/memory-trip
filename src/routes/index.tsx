@@ -7,7 +7,9 @@ import MainLayout from '@/layouts/main-layout';
 
 const Home = withSuspense(lazy(() => import('@/views/home')));
 const About = withSuspense(lazy(() => import('@/views/about')));
-const AdminDashboard = withSuspense(lazy(() => import('@/views/admin/dashboard')));
+const AdminDashboard = withSuspense(
+  lazy(() => import('@/views/admin/dashboard')),
+);
 const NotFound = withSuspense(
   lazy(() => import('../views/not-found/not-found')),
 );
@@ -15,26 +17,26 @@ const NotFound = withSuspense(
 export const routes = [
   {
     path: '/',
-    element: <MainLayout/>,
-    errorElement: <ErrorBoundary/>,
+    element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
     children: [
       {
         index: true,
-        element: <Home/>,
+        element: <Home />,
       },
       {
         path: 'about',
-        element: <About/>,
+        element: <About />,
       },
       {
         path: 'admin',
-        element: <AdminDashboard/>,
+        element: <AdminDashboard />,
       },
     ],
   },
   {
     path: '*',
-    element: <NotFound/>,
+    element: <NotFound />,
   },
 ];
 

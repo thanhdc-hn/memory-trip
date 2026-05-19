@@ -1,63 +1,64 @@
-import { useState, useCallback, useEffect } from "react"
-import { encode, decode } from "@/utils/crypto"
-import { teamService } from "@/services/team.service"
+import { useCallback, useEffect, useState } from 'react';
 
-const ADMIN_AUTH_KEY = 'admin_auth_token'
+import { teamService } from '@/services/team.service';
+import { decode, encode } from '@/utils/crypto';
+
+const ADMIN_AUTH_KEY = 'admin_auth_token';
 
 export function useAdminAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const checkAuth = useCallback(() => {
-    const token = localStorage.getItem(ADMIN_AUTH_KEY)
+    const token = localStorage.getItem(ADMIN_AUTH_KEY);
     if (!token) {
-      setIsAuthenticated(false)
-      setIsLoading(false)
-      return false
+      setIsAuthenticated(false);
+      setIsLoading(false);
+      return false;
     }
 
-    const decoded = decode(token)
+    const decoded = decode(token);
     if (!decoded) {
-      localStorage.removeItem(ADMIN_AUTH_KEY)
-      setIsAuthenticated(false)
-      setIsLoading(false)
-      return false
+      localStorage.removeItem(ADMIN_AUTH_KEY);
+      setIsAuthenticated(false);
+      setIsLoading(false);
+      return false;
     }
 
-    setIsAuthenticated(true)
-    setIsLoading(false)
-    return true
-  }, [])
+    setIsAuthenticated(true);
+    setIsLoading(false);
+    return true;
+  }, []);
 
   useEffect(() => {
-    checkAuth()
-  }, [checkAuth])
+    checkAuth();
+  }, [checkAuth]);
 
   const login = async (password: string) => {
-    const token = encode(password)
-    localStorage.setItem(ADMIN_AUTH_KEY, token)
+    const token = encode(password);
+    localStorage.setItem(ADMIN_AUTH_KEY, token);
 
     try {
-      await teamService.getTeams()
-      setIsAuthenticated(true)
-      return true
+      await teamService.getTeams();
+      setIsAuthenticated(true);
+      return true;
     } catch {
-      localStorage.removeItem(ADMIN_AUTH_KEY)
-      setIsAuthenticated(false)
-      return false
+      localStorage.removeItem(ADMIN_AUTH_KEY);
+      setIsAuthenticated(false);
+      return false;
     }
-  }
+  };
 
   const logout = () => {
-    localStorage.removeItem(ADMIN_AUTH_KEY)
-    setIsAuthenticated(false)
-  }
+    localStorage.removeItem(ADMIN_AUTH_KEY);
+    setIsAuthenticated(false);
+  };
 
   return {
     isAuthenticated,
     isLoading,
     login,
     logout,
-    checkAuth
-  }
+    checkAuth,
+  };
 }

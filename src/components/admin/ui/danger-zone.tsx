@@ -1,34 +1,42 @@
-import { useState } from "react"
-import { AlertTriangle, Trash2, Eraser } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Modal } from "@/components/ui/modal"
+import { AlertTriangle, Eraser, Trash2 } from 'lucide-react';
+
+import { useState } from 'react';
+
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Modal } from '@/components/ui/modal';
 
 export function ConfirmDialog({
-                                open,
-                                onOpenChange,
-                                title,
-                                description,
-                                confirmText,
-                                confirmVariant = "destructive",
-                                onConfirm,
-                                requireMatch,
-                                matchValue,
-                              }: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  title: string
-  description: string
-  confirmText: string
-  confirmVariant?: "default" | "destructive" | "outline" | "secondary"
-  onConfirm: () => void
-  requireMatch?: boolean
-  matchValue?: string
+  open,
+  onOpenChange,
+  title,
+  description,
+  confirmText,
+  confirmVariant = 'destructive',
+  onConfirm,
+  requireMatch,
+  matchValue,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description: string;
+  confirmText: string;
+  confirmVariant?: 'default' | 'destructive' | 'outline' | 'secondary';
+  onConfirm: () => void;
+  requireMatch?: boolean;
+  matchValue?: string;
 }) {
-  const [inputValue, setInputValue] = useState("")
+  const [inputValue, setInputValue] = useState('');
 
-  const canConfirm = !requireMatch || (inputValue === matchValue)
+  const canConfirm = !requireMatch || inputValue === matchValue;
 
   return (
     <Modal
@@ -42,7 +50,9 @@ export function ConfirmDialog({
         {requireMatch && (
           <div className="space-y-2">
             <p className="text-sm font-medium text-gray-500">
-              Type <span className="font-bold text-gray-900">"{matchValue}"</span> to confirm:
+              Type{' '}
+              <span className="font-bold text-gray-900">"{matchValue}"</span> to
+              confirm:
             </p>
             <Input
               value={inputValue}
@@ -65,9 +75,9 @@ export function ConfirmDialog({
             className="flex-1 rounded-xl"
             disabled={!canConfirm}
             onClick={() => {
-              onConfirm()
-              onOpenChange(false)
-              setInputValue("")
+              onConfirm();
+              onOpenChange(false);
+              setInputValue('');
             }}
           >
             {confirmText}
@@ -75,60 +85,62 @@ export function ConfirmDialog({
         </div>
       </div>
     </Modal>
-  )
+  );
 }
 
 export function DangerZone({
-                             teamName,
-                             onDeleteTeam,
-                             onClearData
-                           }: {
-  teamName: string,
-  onDeleteTeam: () => void,
-  onClearData: () => void
+  teamName,
+  onDeleteTeam,
+  onClearData,
+}: {
+  teamName: string;
+  onDeleteTeam: () => void;
+  onClearData: () => void;
 }) {
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [showClearConfirm, setShowClearConfirm] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   return (
-    <Card className="border-red-100 bg-red-50/30 overflow-hidden">
+    <Card className="overflow-hidden border-red-100 bg-red-50/30">
       <CardHeader className="pb-4">
         <div className="flex items-center gap-2 text-red-600">
-          <AlertTriangle className="w-5 h-5"/>
+          <AlertTriangle className="h-5 w-5" />
           <CardTitle className="text-lg">Danger Zone</CardTitle>
         </div>
-        <CardDescription className="text-red-600/70 font-sans text-xs">
+        <CardDescription className="font-sans text-xs text-red-600/70">
           Irreversible actions for this team. Please be careful.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         <Button
           variant="outline"
-          className="w-full justify-start gap-3 h-14 rounded-2xl border-red-100 hover:bg-red-50 hover:text-red-600 hover:border-red-200 group transition-all"
+          className="group h-14 w-full justify-start gap-3 rounded-2xl border-red-100 transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-600"
           onClick={() => setShowClearConfirm(true)}
         >
-          <div
-            className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 group-hover:bg-red-200 transition-colors">
-            <Eraser className="w-4 h-4"/>
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-red-600 transition-colors group-hover:bg-red-200">
+            <Eraser className="h-4 w-4" />
           </div>
           <div className="flex flex-col items-start">
-            <span className="font-bold text-sm">Clear team data</span>
-            <span className="text-[10px] opacity-60">Delete all posts and images</span>
+            <span className="text-sm font-bold">Clear team data</span>
+            <span className="text-[10px] opacity-60">
+              Delete all posts and images
+            </span>
           </div>
         </Button>
 
         <Button
           variant="outline"
-          className="w-full justify-start gap-3 h-14 rounded-2xl border-red-100 hover:bg-red-600 hover:text-white hover:border-red-600 group transition-all"
+          className="group h-14 w-full justify-start gap-3 rounded-2xl border-red-100 transition-all hover:border-red-600 hover:bg-red-600 hover:text-white"
           onClick={() => setShowDeleteConfirm(true)}
         >
-          <div
-            className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 group-hover:bg-white/20 group-hover:text-white transition-colors">
-            <Trash2 className="w-4 h-4"/>
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-red-600 transition-colors group-hover:bg-white/20 group-hover:text-white">
+            <Trash2 className="h-4 w-4" />
           </div>
           <div className="flex flex-col items-start">
-            <span className="font-bold text-sm">Delete team permanently</span>
-            <span className="text-[10px] opacity-60">This cannot be undone</span>
+            <span className="text-sm font-bold">Delete team permanently</span>
+            <span className="text-[10px] opacity-60">
+              This cannot be undone
+            </span>
           </div>
         </Button>
       </CardContent>
@@ -153,5 +165,5 @@ export function DangerZone({
         onConfirm={onDeleteTeam}
       />
     </Card>
-  )
+  );
 }

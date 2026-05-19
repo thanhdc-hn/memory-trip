@@ -1,5 +1,6 @@
-import { forwardRef, type HTMLAttributes } from "react"
-import { cn } from "@/lib/utils"
+import { type HTMLAttributes, forwardRef } from 'react';
+
+import { cn } from '@/lib/utils';
 
 const Divider = forwardRef<
   HTMLDivElement,
@@ -8,13 +9,14 @@ const Divider = forwardRef<
   <div
     ref={ref}
     className={cn(
-      "shrink-0 bg-border h-[2px] w-full",
-      variant === 'dashed' && "bg-transparent border-t-2 border-dashed border-border",
-      className
+      'bg-border h-[2px] w-full shrink-0',
+      variant === 'dashed' &&
+        'border-border border-t-2 border-dashed bg-transparent',
+      className,
     )}
     {...props}
   />
-))
-Divider.displayName = "Divider"
+));
+Divider.displayName = 'Divider';
 
-export { Divider }
+export { Divider };

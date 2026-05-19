@@ -10,8 +10,8 @@ mục tiêu tối ưu cho thiết bị di động (Mobile First) và cung cấp 
 - **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) (Sử dụng `@tailwindcss/vite` plugin)
 - **Routing**: [React Router Dom v7](https://reactrouter.com/) (Object-based routing)
 - **State Management**:
-    - Server State: [TanStack Query v5](https://tanstack.com/query/latest) (React Query)
-    - Client State: [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)
+  - Server State: [TanStack Query v5](https://tanstack.com/query/latest) (React Query)
+  - Client State: [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction)
 - **Backend Service**: [Supabase](https://supabase.com/)
 - **PWA**: `vite-plugin-pwa`
 - **Chất lượng mã nguồn**: ESLint, Prettier, Husky
@@ -126,6 +126,7 @@ Dự án sử dụng kiến trúc bảo mật nhiều lớp:
 ### 8. Netlify Functions (Backend Layer)
 
 Các API quản trị được đặt tại `netlify/functions/`:
+
 - `admin-teams-list`: Lấy danh sách team.
 - `admin-teams-create`: Tạo team mới.
 - `admin-teams-update`: Cập nhật thông tin/trạng thái khóa team.

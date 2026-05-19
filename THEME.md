@@ -17,7 +17,7 @@ prioritizes emotional warmth, playful imperfection, and nostalgic charm over cor
 A soft, warm palette that avoids harsh neons or corporate blues.
 
 | Tone                | Hex       | Usage                                     |
-|---------------------|-----------|-------------------------------------------|
+| ------------------- | --------- | ----------------------------------------- |
 | **Sky Blue**        | `#87CEEB` | Primary accents, links, sky backgrounds.  |
 | **Ocean Teal**      | `#40E0D0` | Secondary accents, progress bars.         |
 | **Sunshine Yellow** | `#FFD700` | Highlights, stars, sparkle icons.         |
@@ -77,4 +77,5 @@ The feed shouldn't be a strict vertical line.
 - Background features a subtle dot-grid or light paper texture.
 
 ---
-*Created with love for the Team Trip Memory App.*
+
+_Created with love for the Team Trip Memory App._

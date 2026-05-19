@@ -1,77 +1,94 @@
-import { type MouseEvent } from "react"
 import {
-  Lock,
-  Unlock,
-  Key,
-  Trash2,
-  Copy,
   Calendar,
+  Copy,
   Image as ImageIcon,
-  MessageSquare
-} from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { toast } from "@/hooks/use-toast"
-import type { Team } from "@/services/team.service"
+  Key,
+  Lock,
+  MessageSquare,
+  Trash2,
+  Unlock,
+} from 'lucide-react';
 
-export type { Team }
+import { type MouseEvent } from 'react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { toast } from '@/hooks/use-toast';
+import type { Team } from '@/services/team.service';
+
+export type { Team };
 
 export function TeamCard({
-                           team,
-                           onToggleLock,
-                           onResetPassword,
-                           onDelete,
-                           onClick
-                         }: {
-  team: Team
-  onToggleLock: (id: string) => void
-  onResetPassword: (id: string) => void
-  onDelete: (id: string) => void
-  onClick: (id: string) => void
+  team,
+  onToggleLock,
+  onResetPassword,
+  onDelete,
+  onClick,
+}: {
+  team: Team;
+  onToggleLock: (id: string) => void;
+  onResetPassword: (id: string) => void;
+  onDelete: (id: string) => void;
+  onClick: (id: string) => void;
 }) {
   const copyInviteLink = (e: MouseEvent) => {
-    e.stopPropagation()
-    const link = `${window.location.origin}/join/${team.id}`
-    navigator.clipboard.writeText(link)
+    e.stopPropagation();
+    const link = `${window.location.origin}/join/${team.id}`;
+    navigator.clipboard.writeText(link);
     toast({
-      title: "Link Copied!",
-      description: "Invite link copied to clipboard.",
-    })
-  }
+      title: 'Link Copied!',
+      description: 'Invite link copied to clipboard.',
+    });
+  };
 
   return (
     <Card
-      className="group overflow-hidden hover:border-primary/50 cursor-pointer transition-all active:scale-[0.98]"
+      className="group hover:border-primary/50 cursor-pointer overflow-hidden transition-all active:scale-[0.98]"
       onClick={() => onClick(team.id)}
     >
       <CardContent className="p-5">
-        <div className="flex justify-between items-start mb-4">
+        <div className="mb-4 flex items-start justify-between">
           <div className="space-y-1">
-            <div className="font-bold text-lg text-gray-900 group-hover:text-primary transition-colors">
+            <div className="group-hover:text-primary text-lg font-bold text-gray-900 transition-colors">
               {team.name}
             </div>
-            <div className="flex items-center gap-2 text-xs text-gray-400 font-medium">
-              <Calendar className="w-3 h-3"/>
+            <div className="flex items-center gap-2 text-xs font-medium text-gray-400">
+              <Calendar className="h-3 w-3" />
               {new Date(team.created_at).toLocaleDateString()}
             </div>
           </div>
-          <Badge variant={team.is_locked ? "destructive" : "secondary"} className="gap-1">
-            {team.is_locked ? <Lock className="w-3 h-3"/> : <Unlock className="w-3 h-3"/>}
-            {team.is_locked ? "Locked" : "Active"}
+          <Badge
+            variant={team.is_locked ? 'destructive' : 'secondary'}
+            className="gap-1"
+          >
+            {team.is_locked ? (
+              <Lock className="h-3 w-3" />
+            ) : (
+              <Unlock className="h-3 w-3" />
+            )}
+            {team.is_locked ? 'Locked' : 'Active'}
           </Badge>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center gap-1">
-            <MessageSquare className="w-4 h-4 text-gray-400"/>
-            <span className="text-sm font-bold text-gray-700">{team.post_count || 0}</span>
-            <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Posts</span>
+        <div className="mb-5 grid grid-cols-2 gap-3">
+          <div className="flex flex-col items-center justify-center gap-1 rounded-xl bg-gray-50 p-3">
+            <MessageSquare className="h-4 w-4 text-gray-400" />
+            <span className="text-sm font-bold text-gray-700">
+              {team.post_count || 0}
+            </span>
+            <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+              Posts
+            </span>
           </div>
-          <div className="bg-gray-50 rounded-xl p-3 flex flex-col items-center justify-center gap-1">
-            <ImageIcon className="w-4 h-4 text-gray-400"/>
-            <span className="text-sm font-bold text-gray-700">{Math.floor((team.post_count || 0) * 1.5)}</span>
-            <span className="text-[10px] text-gray-400 uppercase tracking-wider font-bold">Images</span>
+          <div className="flex flex-col items-center justify-center gap-1 rounded-xl bg-gray-50 p-3">
+            <ImageIcon className="h-4 w-4 text-gray-400" />
+            <span className="text-sm font-bold text-gray-700">
+              {Math.floor((team.post_count || 0) * 1.5)}
+            </span>
+            <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+              Images
+            </span>
           </div>
         </div>
 
@@ -79,52 +96,56 @@ export function TeamCard({
           <Button
             variant="outline"
             size="sm"
-            className="flex-1 rounded-xl h-9 text-xs font-bold gap-1.5"
+            className="h-9 flex-1 gap-1.5 rounded-xl text-xs font-bold"
             onClick={copyInviteLink}
           >
-            <Copy className="w-3.5 h-3.5"/>
+            <Copy className="h-3.5 w-3.5" />
             Copy Link
           </Button>
           <div className="flex items-center gap-1">
             <Button
               variant="outline"
               size="icon"
-              className="rounded-xl h-9 w-9 text-gray-400 hover:text-primary"
+              className="hover:text-primary h-9 w-9 rounded-xl text-gray-400"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleLock(team.id);
               }}
-              title={team.is_locked ? "Unlock" : "Lock"}
+              title={team.is_locked ? 'Unlock' : 'Lock'}
             >
-              {team.is_locked ? <Unlock className="w-4 h-4"/> : <Lock className="w-4 h-4"/>}
+              {team.is_locked ? (
+                <Unlock className="h-4 w-4" />
+              ) : (
+                <Lock className="h-4 w-4" />
+              )}
             </Button>
             <Button
               variant="outline"
               size="icon"
-              className="rounded-xl h-9 w-9 text-gray-400 hover:text-primary"
+              className="hover:text-primary h-9 w-9 rounded-xl text-gray-400"
               onClick={(e) => {
                 e.stopPropagation();
                 onResetPassword(team.id);
               }}
               title="Reset Password"
             >
-              <Key className="w-4 h-4"/>
+              <Key className="h-4 w-4" />
             </Button>
             <Button
               variant="outline"
               size="icon"
-              className="rounded-xl h-9 w-9 text-gray-400 hover:text-red-500 hover:bg-red-50"
+              className="h-9 w-9 rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-500"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete(team.id);
               }}
               title="Delete Team"
             >
-              <Trash2 className="w-4 h-4"/>
+              <Trash2 className="h-4 w-4" />
             </Button>
           </div>
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

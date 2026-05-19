@@ -1,11 +1,12 @@
-import { forwardRef, type HTMLAttributes } from "react"
-import { cn } from "@/lib/utils"
+import { type HTMLAttributes, forwardRef } from 'react';
+
+import { cn } from '@/lib/utils';
 
 interface ImageFrameProps extends HTMLAttributes<HTMLDivElement> {
-  src: string
-  alt?: string
-  caption?: string
-  rotation?: number
+  src: string;
+  alt?: string;
+  caption?: string;
+  rotation?: number;
 }
 
 const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
@@ -14,29 +15,25 @@ const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
       <div
         ref={ref}
         className={cn(
-          "bg-white p-3 pb-10 shadow-polaroid rounded-sm inline-block transition-transform duration-300 hover:rotate-0",
-          className
+          'shadow-polaroid inline-block rounded-sm bg-white p-3 pb-10 transition-transform duration-300 hover:rotate-0',
+          className,
         )}
         style={{ transform: `rotate(${rotation}deg)` }}
         {...props}
       >
-        <div className="aspect-square bg-sand/20 overflow-hidden rounded-sm relative">
-          <img
-            src={src}
-            alt={alt}
-            className="object-cover w-full h-full"
-          />
+        <div className="bg-sand/20 relative aspect-square overflow-hidden rounded-sm">
+          <img src={src} alt={alt} className="h-full w-full object-cover" />
           {children}
         </div>
         {caption && (
-          <div className="mt-3 font-handwritten text-center text-text-h text-lg truncate px-2">
+          <div className="font-handwritten text-text-h mt-3 truncate px-2 text-center text-lg">
             {caption}
           </div>
         )}
       </div>
-    )
-  }
-)
-ImageFrame.displayName = "ImageFrame"
+    );
+  },
+);
+ImageFrame.displayName = 'ImageFrame';
 
-export { ImageFrame }
+export { ImageFrame };

@@ -1,20 +1,20 @@
-import { forwardRef, type HTMLAttributes, type ImgHTMLAttributes } from "react"
-import { cn } from "@/lib/utils"
+import { type HTMLAttributes, type ImgHTMLAttributes, forwardRef } from 'react';
 
-const Avatar = forwardRef<
-  HTMLDivElement,
-  HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm bg-sand/20",
-      className
-    )}
-    {...props}
-  />
-))
-Avatar.displayName = "Avatar"
+import { cn } from '@/lib/utils';
+
+const Avatar = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn(
+        'bg-sand/20 relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm',
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
+Avatar.displayName = 'Avatar';
 
 const AvatarImage = forwardRef<
   HTMLImageElement,
@@ -23,11 +23,11 @@ const AvatarImage = forwardRef<
   <img
     alt="Avatar"
     ref={ref}
-    className={cn("aspect-square h-full w-full object-cover", className)}
+    className={cn('aspect-square h-full w-full object-cover', className)}
     {...props}
   />
-))
-AvatarImage.displayName = "AvatarImage"
+));
+AvatarImage.displayName = 'AvatarImage';
 
 const AvatarFallback = forwardRef<
   HTMLDivElement,
@@ -36,12 +36,12 @@ const AvatarFallback = forwardRef<
   <div
     ref={ref}
     className={cn(
-      "flex h-full w-full items-center justify-center rounded-full bg-peach/30 text-coral font-bold",
-      className
+      'bg-peach/30 text-coral flex h-full w-full items-center justify-center rounded-full font-bold',
+      className,
     )}
     {...props}
   />
-))
-AvatarFallback.displayName = "AvatarFallback"
+));
+AvatarFallback.displayName = 'AvatarFallback';
 
-export { Avatar, AvatarImage, AvatarFallback }
+export { Avatar, AvatarImage, AvatarFallback };

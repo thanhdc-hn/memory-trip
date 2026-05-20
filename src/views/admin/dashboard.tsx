@@ -20,7 +20,7 @@ import { toast } from '@/hooks/use-toast.ts';
 import { teamService } from '@/services/team.service';
 
 export default function AdminDashboard() {
-  const { isAuthenticated, isLoading, login, logout, checkAuth } =
+  const { isAuthenticated, isLoading, login, logout, remainingTime } =
     useAdminAuth();
   const { teams, createTeam, deleteTeam, toggleTeamLock } = useTeams();
 
@@ -37,18 +37,6 @@ export default function AdminDashboard() {
       .catch(() => {});
   }, [isAuthenticated]);
 
-  useEffect(() => {
-    if (!isAuthenticated) return;
-
-    const checkInterval = setInterval(() => {
-      checkAuth();
-    }, 10000); // check session every 10s
-
-    return () => {
-      clearInterval(checkInterval);
-    };
-  }, [isAuthenticated, checkAuth]);
-
   if (isAuthenticated === null || isLoading) return null; // Initial check
 
   if (!isAuthenticated) {
@@ -56,6 +44,12 @@ export default function AdminDashboard() {
   }
 
   const selectedTeam = teams.find((t) => t.id === selectedTeamId);
+
+  const formatCountdown = (ms: number) => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   const filteredTeams = teams
     .filter((t) => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -98,6 +92,11 @@ export default function AdminDashboard() {
             onBack={selectedTeam ? () => setSelectedTeamId(null) : undefined}
             onLogout={logout}
           />
+          {remainingTime > 0 && (
+            <div className="border-b border-gray-100 bg-amber-50 px-4 py-1.5 text-center text-xs font-medium text-amber-700">
+              Session expires in {formatCountdown(remainingTime)}
+            </div>
+          )}
         </div>
       }
     >

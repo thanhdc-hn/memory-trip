@@ -17,7 +17,7 @@ export function useTeams() {
     error,
     refetch,
   } = useQuery({
-    queryKey: ['teams'],
+    queryKey: ['teams', localStorage.getItem('admin_auth_token')],
     queryFn: () => teamService.getTeams(),
     throwOnError: (err: any) => err.message === 'Unauthorized',
   });

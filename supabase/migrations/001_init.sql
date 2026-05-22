@@ -57,12 +57,12 @@ returns json as $$
     from storage.objects;
 $$ language sql security definer;
 
-create view public_team_preview as
+create or replace view public_team_preview as
 select
     id,
     name,
     is_locked,
-    invite_password is not null as has_password
+    nullif(trim(invite_password), '') is not null as has_password
 from teams;
 
 grant select on public_team_preview to anon;

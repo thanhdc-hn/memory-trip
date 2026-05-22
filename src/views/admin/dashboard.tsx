@@ -1,4 +1,4 @@
-import { HardDrive, Plus, Search } from 'lucide-react';
+import { HardDrive, Loader2, Plus, Search } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
 
@@ -20,9 +20,20 @@ import { toast } from '@/hooks/use-toast.ts';
 import { teamService } from '@/services/team.service';
 
 export default function AdminDashboard() {
-  const { isAuthenticated, isLoading, login, logout, remainingTime } =
-    useAdminAuth();
-  const { teams, createTeam, deleteTeam, toggleTeamLock } = useTeams();
+  const {
+    isAuthenticated,
+    isLoading: isAuthLoading,
+    login,
+    logout,
+    remainingTime,
+  } = useAdminAuth();
+  const {
+    teams,
+    createTeam,
+    deleteTeam,
+    toggleTeamLock,
+    loading: isTeamsLoading,
+  } = useTeams();
 
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
@@ -37,7 +48,7 @@ export default function AdminDashboard() {
       .catch(() => {});
   }, [isAuthenticated]);
 
-  if (isAuthenticated === null || isLoading) return null; // Initial check
+  if (isAuthenticated === null || isAuthLoading) return null; // Initial check
 
   if (!isAuthenticated) {
     return <AdminAuthModal onLogin={login} />;
@@ -165,10 +176,15 @@ export default function AdminDashboard() {
           </div>
 
           {/* Teams List */}
-          {isLoading ? (
+          {isTeamsLoading ? (
             <div className="grid gap-4">
               {[1, 2, 3].map((i) => (
-                <LoadingSkeleton key={i} className="h-48 w-full" />
+                <div
+                  key={i}
+                  className="flex h-48 w-full items-center justify-center rounded-2xl border-2 border-dashed border-gray-100 bg-gray-50/50"
+                >
+                  <Loader2 className="text-primary h-8 w-8 animate-spin opacity-20" />
+                </div>
               ))}
             </div>
           ) : filteredTeams.length > 0 ? (

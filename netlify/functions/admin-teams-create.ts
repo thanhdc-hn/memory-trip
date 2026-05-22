@@ -16,18 +16,20 @@ export const handler: Handler = async (event) => {
   if (authError) return authError;
 
   try {
-    const { name, invite_password } = JSON.parse(event.body || '{}');
+    const { name, invite_code, invite_password } = JSON.parse(
+      event.body || '{}',
+    );
 
-    if (!name) {
+    if (!name || !invite_code) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ error: 'Name is required' }),
+        body: JSON.stringify({ error: 'Name and Invite Code are required' }),
       };
     }
 
     const { data, error } = await supabase
       .from('teams')
-      .insert([{ name, invite_password }])
+      .insert([{ name, invite_code, invite_password }])
       .select()
       .single();
 

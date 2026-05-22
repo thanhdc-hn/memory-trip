@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { Calendar, Copy, Lock, MessageSquare, Unlock } from 'lucide-react';
 
 import { type MouseEvent } from 'react';
@@ -22,7 +23,7 @@ export function TeamCard({
 }) {
   const copyInviteLink = (e: MouseEvent) => {
     e.stopPropagation();
-    const link = `${window.location.origin}/join/${team.id}`;
+    const link = `${window.location.origin}/join/${team.invite_code}`;
     navigator.clipboard.writeText(link);
     toast({
       title: 'Link Copied!',
@@ -41,9 +42,20 @@ export function TeamCard({
             <div className="group-hover:text-primary text-lg font-bold text-gray-900 transition-colors">
               {team.name}
             </div>
-            <div className="flex items-center gap-2 text-xs font-medium text-gray-400">
-              <Calendar className="h-3 w-3" />
-              {new Date(team.created_at).toLocaleDateString()}
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 text-xs font-medium text-gray-400">
+                <Calendar className="h-3 w-3" />
+                {dayjs(team.created_at).format('MM/DD/YYYY')}
+              </div>
+              <div className="text-primary/60 bg-primary/5 rounded-full px-2 py-0.5 text-[10px] font-bold">
+                /join/{team.invite_code}
+              </div>
+              {team.invite_password && (
+                <div className="flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-600">
+                  <Lock className="h-2.5 w-2.5" />
+                  Protected
+                </div>
+              )}
             </div>
           </div>
           <Badge

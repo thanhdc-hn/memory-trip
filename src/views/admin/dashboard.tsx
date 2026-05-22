@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { HardDrive, Loader2, Plus, Search } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
@@ -64,16 +65,18 @@ export default function AdminDashboard() {
 
   const filteredTeams = teams
     .filter((t) => t.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    .sort(
-      (a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-    );
+    .sort((a, b) => dayjs(b.created_at).diff(dayjs(a.created_at)));
 
   const handleCreateTeam = async (data: {
     name: string;
+    invite_code: string;
     password?: string;
   }) => {
-    await createTeam({ name: data.name, invite_password: data.password });
+    await createTeam({
+      name: data.name,
+      invite_code: data.invite_code,
+      invite_password: data.password,
+    });
   };
 
   const handleToggleLock = async (id: string) => {

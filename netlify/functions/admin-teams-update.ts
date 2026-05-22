@@ -16,7 +16,7 @@ export const handler: Handler = async (event) => {
   if (authError) return authError;
 
   try {
-    const { id, name, invite_password, is_locked } = JSON.parse(
+    const { id, name, invite_code, invite_password, is_locked } = JSON.parse(
       event.body || '{}',
     );
 
@@ -29,6 +29,7 @@ export const handler: Handler = async (event) => {
 
     const updates: any = {};
     if (name !== undefined) updates.name = name;
+    if (invite_code !== undefined) updates.invite_code = invite_code;
     if (invite_password !== undefined)
       updates.invite_password = invite_password;
     if (is_locked !== undefined) updates.is_locked = is_locked;

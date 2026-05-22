@@ -1,6 +1,7 @@
 export interface Team {
   id: string;
   name: string;
+  invite_code: string;
   invite_password?: string;
   is_locked: boolean;
   created_at: string;
@@ -9,11 +10,13 @@ export interface Team {
 
 export type CreateTeamInput = {
   name: string;
+  invite_code: string;
   invite_password?: string;
 };
 
 export type UpdateTeamInput = {
   name?: string;
+  invite_code?: string;
   invite_password?: string;
   is_locked?: boolean;
 };

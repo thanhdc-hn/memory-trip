@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import { type FC } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -13,7 +15,7 @@ const MainLayout: FC = () => {
         <Outlet />
       </main>
       <footer className="border-t border-gray-100 p-4 text-center text-sm text-gray-500 dark:border-gray-800">
-        © {new Date().getFullYear()} Memory Trip
+        © {dayjs().year()} Memory Trip
       </footer>
       <Toaster />
     </div>

@@ -4,29 +4,32 @@ import { useNavigate } from 'react-router-dom';
 import { publicTeamService } from '@/services/public-team.service';
 import type { PublicTeam } from '@/services/public-team.service';
 
-export function usePublicTeam(teamId: string | undefined) {
+export function usePublicTeam(inviteCode: string | undefined) {
   const [team, setTeam] = useState<PublicTeam | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!teamId) {
+    if (!inviteCode) {
       setLoading(false);
-      return;
-    }
-
-    // Returning user logic
-    const savedTeamId = localStorage.getItem('team_id');
-    if (savedTeamId === teamId) {
-      navigate('/timeline');
       return;
     }
 
     const fetchTeam = async () => {
       try {
         setLoading(true);
-        const data = await publicTeamService.getTeam(teamId);
+        const data = await publicTeamService.getTeamByInviteCode(inviteCode);
+
+        if (data) {
+          // Returning user logic
+          const savedTeamId = localStorage.getItem('team_id');
+          if (savedTeamId === data.id) {
+            navigate('/timeline');
+            return;
+          }
+        }
+
         setTeam(data);
       } catch (err) {
         console.error('Failed to fetch team:', err);
@@ -37,7 +40,7 @@ export function usePublicTeam(teamId: string | undefined) {
     };
 
     fetchTeam();
-  }, [teamId, navigate]);
+  }, [inviteCode, navigate]);
 
   const joinTeam = (nickname: string) => {
     if (!team) return;
@@ -51,9 +54,9 @@ export function usePublicTeam(teamId: string | undefined) {
   };
 
   const verifyPassword = async (password: string): Promise<boolean> => {
-    if (!teamId) return false;
+    if (!team) return false;
     try {
-      return await publicTeamService.verifyPassword(teamId, password);
+      return await publicTeamService.verifyPassword(team.id, password);
     } catch (err) {
       console.error('Password verification failed:', err);
       return false;

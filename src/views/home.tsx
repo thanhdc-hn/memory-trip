@@ -7,9 +7,11 @@ import {
   Star,
 } from 'lucide-react';
 
-import { type FC } from 'react';
+import { type FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Float, Pop, Tape } from '@/components/animation/animation-utils';
+import { TeamCodeModal } from '@/components/join/TeamCodeModal';
 import { AppLayout, MasonryGrid } from '@/components/layout/layout-primitives';
 import { MemoryPostCard } from '@/components/memory/memory-post-card';
 import { UploadFabButton } from '@/components/memory/upload-fab-button';
@@ -33,6 +35,20 @@ import { useToast } from '@/hooks/use-toast';
 
 const Home: FC = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const [showJoinModal, setShowJoinModal] = useState(false);
+
+  useEffect(() => {
+    const teamId = localStorage.getItem('team_id');
+    const nickname = localStorage.getItem('nickname');
+    if (teamId && nickname) {
+      navigate('/timeline');
+    }
+  }, [navigate]);
+
+  const handleReadyClick = () => {
+    setShowJoinModal(true);
+  };
 
   return (
     <AppLayout
@@ -375,7 +391,9 @@ const Home: FC = () => {
         </div>
       </section>
 
-      <UploadFabButton onClick={() => alert('Ready to post!')} />
+      <UploadFabButton label="READY!" onClick={handleReadyClick} />
+
+      <TeamCodeModal open={showJoinModal} onOpenChange={setShowJoinModal} />
     </AppLayout>
   );
 };

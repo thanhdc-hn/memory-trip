@@ -19,8 +19,8 @@ export function useAdminSecret() {
     const handleClick = () => {
       const now = Date.now();
 
-      // Reset count if more than 3 seconds between clicks (optional, but good for UX)
-      if (now - lastClickTime.current > 3000) {
+      // Reset count if more than 1 seconds between clicks (optional, but good for UX)
+      if (now - lastClickTime.current > 1000) {
         clickCount.current = 1;
       } else {
         clickCount.current += 1;

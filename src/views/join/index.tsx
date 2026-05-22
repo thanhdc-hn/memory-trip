@@ -10,6 +10,7 @@ import { JoinLayout } from '@/components/join/JoinLayout';
 import { JoinSkeleton } from '@/components/join/JoinSkeleton';
 import { NicknameInput } from '@/components/join/NicknameInput';
 import { PasswordInput } from '@/components/join/PasswordInput';
+import { generateRandomNickname } from '@/features/join/utils/randomNickname';
 import { usePublicTeam } from '@/hooks/use-public-team';
 
 const WELCOME_MESSAGES = [
@@ -21,10 +22,10 @@ const WELCOME_MESSAGES = [
 ];
 
 export default function JoinPage() {
-  const { teamId } = useParams<{ teamId: string }>();
-  const { team, loading, joinTeam, verifyPassword } = usePublicTeam(teamId);
+  const { inviteCode } = useParams<{ inviteCode: string }>();
+  const { team, loading, joinTeam, verifyPassword } = usePublicTeam(inviteCode);
 
-  const [nickname, setNickname] = useState('');
+  const [nickname, setNickname] = useState(() => generateRandomNickname());
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
@@ -101,6 +102,7 @@ export default function JoinPage() {
             <NicknameInput
               value={nickname}
               onChange={setNickname}
+              onRandomize={() => setNickname(generateRandomNickname())}
               disabled={isJoining}
             />
 

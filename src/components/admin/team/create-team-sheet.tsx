@@ -1,8 +1,9 @@
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Modal } from '@/components/ui/modal';
+import { generateInviteCode } from '@/utils/generateInviteCode';
 
 export function CreateTeamSheet({
   open,
@@ -11,18 +12,63 @@ export function CreateTeamSheet({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreate: (data: { name: string; password?: string }) => void;
+  onCreate: (data: {
+    name: string;
+    invite_code: string;
+    password?: string;
+  }) => Promise<void>;
 }) {
   const [name, setName] = useState('');
+  const [inviteCode, setInviteCode] = useState('');
   const [password, setPassword] = useState('');
+  const [isManualInviteCode, setIsManualInviteCode] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  useEffect(() => {
+    if (!isManualInviteCode && name) {
+      setInviteCode(generateInviteCode(name));
+    }
+  }, [name, isManualInviteCode]);
+
+  useEffect(() => {
+    if (!open) {
+      setName('');
+      setInviteCode('');
+      setPassword('');
+      setIsManualInviteCode(false);
+      setError(null);
+    }
+  }, [open]);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!name) return;
-    onCreate({ name, password });
-    setName('');
-    setPassword('');
-    onOpenChange(false);
+    if (!name || !inviteCode) return;
+
+    setIsSubmitting(true);
+    setError(null);
+
+    const normalizedInviteCode = inviteCode.trim().toLowerCase();
+
+    try {
+      await onCreate({
+        name: name.trim(),
+        invite_code: normalizedInviteCode,
+        password: password.trim() || undefined,
+      });
+      onOpenChange(false);
+    } catch (err: any) {
+      if (
+        err.message?.includes('duplicate') ||
+        err.message?.includes('unique')
+      ) {
+        setError('This team code already exists 🌙');
+      } else {
+        setError(err.message || 'Failed to create team');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -47,6 +93,33 @@ export function CreateTeamSheet({
               className="rounded-xl"
             />
           </div>
+
+          <div className="space-y-2">
+            <div className="ml-1 flex items-center justify-between">
+              <label className="text-sm font-bold text-gray-700">
+                Invite Code
+              </label>
+              <span className="text-[10px] font-medium text-gray-400">
+                /join/{inviteCode || '...'}
+              </span>
+            </div>
+            <Input
+              placeholder="summer-trip-2024"
+              value={inviteCode}
+              onChange={(e) => {
+                setInviteCode(
+                  e.target.value.toLowerCase().replace(/\s+/g, '-'),
+                );
+                setIsManualInviteCode(true);
+              }}
+              required
+              className="rounded-xl"
+            />
+            {error && (
+              <p className="ml-1 text-xs font-medium text-red-500">{error}</p>
+            )}
+          </div>
+
           <div className="space-y-2">
             <label className="ml-1 text-sm font-bold text-gray-700">
               Invite Password (optional)
@@ -66,11 +139,16 @@ export function CreateTeamSheet({
             variant="outline"
             className="flex-1 rounded-xl"
             onClick={() => onOpenChange(false)}
+            disabled={isSubmitting}
           >
             Cancel
           </Button>
-          <Button type="submit" className="flex-1 rounded-xl" disabled={!name}>
-            Create Team
+          <Button
+            type="submit"
+            className="flex-1 rounded-xl"
+            disabled={!name || !inviteCode || isSubmitting}
+          >
+            {isSubmitting ? 'Creating...' : 'Create Team'}
           </Button>
         </div>
       </form>

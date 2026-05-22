@@ -10,6 +10,7 @@ const About = withSuspense(lazy(() => import('@/views/about')));
 const AdminDashboard = withSuspense(
   lazy(() => import('@/views/admin/dashboard')),
 );
+const Join = withSuspense(lazy(() => import('@/views/join')));
 const NotFound = withSuspense(
   lazy(() => import('../views/not-found/not-found')),
 );
@@ -31,6 +32,10 @@ export const routes = [
       {
         path: 'admin',
         element: <AdminDashboard />,
+      },
+      {
+        path: 'join/:teamId',
+        element: <Join />,
       },
     ],
   },

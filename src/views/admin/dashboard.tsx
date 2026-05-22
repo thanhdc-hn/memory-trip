@@ -10,7 +10,7 @@ import {
 import { CreateTeamSheet } from '@/components/admin/team/create-team-sheet';
 import { TeamCard } from '@/components/admin/team/team-card';
 import { TeamDetailView } from '@/components/admin/team/team-detail-view';
-import { EmptyState, LoadingSkeleton } from '@/components/admin/ui/admin-ui';
+import { EmptyState } from '@/components/admin/ui/admin-ui';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

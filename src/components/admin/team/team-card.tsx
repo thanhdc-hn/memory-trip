@@ -37,18 +37,26 @@ export function TeamCard({
       onClick={() => onClick(team.id)}
     >
       <CardContent className="p-5">
-        <div className="mb-4 flex items-start justify-between">
+        <div className="mb-4 items-start justify-between">
           <div className="space-y-1">
-            <div className="group-hover:text-primary text-lg font-bold text-gray-900 transition-colors">
-              {team.name}
+            <div className="group-hover:text-primary flex text-lg font-bold text-gray-900 transition-colors">
+              <div className="flex-1">{team.name}</div>
+              <Badge
+                variant={team.is_locked ? 'destructive' : 'secondary'}
+                className="gap-1"
+              >
+                {team.is_locked ? (
+                  <Lock className="h-3 w-3" />
+                ) : (
+                  <Unlock className="h-3 w-3" />
+                )}
+                {team.is_locked ? 'Locked' : 'Active'}
+              </Badge>
             </div>
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1.5 text-xs font-medium text-gray-400">
                 <Calendar className="h-3 w-3" />
                 {dayjs(team.created_at).format('MM/DD/YYYY')}
-              </div>
-              <div className="text-primary/60 bg-primary/5 rounded-full px-2 py-0.5 text-[10px] font-bold">
-                /join/{team.invite_code}
               </div>
               {team.invite_password && (
                 <div className="flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-600">
@@ -58,17 +66,6 @@ export function TeamCard({
               )}
             </div>
           </div>
-          <Badge
-            variant={team.is_locked ? 'destructive' : 'secondary'}
-            className="gap-1"
-          >
-            {team.is_locked ? (
-              <Lock className="h-3 w-3" />
-            ) : (
-              <Unlock className="h-3 w-3" />
-            )}
-            {team.is_locked ? 'Locked' : 'Active'}
-          </Badge>
         </div>
 
         <div className="mb-5 grid grid-cols-1 gap-3">

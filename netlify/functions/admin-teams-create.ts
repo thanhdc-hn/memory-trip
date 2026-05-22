@@ -20,6 +20,8 @@ export const handler: Handler = async (event) => {
       event.body || '{}',
     );
 
+    const password = invite_password?.trim() || null;
+
     if (!name || !invite_code) {
       return {
         statusCode: 400,
@@ -29,7 +31,7 @@ export const handler: Handler = async (event) => {
 
     const { data, error } = await supabase
       .from('teams')
-      .insert([{ name, invite_code, invite_password }])
+      .insert([{ name, invite_code, invite_password: password }])
       .select()
       .single();
 

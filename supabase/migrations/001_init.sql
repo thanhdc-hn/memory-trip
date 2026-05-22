@@ -2,7 +2,7 @@ create table teams
 (
     id              uuid primary key default gen_random_uuid(),
     name            text not null,
-    invite_password text not null,
+    invite_password text,
     is_locked       boolean          default false,
     created_at      timestamptz      default now()
 );
@@ -56,4 +56,43 @@ returns json as $$
     )
     from storage.objects;
 $$ language sql security definer;
+
+create view public_team_preview as
+select
+    id,
+    name,
+    is_locked,
+    invite_password is not null as has_password
+from teams;
+
+grant select on public_team_preview to anon;
+
+create or replace function verify_team_password(
+    p_team_id uuid,
+    p_password text
+)
+returns boolean
+language plpgsql
+security definer
+as $$
+declare
+valid boolean;
+begin
+select exists (
+    select 1
+    from teams
+    where id = p_team_id
+      and (
+        invite_password is null
+            or invite_password = p_password
+        )
+)
+into valid;
+
+return valid;
+end;
+$$;
+
+grant execute on function verify_team_password(uuid, text) to anon;
+
 

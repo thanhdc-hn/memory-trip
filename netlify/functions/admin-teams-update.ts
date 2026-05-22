@@ -31,7 +31,7 @@ export const handler: Handler = async (event) => {
     if (name !== undefined) updates.name = name;
     if (invite_code !== undefined) updates.invite_code = invite_code;
     if (invite_password !== undefined)
-      updates.invite_password = invite_password;
+      updates.invite_password = invite_password?.trim() || null;
     if (is_locked !== undefined) updates.is_locked = is_locked;
 
     const { data, error } = await supabase

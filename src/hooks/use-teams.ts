@@ -32,6 +32,9 @@ export function useTeams() {
       });
     },
     onError: (err: any) => {
+      if (err.message?.includes('teams_invite_code_key')) {
+        return;
+      }
       toast({
         title: 'Error',
         description: err.message || 'Failed to create team.',
@@ -60,6 +63,9 @@ export function useTeams() {
     onError: (err: any, _, context) => {
       if (context?.previousTeams) {
         queryClient.setQueryData(['teams'], context.previousTeams);
+      }
+      if (err.message?.includes('teams_invite_code_key')) {
+        return;
       }
       toast({
         title: 'Error',

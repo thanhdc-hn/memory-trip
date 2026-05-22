@@ -10,8 +10,9 @@ alter table teams
 -- For existing rows, we might need a default or manual update, but for this task we assume it's fresh or we can handle nulls.
 -- The requirement says "unique not null".
 
+drop view if exists public_team_preview;
 -- Re-create public_team_preview view with invite_code
-create or replace view public_team_preview as
+create view public_team_preview as
 select
     id,
     name,

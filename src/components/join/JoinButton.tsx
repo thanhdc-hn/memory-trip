@@ -15,9 +15,9 @@ export function JoinButton({
   return (
     <Button
       variant="sticker"
-      size="sticker"
+      size="lg"
       className={cn(
-        'group w-full rounded-2xl py-6 text-2xl transition-all',
+        'group w-full rounded-2xl py-6 text-[16px] transition-all sm:text-2xl',
         loading && 'pointer-events-none opacity-80',
       )}
       onClick={onClick}
@@ -29,7 +29,7 @@ export function JoinButton({
         ) : (
           <>
             JOIN MEMORY SPACE
-            <Sparkles className="h-6 w-6 group-hover:animate-pulse" />
+            <Sparkles className="h-4 w-4 group-hover:animate-pulse" />
           </>
         )}
       </span>

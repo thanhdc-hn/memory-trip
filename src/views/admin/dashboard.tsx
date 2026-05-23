@@ -35,7 +35,6 @@ export default function AdminDashboard() {
     toggleTeamLock,
     loading: isTeamsLoading,
   } = useTeams();
-  console.log({ teams });
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

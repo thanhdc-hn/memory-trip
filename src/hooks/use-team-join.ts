@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { publicTeamService } from '@/services/public-team.service';
+import { URL_PATH } from '@/utils/constants.ts';
 
 export function useTeamJoin() {
   const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ export function useTeamJoin() {
       const team = await publicTeamService.getTeamByInviteCode(inviteCode);
 
       if (team) {
-        navigate(`/join/${team.invite_code}`);
+        navigate(`${URL_PATH.JOIN}/${team.invite_code}`);
       } else {
         setError('Oops! Team not found. Please ask your trip organizer! 💫');
       }

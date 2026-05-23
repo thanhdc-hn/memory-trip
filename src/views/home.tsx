@@ -9,27 +9,21 @@ import { TeamCodeModal } from '@/components/join/TeamCodeModal';
 import { AppLayout, MasonryGrid } from '@/components/layout/layout-primitives';
 import { MemoryPostCard } from '@/components/memory/memory-post-card';
 import { Divider } from '@/components/ui/divider';
-import { supabase } from '@/lib/supabase.ts';
+import { STORAGE_KEY, URL_PATH } from '@/utils/constants.ts';
+import storage from '@/utils/storage.ts';
 
 const Home: FC = () => {
   const navigate = useNavigate();
   const [showJoinModal, setShowJoinModal] = useState(false);
 
   useEffect(() => {
-    const teamId = localStorage.getItem('team_id');
-    const nickname = localStorage.getItem('nickname');
+    const teamId = storage.get<string>(STORAGE_KEY.TEAM_ID);
+    const nickname = storage.get<string>(STORAGE_KEY.NICKNAME);
     if (teamId && nickname) {
-      navigate('/timeline');
+      navigate(URL_PATH.TIMELINE);
+    } else {
+      // storage.clear();
     }
-
-    const checkSupabase = async () => {
-      await supabase.auth.signOut();
-
-      const { data } = await supabase.auth.getUser();
-
-      console.log(data);
-    };
-    checkSupabase();
   }, [navigate]);
 
   const handleReadyClick = () => {

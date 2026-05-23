@@ -1,3 +1,5 @@
+import storage from '@/utils/storage.ts';
+
 export interface Team {
   id: string;
   name: string;
@@ -26,7 +28,7 @@ async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const token = localStorage.getItem('admin_auth_token');
+  const token = storage.get<string>('admin_auth_token');
 
   const headers = {
     'Content-Type': 'application/json',

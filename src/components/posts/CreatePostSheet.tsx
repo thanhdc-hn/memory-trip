@@ -11,6 +11,7 @@ interface CreatePostSheetProps {
   teamId: string;
   onOptimisticPost: (post: Post) => void;
   onRollback: (postId: string) => void;
+  onSuccess?: () => void;
 }
 
 export const CreatePostSheet: React.FC<CreatePostSheetProps> = ({
@@ -19,7 +20,13 @@ export const CreatePostSheet: React.FC<CreatePostSheetProps> = ({
   teamId,
   onOptimisticPost,
   onRollback,
+  onSuccess,
 }) => {
+  const onCreatePostSuccess = () => {
+    onOpenChange(false);
+    onSuccess?.();
+  };
+
   return (
     <Modal
       open={open}
@@ -31,7 +38,7 @@ export const CreatePostSheet: React.FC<CreatePostSheetProps> = ({
       <div className="py-4">
         <CreatePostForm
           teamId={teamId}
-          onSuccess={() => onOpenChange(false)}
+          onSuccess={onCreatePostSuccess}
           onOptimisticPost={onOptimisticPost}
           onRollback={onRollback}
         />

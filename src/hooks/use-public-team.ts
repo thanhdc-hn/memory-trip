@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { publicTeamService } from '@/services/public-team.service';
 import type { PublicTeam } from '@/services/public-team.service';
+import { STORAGE_KEY, URL_PATH } from '@/utils/constants.ts';
+import storage from '@/utils/storage.ts';
 
 export function usePublicTeam(inviteCode: string | undefined) {
   const [team, setTeam] = useState<PublicTeam | null>(null);
@@ -23,9 +25,9 @@ export function usePublicTeam(inviteCode: string | undefined) {
 
         if (data) {
           // Returning user logic
-          const savedTeamId = localStorage.getItem('team_id');
+          const savedTeamId = storage.get<string>(STORAGE_KEY.TEAM_ID);
           if (savedTeamId === data.id) {
-            navigate('/timeline');
+            navigate(URL_PATH.TIMELINE);
             return;
           }
         }
@@ -50,7 +52,7 @@ export function usePublicTeam(inviteCode: string | undefined) {
     localStorage.setItem('joined_at', Date.now().toString());
 
     // Refresh page to ensure Supabase client gets the new team_id header
-    window.location.href = '/timeline';
+    window.location.href = URL_PATH.TIMELINE;
   };
 
   const verifyPassword = async (password: string): Promise<boolean> => {

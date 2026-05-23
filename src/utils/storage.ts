@@ -1,23 +1,24 @@
+const _get = <T>(key: string): T | null => {
+  const value = localStorage.getItem(key);
+  try {
+    return value ? (JSON.parse(value) as T) : null;
+  } catch {
+    return value as T;
+  }
+};
+
+const _set = <T>(key: string, value: T): void => {
+  localStorage.setItem(key, JSON.stringify(value));
+};
+
 const storage = {
-  get: <T>(key: string): T | null => {
-    try {
-      const value = localStorage.getItem(key);
-      return value ? (JSON.parse(value) as T) : null;
-    } catch (error) {
-      console.error(`Error getting localStorage key "${key}":`, error);
-      return null;
-    }
+  set: <T>(key: string, value: T) => {
+    _set(key, value);
   },
 
-  set: <T>(key: string, value: T): void => {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error);
-    }
-  },
+  get: <T>(key: string): T | null => _get<T>(key),
 
-  remove: (key: string): void => {
+  remove: (key: string) => {
     localStorage.removeItem(key);
   },
 

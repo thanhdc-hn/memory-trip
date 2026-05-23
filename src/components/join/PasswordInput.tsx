@@ -26,7 +26,7 @@ export function PasswordInput({
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         className={cn(
-          'text-center text-lg transition-transform',
+          'text-center text-[16px] transition-transform sm:text-lg',
           error && 'border-coral animate-shake',
         )}
       />

@@ -5,6 +5,8 @@ import {
   type PublicTeam,
   publicTeamService,
 } from '@/services/public-team.service';
+import { STORAGE_KEY } from '@/utils/constants.ts';
+import storage from '@/utils/storage.ts';
 
 export function useCurrentTeam() {
   const [team, setTeam] = useState<PublicTeam | null>(null);
@@ -12,8 +14,8 @@ export function useCurrentTeam() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const teamId = localStorage.getItem('team_id');
-    const nickname = localStorage.getItem('nickname');
+    const teamId = storage.get<string>(STORAGE_KEY.TEAM_ID);
+    const nickname = storage.get<string>(STORAGE_KEY.NICKNAME);
 
     if (!teamId || !nickname) {
       navigate('/');
@@ -27,8 +29,8 @@ export function useCurrentTeam() {
           setTeam(data);
         } else {
           // Team no longer exists
-          localStorage.removeItem('team_id');
-          localStorage.removeItem('nickname');
+          storage.remove(STORAGE_KEY.TEAM_ID);
+          storage.remove(STORAGE_KEY.NICKNAME);
           navigate('/');
         }
       } catch (err) {

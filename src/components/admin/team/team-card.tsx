@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import type { Team } from '@/services/team.service';
+import { URL_PATH } from '@/utils/constants.ts';
 
 export type { Team };
 
@@ -30,7 +31,7 @@ export function TeamCard({
 }) {
   const copyInviteLink = (e: MouseEvent) => {
     e.stopPropagation();
-    const link = `${window.location.origin}/join/${team.invite_code}`;
+    const link = `${window.location.origin}${URL_PATH.JOIN}/${team.invite_code}`;
     navigator.clipboard.writeText(link);
     toast({
       title: 'Link Copied!',

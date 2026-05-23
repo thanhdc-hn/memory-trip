@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { teamService } from '@/services/team.service';
-import { ADMIN_EXPIRED_TIME } from '@/utils/constants';
+import { ADMIN_EXPIRED_TIME, STORAGE_KEY } from '@/utils/constants';
 import { decode, encode } from '@/utils/crypto';
-
-const ADMIN_AUTH_KEY = 'admin_auth_token';
-const ADMIN_EXPIRE_KEY = 'admin_expire_time';
+import storage from '@/utils/storage.ts';
 
 export function useAdminAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -14,14 +12,14 @@ export function useAdminAuth() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const clearAdmin = useCallback(() => {
-    localStorage.removeItem(ADMIN_AUTH_KEY);
-    localStorage.removeItem(ADMIN_EXPIRE_KEY);
+    storage.remove(STORAGE_KEY.ADMIN_AUTH_TOKEN);
+    storage.remove(STORAGE_KEY.ADMIN_EXPIRE_KEY);
     setIsAuthenticated(false);
     setRemainingTime(0);
   }, []);
 
   const checkExpiry = useCallback(() => {
-    const expireTime = localStorage.getItem(ADMIN_EXPIRE_KEY);
+    const expireTime = storage.get(STORAGE_KEY.ADMIN_EXPIRE_KEY);
     if (!expireTime) {
       setRemainingTime(0);
       return;
@@ -42,7 +40,7 @@ export function useAdminAuth() {
   }, [checkExpiry]);
 
   const checkAuth = useCallback(() => {
-    const token = localStorage.getItem(ADMIN_AUTH_KEY);
+    const token = storage.get<string>(STORAGE_KEY.ADMIN_AUTH_TOKEN);
     if (!token) {
       setIsAuthenticated(false);
       setIsLoading(false);
@@ -57,7 +55,7 @@ export function useAdminAuth() {
     }
 
     // Check if already expired
-    const expireTime = localStorage.getItem(ADMIN_EXPIRE_KEY);
+    const expireTime = storage.get(STORAGE_KEY.ADMIN_EXPIRE_KEY);
     if (expireTime && Date.now() > Number(expireTime)) {
       clearAdmin();
       setIsLoading(false);
@@ -79,12 +77,12 @@ export function useAdminAuth() {
 
   const login = async (password: string) => {
     const token = encode(password);
-    localStorage.setItem(ADMIN_AUTH_KEY, token);
+    storage.set(STORAGE_KEY.ADMIN_AUTH_TOKEN, token);
 
     try {
       await teamService.getTeams();
-      localStorage.setItem(
-        ADMIN_EXPIRE_KEY,
+      storage.set(
+        STORAGE_KEY.ADMIN_EXPIRE_KEY,
         String(Date.now() + ADMIN_EXPIRED_TIME),
       );
       setIsAuthenticated(true);

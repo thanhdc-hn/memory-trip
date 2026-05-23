@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 import { useCreatePost } from '@/hooks/posts/use-create-post';
 import { type Post } from '@/services/posts.service';
+import storage from '@/utils/storage.ts';
 
 import { CaptionInput } from './CaptionInput';
 import { ImagePicker } from './ImagePicker';
@@ -27,7 +28,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const { createPost, isCreating } = useCreatePost();
-  const nickname = localStorage.getItem('nickname') || 'Traveler';
+  const nickname = storage.get<string>('nickname') || 'Traveler';
 
   const isValid = caption.trim().length > 0 || image !== null;
 

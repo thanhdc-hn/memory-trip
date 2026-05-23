@@ -3,6 +3,7 @@ import { type FormEvent, useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Modal } from '@/components/ui/modal';
+import { URL_PATH } from '@/utils/constants.ts';
 import { generateInviteCode } from '@/utils/generateInviteCode';
 
 export function CreateTeamSheet({
@@ -100,7 +101,7 @@ export function CreateTeamSheet({
                 Invite Code
               </label>
               <span className="text-[10px] font-medium text-gray-400">
-                /join/{inviteCode || '...'}
+                {`${URL_PATH.JOIN}/${inviteCode || '...'}`}
               </span>
             </div>
             <Input

@@ -98,7 +98,7 @@ export default function AdminDashboard() {
 
   const formatStorageSize = () => {
     const gb = 1024 * 1024 * 1024;
-    if (!storageSize) return;
+    if (!storageSize) return '0 KB';
     if (storageSize >= gb) {
       return `${(storageSize / gb).toFixed(2)} GB`;
     } else if (storageSize >= 1024 * 1024) {

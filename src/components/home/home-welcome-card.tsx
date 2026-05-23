@@ -98,7 +98,7 @@ export const HomeWelcomeCard: FC<HomeWelcomeCardProps> = ({ onReadyClick }) => {
 
       <div className="mt-12 flex flex-col items-center gap-2">
         <p className="font-rounded text-text/40 text-sm">
-          Want to say hi? Please contact me via email.
+          Want to save memories ? Please contact me via email.
         </p>
         <a
           href="mailto:thanh.duong1@ntq-solution.com.vn"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { UploadFabButton } from '@/components/memory/upload-fab-button';
@@ -11,6 +11,8 @@ import { ScrollToTopButton } from '@/components/timeline/ScrollToTopButton';
 import { TimelineHeader } from '@/components/timeline/TimelineHeader';
 import { useCurrentTeam } from '@/hooks/use-current-team';
 import { useTimelinePosts } from '@/hooks/use-timeline-posts';
+import { POST_WAIT_TIME } from '@/utils/constants';
+import { formatCooldown } from '@/utils/time';
 
 export default function TimelinePage() {
   const { team, loading: teamLoading } = useCurrentTeam();
@@ -49,6 +51,21 @@ export default function TimelinePage() {
 
   const [showIncomingModal, setShowIncomingModal] = useState(false);
   const [showCreateSheet, setShowCreateSheet] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+
+  useEffect(() => {
+    if (cooldown <= 0) return;
+
+    const timer = setInterval(() => {
+      setCooldown((prev) => Math.max(0, prev - 1));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [cooldown]);
+
+  const handlePostSuccess = useCallback(() => {
+    setCooldown(Math.floor(POST_WAIT_TIME / 1000));
+  }, []);
 
   const handlePostClick = () => {
     // setShowIncomingModal(true);
@@ -112,8 +129,14 @@ export default function TimelinePage() {
 
       {!team?.is_locked && (
         <UploadFabButton
-          label="Share"
+          label={
+            cooldown > 0
+              ? `Next memory in ${formatCooldown(cooldown)}`
+              : 'Share'
+          }
           onClick={handleCreatePost}
+          disabled={cooldown > 0}
+          loading={cooldown > 0}
           className="shadow-sticker"
         />
       )}
@@ -124,6 +147,7 @@ export default function TimelinePage() {
         teamId={team?.id || ''}
         onOptimisticPost={addOptimisticPost}
         onRollback={removeOptimisticPost}
+        onSuccess={handlePostSuccess}
       />
 
       <IncomingFeatureModal

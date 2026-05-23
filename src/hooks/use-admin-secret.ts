@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { URL_PATH } from '@/utils/constants.ts';
+
 /**
  * Hook to navigate to admin page after 10 clicks anywhere on the screen
  */
@@ -12,7 +14,10 @@ export function useAdminSecret() {
 
   useEffect(() => {
     // Reset if we are already on admin page
-    if (location.pathname.startsWith('/admin')) {
+    if (
+      location.pathname.startsWith(URL_PATH.ADMIN) ||
+      location.pathname.includes(URL_PATH.JOIN)
+    ) {
       return;
     }
 
@@ -30,7 +35,7 @@ export function useAdminSecret() {
 
       if (clickCount.current >= 10) {
         clickCount.current = 0; // Reset
-        navigate('/admin');
+        navigate(URL_PATH.ADMIN);
       }
     };
 

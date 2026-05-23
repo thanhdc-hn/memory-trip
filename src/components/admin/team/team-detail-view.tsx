@@ -18,6 +18,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useTeams } from '@/hooks/use-teams';
 import type { Team } from '@/services/team.service';
+import { URL_PATH } from '@/utils/constants.ts';
 
 export function TeamDetailView({
   team,
@@ -155,7 +156,7 @@ export function TeamDetailView({
                   Invite Code
                 </label>
                 <span className="text-[10px] text-gray-400">
-                  /join/{inviteCode}
+                  {`${URL_PATH.JOIN}/${inviteCode}`}
                 </span>
               </div>
               <Input

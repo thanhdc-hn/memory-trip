@@ -2,9 +2,9 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
+import { ImageFrame } from '@/components/ui/image-frame';
+import { getPostImageUrl } from '@/features/posts/utils/getPostImageUrl';
 import type { Post } from '@/services/posts.service';
-import { storageService } from '@/services/storage.service';
 
 dayjs.extend(relativeTime);
 
@@ -15,43 +15,64 @@ interface PostCardProps {
 
 export function PostCard({ post, onClick }: PostCardProps) {
   const timeAgo = dayjs(post.created_at).fromNow();
-  const imageUrl = post.image_path
-    ? storageService.getPublicUrl(post.image_path)
-    : null;
+
+  const imageUrl = getPostImageUrl(post);
+
+  // Generate a semi-random rotation based on post ID
+  const rotation = (parseInt(post.id.substring(0, 8), 16) % 6) - 3;
 
   return (
-    <Card
-      className="border-border shadow-soft cursor-pointer overflow-hidden rounded-3xl border-2 transition-all active:scale-[0.98]"
+    <div
+      className="group animate-in fade-in slide-in-from-bottom-2 duration-500"
       onClick={onClick}
     >
-      <div className="space-y-3 p-4">
-        <div className="flex items-center justify-between">
-          <Badge
-            variant="nickname"
-            className="bg-primary/10 text-primary border-primary/20"
-          >
-            @{post.author_name}
-          </Badge>
-          <span className="text-text/40 font-rounded text-xs">{timeAgo}</span>
-        </div>
-
-        {imageUrl && (
-          <div className="border-border bg-sand/5 relative aspect-square overflow-hidden rounded-2xl border-2">
-            <img
-              src={imageUrl}
-              alt={post.caption || 'Memory'}
-              className="h-full w-full object-cover"
-              loading="lazy"
-            />
+      {imageUrl ? (
+        <ImageFrame
+          src={imageUrl}
+          caption={post.caption || undefined}
+          rotation={rotation}
+          className="w-full cursor-pointer transition-transform active:scale-[0.98]"
+        >
+          <div className="absolute top-2 left-2">
+            <Badge
+              variant="nickname"
+              className="border-none bg-white/80 shadow-sm backdrop-blur-sm"
+            >
+              @{post.author_name}
+            </Badge>
           </div>
-        )}
-
-        {post.caption && (
-          <p className="font-handwritten text-text line-clamp-3 px-2 text-lg">
+          <div className="absolute top-2 right-2">
+            <span className="text-text/40 font-rounded rounded-full bg-white/60 px-2 py-0.5 text-[10px] backdrop-blur-sm">
+              {timeAgo}
+            </span>
+          </div>
+        </ImageFrame>
+      ) : (
+        <div
+          className="shadow-polaroid relative flex aspect-square cursor-pointer flex-col items-center justify-center rounded-sm bg-white p-6 text-center transition-transform duration-300 hover:rotate-0 active:scale-[0.98]"
+          style={{ transform: `rotate(${rotation}deg)` }}
+        >
+          <div className="absolute top-2 left-2">
+            <Badge
+              variant="nickname"
+              className="bg-sand/20 border-none shadow-sm backdrop-blur-sm"
+            >
+              @{post.author_name}
+            </Badge>
+          </div>
+          <div className="absolute top-2 right-2">
+            <span className="text-text/40 font-rounded px-2 py-0.5 text-[10px]">
+              {timeAgo}
+            </span>
+          </div>
+          <p className="font-handwritten text-text px-4 text-xl leading-relaxed">
             {post.caption}
           </p>
-        )}
-      </div>
-    </Card>
+          <div className="absolute right-4 bottom-12">
+            <span className="text-accent text-2xl">✨</span>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

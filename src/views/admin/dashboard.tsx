@@ -17,7 +17,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useAdminAuth } from '@/hooks/use-admin-auth';
 import { useTeams } from '@/hooks/use-teams';
-import { toast } from '@/hooks/use-toast.ts';
 import { teamService } from '@/services/team.service';
 
 export default function AdminDashboard() {
@@ -32,10 +31,11 @@ export default function AdminDashboard() {
     teams,
     createTeam,
     deleteTeam,
+    clearTeamData,
     toggleTeamLock,
     loading: isTeamsLoading,
   } = useTeams();
-
+  console.log({ teams });
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,7 +45,9 @@ export default function AdminDashboard() {
     if (!isAuthenticated) return;
     teamService
       .getStorageUsage()
-      .then((d) => setStorageSize(d.total_size))
+      .then((d) => {
+        setStorageSize(d.total_size);
+      })
       .catch(() => {});
   }, [isAuthenticated]);
 
@@ -91,10 +93,22 @@ export default function AdminDashboard() {
     setSelectedTeamId(null);
   };
 
-  const handleClearData = (id: string) => {
-    // This could be implemented in teamService if needed
-    console.log('Clear data for team:', id);
-    toast({ title: 'Data Cleared', description: 'Posts and images removed.' });
+  const handleClearData = async (id: string) => {
+    await clearTeamData(id);
+  };
+
+  const formatStorageSize = () => {
+    const gb = 1024 * 1024 * 1024;
+    if (!storageSize) return;
+    if (storageSize >= gb) {
+      return `${(storageSize / gb).toFixed(2)} GB`;
+    } else if (storageSize >= 1024 * 1024) {
+      return `${(storageSize / (1024 * 1024)).toFixed(2)} MB`;
+    } else if (storageSize >= 1024) {
+      return `${(storageSize / 1024).toFixed(2)} KB`;
+    } else {
+      return `${storageSize} bytes`;
+    }
   };
 
   return (
@@ -136,10 +150,8 @@ export default function AdminDashboard() {
                     Storage Usage
                   </span>
                   <span className="text-xs font-bold text-gray-500">
-                    {storageSize !== null
-                      ? `${(storageSize / 1024 / 1024 / 1024).toFixed(2)} GB`
-                      : '...'}{' '}
-                    / 5 GB
+                    {storageSize !== null ? `${formatStorageSize()}` : '...'} /
+                    5 GB
                   </span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">

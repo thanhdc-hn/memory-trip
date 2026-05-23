@@ -1,25 +1,62 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 import { UploadFabButton } from '@/components/memory/upload-fab-button';
+import { CreatePostSheet } from '@/components/posts/CreatePostSheet';
 import { EmptyTimelineState } from '@/components/timeline/EmptyTimelineState';
 import { IncomingFeatureModal } from '@/components/timeline/IncomingFeatureModal';
 import { PostCard } from '@/components/timeline/PostCard';
 import { PostSkeleton } from '@/components/timeline/PostSkeleton';
+import { ScrollToTopButton } from '@/components/timeline/ScrollToTopButton';
 import { TimelineHeader } from '@/components/timeline/TimelineHeader';
 import { useCurrentTeam } from '@/hooks/use-current-team';
 import { useTimelinePosts } from '@/hooks/use-timeline-posts';
 
 export default function TimelinePage() {
   const { team, loading: teamLoading } = useCurrentTeam();
-  const { posts, loading: postsLoading } = useTimelinePosts(team?.id || null);
+  const {
+    posts,
+    loading: postsLoading,
+    isLoadingMore,
+    hasMore,
+    loadMore,
+    addOptimisticPost,
+    removeOptimisticPost,
+    newPostsCount,
+    resetNewPostsCount,
+  } = useTimelinePosts(team?.id || null);
+
+  const { ref, inView } = useInView({
+    threshold: 0,
+    rootMargin: '100px',
+  });
+
+  useEffect(() => {
+    if (inView && hasMore && !isLoadingMore && !postsLoading) {
+      loadMore();
+    }
+  }, [inView, hasMore, isLoadingMore, postsLoading, loadMore]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY === 0) {
+        resetNewPostsCount();
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [resetNewPostsCount]);
+
   const [showIncomingModal, setShowIncomingModal] = useState(false);
+  const [showCreateSheet, setShowCreateSheet] = useState(false);
 
   const handlePostClick = () => {
-    setShowIncomingModal(true);
+    // setShowIncomingModal(true);
   };
 
   const handleCreatePost = () => {
-    setShowIncomingModal(true); // Create feature is also incoming as per instructions or we just show the modal for now
+    if (team?.is_locked) return;
+    setShowCreateSheet(true);
   };
 
   const loading = teamLoading || postsLoading;
@@ -29,6 +66,16 @@ export default function TimelinePage() {
       <TimelineHeader team={team} />
 
       <main className="w-full max-w-2xl flex-1 px-4 py-8">
+        {team?.is_locked && (
+          <div className="animate-in fade-in slide-in-from-top-4 mb-6 duration-500">
+            <div className="bg-primary/10 rounded-2xl p-4 text-center">
+              <p className="text-primary font-medium">
+                This trip memory book is closed 🌙
+              </p>
+            </div>
+          </div>
+        )}
+
         {loading ? (
           <div className="grid grid-cols-1 gap-6">
             {[1, 2, 3].map((i) => (
@@ -36,26 +83,55 @@ export default function TimelinePage() {
             ))}
           </div>
         ) : posts.length > 0 ? (
-          <div className="animate-in fade-in slide-in-from-bottom-4 grid grid-cols-1 gap-8 duration-700">
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} onClick={handlePostClick} />
-            ))}
-          </div>
+          <>
+            <div className="animate-in fade-in slide-in-from-bottom-4 grid grid-cols-1 gap-8 duration-700">
+              {posts.map((post) => (
+                <PostCard key={post.id} post={post} onClick={handlePostClick} />
+              ))}
+            </div>
+
+            {(hasMore || isLoadingMore) && (
+              <div ref={ref} className="mt-8 flex justify-center py-4">
+                {isLoadingMore ? (
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
+                    <p className="text-muted-foreground text-sm font-medium">
+                      Loading more memories...
+                    </p>
+                  </div>
+                ) : (
+                  <div className="h-8" /> // Invisible trigger
+                )}
+              </div>
+            )}
+          </>
         ) : (
           <EmptyTimelineState />
         )}
       </main>
 
-      <UploadFabButton
-        label="Share"
-        onClick={handleCreatePost}
-        className="shadow-sticker"
+      {!team?.is_locked && (
+        <UploadFabButton
+          label="Share"
+          onClick={handleCreatePost}
+          className="shadow-sticker"
+        />
+      )}
+
+      <CreatePostSheet
+        open={showCreateSheet}
+        onOpenChange={setShowCreateSheet}
+        teamId={team?.id || ''}
+        onOptimisticPost={addOptimisticPost}
+        onRollback={removeOptimisticPost}
       />
 
       <IncomingFeatureModal
         open={showIncomingModal}
         onOpenChange={setShowIncomingModal}
       />
+
+      <ScrollToTopButton newPostsCount={newPostsCount} />
 
       {/* Spacing for FAB */}
       <div className="h-24" />

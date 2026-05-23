@@ -6,6 +6,7 @@ export interface Team {
   is_locked: boolean;
   created_at: string;
   post_count?: number;
+  image_count?: number;
 }
 
 export type CreateTeamInput = {
@@ -68,6 +69,13 @@ export const teamService = {
 
   async deleteTeam(id: string): Promise<void> {
     await apiFetch('admin-teams-delete', {
+      method: 'POST',
+      body: JSON.stringify({ id }),
+    });
+  },
+
+  async clearTeamData(id: string): Promise<void> {
+    await apiFetch('admin-teams-clear-data', {
       method: 'POST',
       body: JSON.stringify({ id }),
     });

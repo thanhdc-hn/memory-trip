@@ -31,7 +31,6 @@ export function TeamDetailView({
   onDeleteTeam: () => void;
   onLockTimeline: () => void;
 }) {
-  console.log(team);
   const { updateTeam } = useTeams();
   const [name, setName] = useState(team.name);
   const [inviteCode, setInviteCode] = useState(team.invite_code);

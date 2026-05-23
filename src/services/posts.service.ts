@@ -7,35 +7,69 @@ export interface Post {
   caption: string | null;
   image_path: string | null;
   created_at: string;
+  isFreshUpload?: boolean;
 }
 
 export const postsService = {
-  async getPosts(teamId: string): Promise<Post[]> {
+  async getPosts(teamId: string, page = 0, pageSize = 10): Promise<Post[]> {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+
     const { data, error } = await supabase
       .from('posts')
       .select('*')
       .eq('team_id', teamId)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(from, to);
 
     if (error) throw error;
     return data || [];
   },
 
-  subscribeToNewPosts(teamId: string, onNewPost: (post: Post) => void) {
-    return supabase
-      .channel(`public:posts:team_id=eq.${teamId}`)
+  async createPost(
+    post: Omit<Post, 'id' | 'created_at'> & { id?: string },
+  ): Promise<Post> {
+    const { data, error } = await supabase
+      .from('posts')
+      .insert([post])
+      .select()
+      .single();
+
+    if (error) {
+      if (error.code === '42501') {
+        throw new Error(
+          'You do not have permission to post here. Are you in the right trip?',
+        );
+      }
+      throw error;
+    }
+    return data;
+  },
+
+  subscribeToNewPosts(teamId: string, onEvent: (payload: any) => void) {
+    const channel = supabase
+      .channel(`timeline:${teamId}`)
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: '*',
           schema: 'public',
           table: 'posts',
           filter: `team_id=eq.${teamId}`,
         },
         (payload) => {
-          onNewPost(payload.new as Post);
+          if (payload.new) {
+            onEvent(payload);
+          }
         },
       )
-      .subscribe();
+      .subscribe((status) => {
+        console.log(
+          `[Realtime] Subscription status for timeline:${teamId}:`,
+          status,
+        );
+      });
+
+    return channel;
   },
 };

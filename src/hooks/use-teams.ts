@@ -122,6 +122,25 @@ export function useTeams() {
     throwOnError: (err: any) => err.message === 'Unauthorized',
   });
 
+  const clearDataMutation = useMutation({
+    mutationFn: (id: string) => teamService.clearTeamData(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['teams'] });
+      toast({
+        title: 'Data Cleared',
+        description: 'All posts and images have been removed.',
+      });
+    },
+    onError: (err: any) => {
+      toast({
+        title: 'Error',
+        description: err.message || 'Failed to clear team data.',
+        variant: 'destructive',
+      });
+    },
+    throwOnError: (err: any) => err.message === 'Unauthorized',
+  });
+
   const toggleLockMutation = useMutation({
     mutationFn: ({ id, isLocked }: { id: string; isLocked: boolean }) =>
       teamService.toggleTeamLock(id, isLocked),
@@ -169,6 +188,7 @@ export function useTeams() {
     createTeam: createMutation.mutateAsync,
     updateTeam: updateMutation.mutateAsync,
     deleteTeam: deleteMutation.mutateAsync,
+    clearTeamData: clearDataMutation.mutateAsync,
     toggleTeamLock: (id: string, isLocked: boolean) =>
       toggleLockMutation.mutateAsync({ id, isLocked }),
     refetch,

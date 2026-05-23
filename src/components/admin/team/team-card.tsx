@@ -1,5 +1,12 @@
 import dayjs from 'dayjs';
-import { Calendar, Copy, Lock, MessageSquare, Unlock } from 'lucide-react';
+import {
+  Calendar,
+  Copy,
+  Image as ImageIcon,
+  Lock,
+  MessageSquare,
+  Unlock,
+} from 'lucide-react';
 
 import { type MouseEvent } from 'react';
 
@@ -68,7 +75,7 @@ export function TeamCard({
           </div>
         </div>
 
-        <div className="mb-5 grid grid-cols-1 gap-3">
+        <div className="mb-5 grid grid-cols-2 gap-3">
           <div className="flex flex-col items-center justify-center gap-1 rounded-xl bg-gray-50 p-3">
             <MessageSquare className="h-4 w-4 text-gray-400" />
             <span className="text-sm font-bold text-gray-700">
@@ -76,6 +83,15 @@ export function TeamCard({
             </span>
             <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
               Posts
+            </span>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-1 rounded-xl bg-gray-50 p-3">
+            <ImageIcon className="h-4 w-4 text-gray-400" />
+            <span className="text-sm font-bold text-gray-700">
+              {team.image_count || 0}
+            </span>
+            <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase">
+              Images
             </span>
           </div>
         </div>

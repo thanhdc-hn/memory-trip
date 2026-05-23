@@ -49,8 +49,8 @@ export function usePublicTeam(inviteCode: string | undefined) {
     localStorage.setItem('nickname', nickname.trim());
     localStorage.setItem('joined_at', Date.now().toString());
 
-    // Redirect to timeline
-    navigate('/timeline');
+    // Refresh page to ensure Supabase client gets the new team_id header
+    window.location.href = '/timeline';
   };
 
   const verifyPassword = async (password: string): Promise<boolean> => {

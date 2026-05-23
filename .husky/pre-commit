@@ -1,1 +1,1 @@
-pnpm lint && pnpm format
+tsc && pnpm exec lint-staged

@@ -31,6 +31,7 @@ export function TeamDetailView({
   onDeleteTeam: () => void;
   onLockTimeline: () => void;
 }) {
+  console.log(team);
   const { updateTeam } = useTeams();
   const [name, setName] = useState(team.name);
   const [inviteCode, setInviteCode] = useState(team.invite_code);
@@ -113,7 +114,7 @@ export function TeamDetailView({
             <CardContent className="flex flex-col items-center justify-center gap-1 p-4 text-center">
               <ImageIcon className="text-secondary h-5 w-5" />
               <span className="text-xl font-bold text-gray-900">
-                {Math.floor((team.post_count || 0) * 1.5)}
+                {team.image_count || 0}
               </span>
               <span className="text-[10px] font-bold text-gray-400 uppercase">
                 Total Images

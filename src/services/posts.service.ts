@@ -47,8 +47,9 @@ export const postsService = {
   },
 
   subscribeToNewPosts(teamId: string, onEvent: (payload: any) => void) {
+    const subscriptionId = Math.random().toString(36).substring(2, 9);
     const channel = supabase
-      .channel(`timeline:${teamId}`)
+      .channel(`timeline:${teamId}:${subscriptionId}`)
       .on(
         'postgres_changes',
         {
@@ -65,7 +66,7 @@ export const postsService = {
       )
       .subscribe((status) => {
         console.log(
-          `[Realtime] Subscription status for timeline:${teamId}:`,
+          `[Realtime] Subscription status for timeline:${teamId}:${subscriptionId}:`,
           status,
         );
       });

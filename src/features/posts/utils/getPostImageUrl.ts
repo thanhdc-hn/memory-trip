@@ -1,8 +1,6 @@
 import type { Post } from '@/services/posts.service';
 import { storageService } from '@/services/storage.service';
 
-import { isFreshUpload } from './isFreshUpload';
-
 interface GetPostImageUrlOptions {
   width?: number;
   quality?: number;
@@ -18,17 +16,13 @@ export function getPostImageUrl(
   options: GetPostImageUrlOptions = {},
 ): string | null {
   if (!post.image_path) return null;
-
+  console.log(post);
   // Handle optimistic posts with blob URLs
   if (post.image_path.startsWith('blob:')) {
     return post.image_path;
   }
 
-  const { quality = 100 } = options;
+  const { width = 640, quality = 90 } = options;
 
-  if (isFreshUpload(post)) {
-    return storageService.getPublicUrl(post.image_path);
-  }
-
-  return storageService.getOptimizedUrl(post.image_path, quality);
+  return storageService.getOptimizedUrl(post.image_path, width, quality);
 }

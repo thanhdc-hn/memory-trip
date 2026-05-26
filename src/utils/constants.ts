@@ -1,5 +1,5 @@
 export const ADMIN_EXPIRED_TIME = 30 * 1000 * 60;
-export const POST_WAIT_TIME = 30 * 1000;
+export const POST_WAIT_TIME = 15 * 1000;
 
 export const STORAGE_KEY = {
   TEAM_ID: 'team_id',

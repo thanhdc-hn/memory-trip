@@ -9,6 +9,7 @@ import {
   AdminLayout,
 } from '@/components/admin/layout/admin-layout';
 import { CreateTeamSheet } from '@/components/admin/team/create-team-sheet';
+import { InviteTeamModal } from '@/components/admin/team/invite-team-modal';
 import { TeamCard } from '@/components/admin/team/team-card';
 import { TeamDetailView } from '@/components/admin/team/team-detail-view';
 import { EmptyState } from '@/components/admin/ui/admin-ui';
@@ -36,6 +37,7 @@ export default function AdminDashboard() {
     loading: isTeamsLoading,
   } = useTeams();
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+  const [qrTeamId, setQrTeamId] = useState<string | null>(null);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [storageSize, setStorageSize] = useState<number | null>(null);
@@ -78,6 +80,10 @@ export default function AdminDashboard() {
       invite_code: data.invite_code,
       invite_password: data.password,
     });
+  };
+
+  const handleGenerateQR = (id: string) => {
+    setQrTeamId(id);
   };
 
   const handleToggleLock = async (id: string) => {
@@ -209,6 +215,7 @@ export default function AdminDashboard() {
                   team={team}
                   onClick={(id) => setSelectedTeamId(id)}
                   onToggleLock={handleToggleLock}
+                  onQRGenerate={handleGenerateQR}
                 />
               ))}
             </div>
@@ -241,6 +248,12 @@ export default function AdminDashboard() {
         open={isCreateOpen}
         onOpenChange={setIsCreateOpen}
         onCreate={handleCreateTeam}
+      />
+
+      <InviteTeamModal
+        team={teams.find((t) => t.id === qrTeamId) || null}
+        isOpen={!!qrTeamId}
+        onClose={() => setQrTeamId(null)}
       />
     </AdminLayout>
   );

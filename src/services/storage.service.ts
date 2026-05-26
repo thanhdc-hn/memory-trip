@@ -28,12 +28,14 @@ export const storageService = {
     return data.publicUrl;
   },
 
-  getOptimizedUrl(imagePath: string, quality = 70): string {
+  getOptimizedUrl(imagePath: string, width = 500, quality = 80): string {
     const { data } = supabase.storage
       .from('memory-images')
       .getPublicUrl(imagePath, {
         transform: {
+          width,
           quality,
+          resize: 'contain',
         },
       });
 

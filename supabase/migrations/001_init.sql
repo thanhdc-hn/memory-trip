@@ -63,6 +63,7 @@ grant select on public_team_preview to anon;
 -- =========================================================
 
 alter table posts enable row level security;
+alter table teams enable row level security;
 
 -- =========================================================
 -- POSTS POLICIES
@@ -84,9 +85,9 @@ to anon
 with check (
     exists (
         select 1
-        from teams
-        where teams.id = posts.team_id
-        and teams.is_locked = false
+        from public_team_preview
+        where public_team_preview.id = posts.team_id
+        and public_team_preview.is_locked = false
     )
 );
 

@@ -5,6 +5,7 @@ import {
   Image as ImageIcon,
   Lock,
   MessageSquare,
+  QrCode,
   Unlock,
 } from 'lucide-react';
 
@@ -22,12 +23,13 @@ export type { Team };
 export function TeamCard({
   team,
   onToggleLock,
-
+  onQRGenerate,
   onClick,
 }: {
   team: Team;
   onToggleLock: (id: string) => void;
   onClick: (id: string) => void;
+  onQRGenerate: (id: string) => void;
 }) {
   const copyInviteLink = (e: MouseEvent) => {
     e.stopPropagation();
@@ -107,6 +109,20 @@ export function TeamCard({
             <Copy className="h-3.5 w-3.5" />
             Copy Link
           </Button>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              className="hover:text-primary h-9 w-9 rounded-xl text-gray-400"
+              onClick={(e) => {
+                e.stopPropagation();
+                onQRGenerate(team.id);
+              }}
+              title={'Generate QR Invite'}
+            >
+              <QrCode className="h-4 w-4" />
+            </Button>
+          </div>
           <div className="flex items-center gap-1">
             <Button
               variant="outline"

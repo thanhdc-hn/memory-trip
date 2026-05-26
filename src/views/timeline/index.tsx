@@ -102,8 +102,13 @@ export default function TimelinePage() {
         ) : posts.length > 0 ? (
           <>
             <div className="animate-in fade-in slide-in-from-bottom-4 grid grid-cols-1 gap-8 duration-700">
-              {posts.map((post) => (
-                <PostCard key={post.id} post={post} onClick={handlePostClick} />
+              {posts.map((post, index) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  onClick={handlePostClick}
+                  isFirst={index === 0}
+                />
               ))}
             </div>
 

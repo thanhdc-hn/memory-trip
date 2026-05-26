@@ -115,7 +115,7 @@ export function FloatingHearts({
         >
           {item.isSad ? (
             <span
-              className="block text-2xl select-none md:text-3xl"
+              className="block text-[48px] select-none"
               style={{
                 filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.12))',
               }}
@@ -133,7 +133,7 @@ export function FloatingHearts({
             >
               <path
                 d="M12 21s-7-4.5-7-10.5C5 7 7.5 5 10 5c1.5 0 2.5 0.8 2 2.2C12.5 5.8 13.5 5 15 5c2.5 0 4.5 2 4.5 5.5C19 16.5 12 21 12 21z"
-                fill="#FF7F50"
+                fill="#E8070C"
                 stroke="rgba(255,255,255,0.85)"
                 strokeWidth="1.2"
                 strokeLinejoin="round"

@@ -29,6 +29,7 @@ export function HeartButton({
 
   return (
     <button
+      data-heart-target=""
       onClick={(e) => {
         e.stopPropagation();
         onClick(e);

@@ -1,12 +1,12 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { FloatingHearts } from '@/components/timeline/FloatingHearts';
+import { FlyToLikeHeart } from '@/components/timeline/FlyToLikeHeart';
 import { HeartButton } from '@/components/timeline/HeartButton';
 import { HeartTooltip } from '@/components/timeline/HeartTooltip';
-import { InstagramHeartOverlay } from '@/components/timeline/InstagramHeartOverlay';
 import { Badge } from '@/components/ui/badge';
 import { ImageFrame } from '@/components/ui/image-frame';
 import { getPostImageUrl } from '@/features/posts/utils/getPostImageUrl';
@@ -30,13 +30,34 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
     post.team_id,
   );
 
-  const [bigHeartTrigger, setBigHeartTrigger] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [floatTrigger, setFloatTrigger] = useState(0);
   const [isSadAnimation, setIsSadAnimation] = useState(false);
   const [isDoubleInteraction, setIsDoubleInteraction] = useState(false);
   const [clickCoord, setClickCoord] = useState<{ x: number; y: number } | null>(
     null,
   );
+  const [flyTrigger, setFlyTrigger] = useState(0);
+  const [flyFrom, setFlyFrom] = useState<{ x: number; y: number } | null>(null);
+  const [flyTo, setFlyTo] = useState<{ x: number; y: number } | null>(null);
+
+  const launchFlyToLike = (coords: { x: number; y: number }) => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const target = container.querySelector('[data-heart-target]');
+    if (!target) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+
+    setFlyFrom(coords);
+    setFlyTo({
+      x: targetRect.left + targetRect.width / 2 - containerRect.left,
+      y: targetRect.top + targetRect.height / 2 - containerRect.top,
+    });
+    setFlyTrigger((t) => t + 1);
+  };
 
   const triggerReactionAnimation = (
     coords: { x: number; y: number } | null,
@@ -48,8 +69,8 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
     setIsDoubleInteraction(fromDoubleTap);
     setIsSadAnimation(!willAdd);
 
-    if (willAdd && fromDoubleTap) {
-      setBigHeartTrigger((t) => t + 1);
+    if (willAdd && fromDoubleTap && coords) {
+      launchFlyToLike(coords);
     }
     setFloatTrigger((t) => t + 1);
     toggleHeart();
@@ -79,8 +100,11 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
       onClick={onClick}
     >
       {imageUrl ? (
-        <div className="relative touch-manipulation" onClick={onDoubleTap}>
-          <InstagramHeartOverlay trigger={bigHeartTrigger} />
+        <div
+          ref={containerRef}
+          className="relative touch-manipulation"
+          onClick={onDoubleTap}
+        >
           <FloatingHearts
             trigger={floatTrigger}
             isSad={isSadAnimation}
@@ -88,6 +112,7 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
             y={clickCoord?.y}
             isDoubleInteraction={isDoubleInteraction}
           />
+          <FlyToLikeHeart trigger={flyTrigger} from={flyFrom} to={flyTo} />
           <HeartTooltip show={showTooltip && isFirst} />
           <ImageFrame
             src={imageUrl}
@@ -120,11 +145,11 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
         </div>
       ) : (
         <div
+          ref={containerRef}
           className="shadow-polaroid relative flex aspect-square cursor-pointer touch-manipulation flex-col items-center justify-center rounded-sm bg-white p-6 text-center transition-transform duration-300 hover:rotate-0 active:scale-[0.98]"
           style={{ transform: `rotate(${rotation}deg)` }}
           onClick={onDoubleTap}
         >
-          <InstagramHeartOverlay trigger={bigHeartTrigger} />
           <FloatingHearts
             trigger={floatTrigger}
             isSad={isSadAnimation}
@@ -132,6 +157,7 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
             y={clickCoord?.y}
             isDoubleInteraction={isDoubleInteraction}
           />
+          <FlyToLikeHeart trigger={flyTrigger} from={flyFrom} to={flyTo} />
           <HeartTooltip show={showTooltip && isFirst} />
           <div className="absolute top-2 left-2">
             <Badge

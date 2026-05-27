@@ -37,6 +37,3 @@ create policy "delete reactions"
 on post_reactions
 for delete
 using (true);
-
--- Enable realtime
-alter publication supabase_realtime add table post_reactions;

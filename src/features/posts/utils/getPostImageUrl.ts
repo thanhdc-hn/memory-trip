@@ -16,7 +16,6 @@ export function getPostImageUrl(
   options: GetPostImageUrlOptions = {},
 ): string | null {
   if (!post.image_path) return null;
-  console.log(post);
   // Handle optimistic posts with blob URLs
   if (post.image_path.startsWith('blob:')) {
     return post.image_path;

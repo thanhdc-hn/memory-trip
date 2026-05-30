@@ -55,7 +55,7 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
           </Button>
 
           {menuOpen && (
-            <div className="bg-surface border-border/50 animate-in fade-in zoom-in-95 absolute top-full right-0 z-50 mt-1 w-44 overflow-hidden rounded-xl border-2 py-1 shadow-lg">
+            <div className="bg-surface border-border/50 animate-in fade-in zoom-in-95 absolute top-full right-0 z-50 mt-1 w-52 overflow-hidden rounded-xl border-2 py-1 shadow-lg">
               <button
                 disabled={!team}
                 onClick={() => {

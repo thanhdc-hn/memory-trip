@@ -239,17 +239,22 @@ function renderCover(team: PublicTeam, total: number): string {
  * Builds a multi-page scrapbook PDF: a cover page plus 4 memories per page in a
  * 2x2 grid. Each page is composited on its own small canvas (mobile-safe) and
  * placed into the PDF as a single image. `imageMap` holds base64 photos by post
- * id; posts absent from the map render as handwritten note cards.
+ * id; posts absent from the map render as handwritten note cards. Returns the
+ * PDF blob plus the per-page JPEG data URLs so the UI can preview pages as
+ * images (Android/iOS WebViews cannot reliably render a PDF blob in an iframe).
  */
 export async function generateAlbumPdf(
   team: PublicTeam,
   posts: Post[],
   imageMap: Map<string, string>,
-): Promise<Blob> {
+): Promise<{ blob: Blob; pages: string[] }> {
   await ensureFont();
 
+  const pages: string[] = [];
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  doc.addImage(renderCover(team, posts.length), 'JPEG', 0, 0, A4_W, A4_H);
+  const cover = renderCover(team, posts.length);
+  pages.push(cover);
+  doc.addImage(cover, 'JPEG', 0, 0, A4_W, A4_H);
 
   const centers = [
     [MARGIN + CELL_W / 2, MARGIN + CELL_H / 2],
@@ -275,19 +280,14 @@ export async function generateAlbumPdf(
       drawCell(ctx, post, img, centers[j][0], centers[j][1]);
     }
     doc.addPage();
-    doc.addImage(
-      canvas.toDataURL('image/jpeg', 0.85),
-      'JPEG',
-      0,
-      0,
-      A4_W,
-      A4_H,
-    );
+    const pageData = canvas.toDataURL('image/jpeg', 0.85);
+    pages.push(pageData);
+    doc.addImage(pageData, 'JPEG', 0, 0, A4_W, A4_H);
     // Yield to the event loop so the UI stays responsive on mobile.
     await new Promise((r) => setTimeout(r, 0));
   }
 
-  return doc.output('blob');
+  return { blob: doc.output('blob'), pages };
 }
 
 function albumFilename(team: PublicTeam): string {

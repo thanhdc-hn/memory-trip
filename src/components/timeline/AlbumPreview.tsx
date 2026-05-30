@@ -1,6 +1,5 @@
 import { Download, Share2, X } from 'lucide-react';
-
-import { useEffect, useState } from 'react';
+import { useScrollLock } from 'usehooks-ts';
 
 import { Button } from '@/components/ui/button';
 import { downloadAlbumPdf, shareAlbumPdf } from '@/services/album-pdf';
@@ -8,21 +7,22 @@ import type { PublicTeam } from '@/services/public-team.service';
 
 interface AlbumPreviewProps {
   blob: Blob;
+  pages: string[];
   team: PublicTeam;
   onClose: () => void;
 }
 
-export function AlbumPreview({ blob, team, onClose }: AlbumPreviewProps) {
-  const [url, setUrl] = useState('');
-
-  useEffect(() => {
-    const objectUrl = URL.createObjectURL(blob);
-    setUrl(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [blob]);
-
+export function AlbumPreview({
+  blob,
+  pages,
+  team,
+  onClose,
+}: AlbumPreviewProps) {
+  useScrollLock();
+  const file = new File([blob], 'album.pdf', { type: 'application/pdf' });
   const canShare =
-    typeof navigator !== 'undefined' && !!navigator.canShare?.({ files: [] });
+    typeof navigator !== 'undefined' &&
+    !!navigator.canShare?.({ files: [file] });
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black/90">
@@ -41,11 +41,18 @@ export function AlbumPreview({ blob, team, onClose }: AlbumPreviewProps) {
         </Button>
       </div>
 
-      <iframe
-        src={url}
-        title="Album preview"
-        className="min-h-0 w-full flex-1 bg-white"
-      />
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-2">
+        <div className="mx-auto flex max-w-2xl flex-col gap-4">
+          {pages.map((page, i) => (
+            <img
+              key={i}
+              src={page}
+              alt={`Album page ${i + 1}`}
+              className="w-full rounded-sm bg-white shadow-lg"
+            />
+          ))}
+        </div>
+      </div>
 
       <div className="safe-bottom flex gap-3 px-4 py-3">
         <Button

@@ -34,6 +34,7 @@ export default function ExportPage() {
     total: number;
   } | null>(null);
   const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
+  const [previewPages, setPreviewPages] = useState<string[]>([]);
   const pageRef = useRef(0);
 
   const { ref: sentinelRef, inView } = useInView({ rootMargin: '200px' });
@@ -92,8 +93,9 @@ export default function ExportPage() {
         signal: controller.signal,
         onProgress: setProgress,
       });
-      const blob = await generateAlbumPdf(team, selected, imageMap);
+      const { blob, pages } = await generateAlbumPdf(team, selected, imageMap);
       setPreviewBlob(blob);
+      setPreviewPages(pages);
     } catch (err) {
       console.error('Album export failed:', err);
       toast({
@@ -108,6 +110,7 @@ export default function ExportPage() {
 
   const handleClosePreview = () => {
     setPreviewBlob(null);
+    setPreviewPages([]);
     clear();
     navigate(URL_PATH.TIMELINE);
   };
@@ -221,6 +224,7 @@ export default function ExportPage() {
       {previewBlob && team && (
         <AlbumPreview
           blob={previewBlob}
+          pages={previewPages}
           team={team}
           onClose={handleClosePreview}
         />

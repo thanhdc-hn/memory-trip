@@ -1,6 +1,7 @@
 import { ArrowLeft, Check } from 'lucide-react';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,6 +21,7 @@ const PAGE_SIZE = 20;
 
 export default function ExportPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation('export');
   const { toast } = useToast();
   const { team, loading: teamLoading } = useCurrentTeam();
   const { selectedIds, count, toggle, clear, isSelected } = useAlbumExport();
@@ -75,7 +77,7 @@ export default function ExportPage() {
   const handleCreateAlbum = async () => {
     if (!team || generating) return;
     if (count === 0) {
-      toast({ title: 'Pick at least one memory to export' });
+      toast({ title: t('toasts.pickOne') });
       return;
     }
 
@@ -99,8 +101,8 @@ export default function ExportPage() {
     } catch (err) {
       console.error('Album export failed:', err);
       toast({
-        title: 'Could not create the album',
-        description: 'Please try again.',
+        title: t('toasts.failedTitle'),
+        description: t('toasts.failedDesc'),
       });
     } finally {
       setGenerating(false);
@@ -122,11 +124,11 @@ export default function ExportPage() {
           variant="ghost"
           size="icon"
           onClick={() => navigate(URL_PATH.TIMELINE)}
-          aria-label="Back to timeline"
+          aria-label={t('back')}
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <div className="text-text-h text-xl font-bold">Pick your memories</div>
+        <div className="text-text-h text-xl font-bold">{t('title')}</div>
       </header>
 
       <main className="w-full max-w-2xl flex-1 px-4 py-6 pb-28">
@@ -160,7 +162,7 @@ export default function ExportPage() {
                     {url ? (
                       <img
                         src={url}
-                        alt={post.caption || 'Memory'}
+                        alt={post.caption || t('memoryAlt')}
                         loading="lazy"
                         className={cn(
                           'h-full w-full object-cover transition-opacity',
@@ -200,9 +202,7 @@ export default function ExportPage() {
           </>
         ) : (
           <div className="text-text/60 mt-16 text-center">
-            <p className="font-handwritten text-2xl">
-              No memories to export yet
-            </p>
+            <p className="font-handwritten text-2xl">{t('empty')}</p>
           </div>
         )}
       </main>
@@ -212,11 +212,14 @@ export default function ExportPage() {
           <div className="mx-auto flex max-w-2xl items-center justify-between gap-4">
             <span className="text-text font-medium">
               {generating && progress
-                ? `Preparing ${progress.loaded}/${progress.total}…`
-                : `${count} ${count === 1 ? 'memory' : 'memories'} selected`}
+                ? t('preparing', {
+                    loaded: progress.loaded,
+                    total: progress.total,
+                  })
+                : t('selected', { count })}
             </span>
             <Button onClick={handleCreateAlbum} disabled={generating}>
-              {generating ? 'Creating…' : 'Create Album'}
+              {generating ? t('creating') : t('createAlbum')}
             </Button>
           </div>
         </div>

@@ -1,10 +1,12 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useToast } from '@/hooks/use-toast';
 import { EXPORT_MAX_SELECTION, EXPORT_WARN_SELECTION } from '@/utils/constants';
 
 export function useAlbumExport() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const { t } = useTranslation('export');
   const { toast } = useToast();
 
   const toggle = useCallback(
@@ -17,22 +19,22 @@ export function useAlbumExport() {
         }
         if (next.size >= EXPORT_MAX_SELECTION) {
           toast({
-            title: `You can select up to ${EXPORT_MAX_SELECTION} memories`,
-            description: 'Deselect one to pick another.',
+            title: t('toasts.maxTitle', { max: EXPORT_MAX_SELECTION }),
+            description: t('toasts.maxDesc'),
           });
           return prev;
         }
         next.add(id);
         if (next.size === EXPORT_WARN_SELECTION + 1) {
           toast({
-            title: 'That is a big album 🐢',
-            description: 'Larger albums may take a little longer on mobile.',
+            title: t('toasts.bigTitle'),
+            description: t('toasts.bigDesc'),
           });
         }
         return next;
       });
     },
-    [toast],
+    [toast, t],
   );
 
   const clear = useCallback(() => setSelectedIds(new Set()), []);

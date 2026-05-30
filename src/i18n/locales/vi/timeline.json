@@ -1,0 +1,39 @@
+{
+  "closed": "Cuốn sổ kỷ niệm của chuyến đi này đã đóng 🌙",
+  "loadingMore": "Đang tải thêm kỷ niệm...",
+  "loadingTrip": "Đang tải chuyến đi...",
+  "headerTagline": "\"Cuốn sổ lưu niệm chung của chúng mình\" ✨",
+  "shareTeam": "Chia sẻ nhóm",
+  "moreOptions": "Thêm tùy chọn",
+  "exportMemories": "Xuất album",
+  "quitTeam": "Rời nhóm",
+  "fab": {
+    "share": "Chia sẻ",
+    "cooldown": "Kỷ niệm tiếp theo sau {{time}}"
+  },
+  "stats": {
+    "memories_one": "{{count}} kỷ niệm",
+    "memories_other": "{{count}} kỷ niệm",
+    "friends_one": "{{count}} người",
+    "friends_other": "{{count}} người"
+  },
+  "empty": {
+    "title": "Chưa có kỷ niệm nào!",
+    "subtitle": "Hãy đăng kỷ niệm đầu tiên và bắt đầu cuốn sổ lưu niệm chung nào! 📔",
+    "hint": "Nhấn nút dấu cộng để thêm ảnh"
+  },
+  "newMemories_one": "{{count}} kỷ niệm mới",
+  "newMemories_other": "{{count}} kỷ niệm mới",
+  "heartHint": "✨ Chạm hai lần để bày tỏ yêu thương",
+  "quitDialog": {
+    "title": "Rời đi sớm vậy sao? 🥺",
+    "description": "Chúng mình sẽ nhớ bạn và những kỷ niệm lắm đấy! Bạn có chắc muốn rời nhóm này không?",
+    "stay": "Mình ở lại!",
+    "confirm": "Vâng, rời nhóm"
+  },
+  "comingSoon": {
+    "title": "Sắp ra mắt! 🚀",
+    "gotIt": "Đã hiểu!",
+    "body": "Chúng mình vẫn đang hoàn thiện chi tiết bài viết, bình luận và biểu cảm. Hãy đón chờ bản cập nhật tiếp theo nhé!"
+  }
+}

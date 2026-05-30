@@ -1,6 +1,7 @@
 import { Sparkles } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Float, Pop } from '@/components/animation/animation-utils';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,7 @@ export function NicknameInput({
 }) {
   const [isRotating, setIsRotating] = useState(false);
   const [triggerPop, setTriggerPop] = useState(false);
+  const { t } = useTranslation('join');
   const { showTooltip, dismiss } = useTooltipState(
     STORAGE_KEY.NICKNAME_TOOLTIP,
   );
@@ -46,13 +48,13 @@ export function NicknameInput({
   return (
     <div className="w-full space-y-2 text-left">
       <Label htmlFor="nickname" className="font-handwritten ml-2 text-lg">
-        What's your nickname?
+        {t('nickname.label')}
       </Label>
       <div className="group relative">
         <Pop trigger={triggerPop}>
           <Input
             id="nickname"
-            placeholder="Type something cute..."
+            placeholder={t('nickname.placeholder')}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             maxLength={25}
@@ -72,7 +74,7 @@ export function NicknameInput({
             <div className="absolute -top-16 -right-1.5 z-20 w-48 opacity-90">
               <Float delay={0.2}>
                 <div className="bg-primary text-primary-foreground font-handwritten relative rounded-xl px-3 py-2 text-sm shadow-lg">
-                  ✨ Not feeling this one? Try another nickname!
+                  {t('nickname.tooltip')}
                   {/* Speech bubble arrow */}
                   <div className="border-t-primary absolute right-4 -bottom-1.5 h-0 w-0 border-x-[6px] border-t-[6px] border-x-transparent" />
                 </div>
@@ -86,7 +88,7 @@ export function NicknameInput({
             onClick={handleRandomize}
             disabled={disabled}
             className="hover:bg-primary/10 text-primary h-8 w-8 rounded-full transition-colors"
-            title="Randomize nickname"
+            title={t('nickname.randomize')}
           >
             <Sparkles
               className={cn(

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
@@ -13,15 +15,16 @@ export function PasswordInput({
   error?: boolean;
   disabled?: boolean;
 }) {
+  const { t } = useTranslation('join');
   return (
     <div className="w-full space-y-2 text-left">
       <Label htmlFor="password" className="font-handwritten ml-2 block text-lg">
-        Secret Key
+        {t('password.label')}
       </Label>
       <Input
         id="password"
         type="password"
-        placeholder="Enter team password"
+        placeholder={t('password.placeholder')}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
@@ -32,7 +35,7 @@ export function PasswordInput({
       />
       {error && (
         <p className="text-coral font-rounded px-2 text-center text-xs">
-          Oops! Wrong password ✨
+          {t('password.error')}
         </p>
       )}
     </div>

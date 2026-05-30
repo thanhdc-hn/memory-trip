@@ -1,0 +1,33 @@
+{
+  "back": "Quay lại dòng thời gian",
+  "title": "Chọn kỷ niệm của bạn",
+  "memoryAlt": "Kỷ niệm",
+  "empty": "Chưa có kỷ niệm nào để xuất",
+  "preparing": "Đang chuẩn bị {{loaded}}/{{total}}…",
+  "selected_one": "Đã chọn {{count}} kỷ niệm",
+  "selected_other": "Đã chọn {{count}} kỷ niệm",
+  "creating": "Đang tạo…",
+  "createAlbum": "Tạo album",
+  "preview": {
+    "title": "Xem trước album của bạn",
+    "close": "Đóng xem trước",
+    "pageAlt": "Trang album {{page}}",
+    "download": "Tải xuống",
+    "share": "Chia sẻ"
+  },
+  "toasts": {
+    "pickOne": "Hãy chọn ít nhất một kỷ niệm để xuất",
+    "failedTitle": "Không thể tạo album",
+    "failedDesc": "Vui lòng thử lại.",
+    "maxTitle": "Bạn chỉ có thể chọn tối đa {{max}} kỷ niệm",
+    "maxDesc": "Bỏ chọn một kỷ niệm để chọn cái khác.",
+    "bigTitle": "Album khá lớn đấy 🐢",
+    "bigDesc": "Album lớn có thể mất thêm chút thời gian trên điện thoại."
+  },
+  "pdf": {
+    "memories_one": "{{count}} kỷ niệm",
+    "memories_other": "{{count}} kỷ niệm",
+    "exportedOn": "Xuất bản ngày {{date}}",
+    "shareTitle": "Kỷ niệm {{name}}"
+  }
+}

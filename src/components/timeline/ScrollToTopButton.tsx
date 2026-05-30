@@ -1,6 +1,7 @@
 import { ArrowUp } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -12,6 +13,7 @@ interface ScrollToTopButtonProps {
 export function ScrollToTopButton({
   newPostsCount = 0,
 }: ScrollToTopButtonProps) {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export function ScrollToTopButton({
         size="icon"
         onClick={scrollToTop}
         className="h-12 w-12 rounded-full shadow-lg"
-        aria-label="Scroll to top"
+        aria-label={t('scrollToTop')}
       >
         <ArrowUp className="h-6 w-6" />
 

@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useInView } from 'react-intersection-observer';
 
 import { UploadFabButton } from '@/components/memory/upload-fab-button';
@@ -21,6 +22,7 @@ import { formatCooldown } from '@/utils/time';
 
 export default function TimelinePage() {
   const { team, loading: teamLoading } = useCurrentTeam();
+  const { t } = useTranslation('timeline');
   const {
     posts,
     loading: postsLoading,
@@ -87,7 +89,7 @@ export default function TimelinePage() {
   const dayGroups = useMemo(() => {
     const groups: { day: string; posts: Post[] }[] = [];
     for (const post of posts) {
-      const day = dayjs(post.created_at).format('MMM D, YYYY');
+      const day = dayjs(post.created_at).format('D MMM, YYYY');
       const last = groups[groups.length - 1];
       if (last && last.day === day) last.posts.push(post);
       else groups.push({ day, posts: [post] });
@@ -109,9 +111,7 @@ export default function TimelinePage() {
           {team?.is_locked && (
             <div className="animate-in fade-in slide-in-from-top-4 mb-6 duration-500">
               <div className="bg-primary/10 rounded-2xl p-4 text-center">
-                <p className="text-primary font-medium">
-                  This trip memory book is closed 🌙
-                </p>
+                <p className="text-primary font-medium">{t('closed')}</p>
               </div>
             </div>
           )}
@@ -152,7 +152,7 @@ export default function TimelinePage() {
                     <div className="flex flex-col items-center gap-2">
                       <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
                       <p className="text-muted-foreground text-sm font-medium">
-                        Loading more memories...
+                        {t('loadingMore')}
                       </p>
                     </div>
                   ) : (
@@ -171,8 +171,8 @@ export default function TimelinePage() {
         <UploadFabButton
           label={
             cooldown > 0
-              ? `Next memory in ${formatCooldown(cooldown)}`
-              : 'Share'
+              ? t('fab.cooldown', { time: formatCooldown(cooldown) })
+              : t('fab.share')
           }
           onClick={handleCreatePost}
           disabled={cooldown > 0}

@@ -1,6 +1,7 @@
 import { Download, LogOut, MoreVertical, Share2 } from 'lucide-react';
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ShareTeamModal } from '@/components/share/share-team-modal';
@@ -14,6 +15,7 @@ import { TripStatsStrip } from './TripStatsStrip';
 
 export function TimelineHeader({ team }: { team: PublicTeam | null }) {
   const navigate = useNavigate();
+  const { t } = useTranslation('timeline');
   const stats = useTeamStats(team?.id || null);
   const [showShare, setShowShare] = useState(false);
   const [showQuit, setShowQuit] = useState(false);
@@ -40,7 +42,7 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
           onClick={() => setShowShare(true)}
         >
           <Share2 className="h-5 w-5" />
-          <span className="sr-only">Share Team</span>
+          <span className="sr-only">{t('shareTeam')}</span>
         </Button>
 
         <div ref={menuRef} className="relative">
@@ -51,7 +53,7 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
             onClick={() => setMenuOpen((o) => !o)}
           >
             <MoreVertical className="h-5 w-5" />
-            <span className="sr-only">More options</span>
+            <span className="sr-only">{t('moreOptions')}</span>
           </Button>
 
           {menuOpen && (
@@ -65,7 +67,7 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
                 className="text-text/80 hover:bg-primary/10 hover:text-primary flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors disabled:opacity-40"
               >
                 <Download className="h-4 w-4" />
-                Export Memories
+                {t('exportMemories')}
               </button>
               <button
                 onClick={() => {
@@ -75,7 +77,7 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
                 className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-red-500 transition-colors hover:bg-red-50 dark:hover:bg-red-950/30"
               >
                 <LogOut className="h-4 w-4" />
-                Quit Team
+                {t('quitTeam')}
               </button>
             </div>
           )}
@@ -84,10 +86,10 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
 
       <div className="mx-auto max-w-2xl space-y-0.5 text-center">
         <div className="text-text-h text-2xl font-bold">
-          {team?.name || 'Loading trip...'}
+          {team?.name || t('loadingTrip')}
         </div>
         <p className="font-handwritten text-text/60 text-sm italic">
-          "Our shared scrapbook of memories" ✨
+          {t('headerTagline')}
         </p>
         <TripStatsStrip stats={stats} />
       </div>

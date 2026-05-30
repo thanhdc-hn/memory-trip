@@ -1,0 +1,17 @@
+{
+  "notFound": {
+    "title": "Ối! Không tìm thấy trang",
+    "description": "Xin lỗi, trang bạn đang tìm không tồn tại, đã bị xóa, đổi tên hoặc tạm thời không khả dụng",
+    "backHome": "Về trang chủ"
+  },
+  "about": {
+    "title": "Về Chúng Tôi",
+    "body": "Memory Trip là ứng dụng giúp bạn lưu giữ những kỷ niệm đáng nhớ trong mỗi chuyến đi. Với giao diện hiện đại, tối ưu cho di động và công nghệ đồng bộ hóa mạnh mẽ.",
+    "back": "Quay lại"
+  },
+  "error": {
+    "title": "Ối!",
+    "message": "Đã có lỗi xảy ra.",
+    "backHome": "Quay lại trang chủ"
+  }
+}

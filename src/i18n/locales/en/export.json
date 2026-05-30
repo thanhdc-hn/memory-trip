@@ -1,0 +1,33 @@
+{
+  "back": "Back to timeline",
+  "title": "Pick your memories",
+  "memoryAlt": "Memory",
+  "empty": "No memories to export yet",
+  "preparing": "Preparing {{loaded}}/{{total}}…",
+  "selected_one": "{{count}} memory selected",
+  "selected_other": "{{count}} memories selected",
+  "creating": "Creating…",
+  "createAlbum": "Create Album",
+  "preview": {
+    "title": "Your album preview",
+    "close": "Close preview",
+    "pageAlt": "Album page {{page}}",
+    "download": "Download",
+    "share": "Share"
+  },
+  "toasts": {
+    "pickOne": "Pick at least one memory to export",
+    "failedTitle": "Could not create the album",
+    "failedDesc": "Please try again.",
+    "maxTitle": "You can select up to {{max}} memories",
+    "maxDesc": "Deselect one to pick another.",
+    "bigTitle": "That is a big album 🐢",
+    "bigDesc": "Larger albums may take a little longer on mobile."
+  },
+  "pdf": {
+    "memories_one": "{{count}} memory",
+    "memories_other": "{{count}} memories",
+    "exportedOn": "Exported {{date}}",
+    "shareTitle": "{{name}} memories"
+  }
+}

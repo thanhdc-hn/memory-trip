@@ -1,6 +1,8 @@
 import { Download, Share2, X } from 'lucide-react';
 import { useScrollLock } from 'usehooks-ts';
 
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '@/components/ui/button';
 import { downloadAlbumPdf, shareAlbumPdf } from '@/services/album-pdf';
 import type { PublicTeam } from '@/services/public-team.service';
@@ -19,6 +21,7 @@ export function AlbumPreview({
   onClose,
 }: AlbumPreviewProps) {
   useScrollLock();
+  const { t } = useTranslation('export');
   const file = new File([blob], 'album.pdf', { type: 'application/pdf' });
   const canShare =
     typeof navigator !== 'undefined' &&
@@ -28,14 +31,14 @@ export function AlbumPreview({
     <div className="fixed inset-0 z-50 flex flex-col bg-black/90">
       <div className="safe-top flex items-center justify-between px-4 py-3">
         <span className="font-handwritten text-lg text-white">
-          Your album preview
+          {t('preview.title')}
         </span>
         <Button
           variant="ghost"
           size="icon"
           onClick={onClose}
           className="text-white hover:bg-white/10"
-          aria-label="Close preview"
+          aria-label={t('preview.close')}
         >
           <X className="h-5 w-5" />
         </Button>
@@ -47,7 +50,7 @@ export function AlbumPreview({
             <img
               key={i}
               src={page}
-              alt={`Album page ${i + 1}`}
+              alt={t('preview.pageAlt', { page: i + 1 })}
               className="w-full rounded-sm bg-white shadow-lg"
             />
           ))}
@@ -61,12 +64,12 @@ export function AlbumPreview({
           onClick={() => downloadAlbumPdf(blob, team)}
         >
           <Download className="mr-2 h-4 w-4" />
-          Download
+          {t('preview.download')}
         </Button>
         {canShare && (
           <Button className="flex-1" onClick={() => shareAlbumPdf(blob, team)}>
             <Share2 className="mr-2 h-4 w-4" />
-            Share
+            {t('preview.share')}
           </Button>
         )}
       </div>

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import { cn } from '@/lib/utils';
 
 interface HeartTooltipProps {
@@ -6,6 +8,7 @@ interface HeartTooltipProps {
 }
 
 export function HeartTooltip({ show, className }: HeartTooltipProps) {
+  const { t } = useTranslation('timeline');
   if (!show) return null;
 
   return (
@@ -17,7 +20,7 @@ export function HeartTooltip({ show, className }: HeartTooltipProps) {
     >
       <div className="flex items-center gap-1.5 rounded-full bg-rose-500 px-3 py-1.5 text-[12px] font-medium whitespace-nowrap text-white shadow-lg">
         <div className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-rose-500" />
-        <span>✨ Tap twice to show your love</span>
+        <span>{t('heartHint')}</span>
       </div>
     </div>
   );

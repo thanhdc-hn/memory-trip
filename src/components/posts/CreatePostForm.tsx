@@ -1,6 +1,7 @@
 import { Heart, Send } from 'lucide-react';
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useCreatePost } from '@/hooks/posts/use-create-post';
 import { type Post } from '@/services/posts.service';
@@ -23,12 +24,13 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
   onOptimisticPost,
   onRollback,
 }) => {
+  const { t } = useTranslation('posts');
   const [caption, setCaption] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const { createPost, isCreating } = useCreatePost();
-  const nickname = storage.get<string>('nickname') || 'Traveler';
+  const nickname = storage.get<string>('nickname') || t('defaultNickname');
 
   const isValid = caption.trim().length > 0 || image !== null;
 
@@ -50,7 +52,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
       );
       onSuccess();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
+      setError(err instanceof Error ? err.message : t('common:error'));
     }
   };
 
@@ -61,7 +63,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
           <Heart className="text-accent fill-accent h-4 w-4" />
         </div>
         <span className="text-text/60 text-sm font-semibold">
-          Posting as <span className="text-accent">{nickname}</span>
+          {t('postingAs')} <span className="text-accent">{nickname}</span>
         </span>
       </div>
 
@@ -93,12 +95,12 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
         {isCreating ? (
           <div className="flex items-center gap-2">
             <div className="h-5 w-5 animate-spin rounded-full border-3 border-white/30 border-t-white" />
-            <span>Sending memory...</span>
+            <span>{t('sending')}</span>
           </div>
         ) : (
           <>
             <Send className="h-5 w-5" />
-            <span>Post Memory</span>
+            <span>{t('submit')}</span>
           </>
         )}
       </button>

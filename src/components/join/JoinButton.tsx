@@ -1,5 +1,7 @@
 import { Sparkles } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
+
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -12,6 +14,7 @@ export function JoinButton({
   loading?: boolean;
   disabled?: boolean;
 }) {
+  const { t } = useTranslation('join');
   return (
     <Button
       variant="sticker"
@@ -25,10 +28,10 @@ export function JoinButton({
     >
       <span className="flex items-center gap-2">
         {loading ? (
-          'JOINING...'
+          t('joining')
         ) : (
           <>
-            JOIN MEMORY SPACE
+            {t('submit')}
             <Sparkles className="h-4 w-4 group-hover:animate-pulse" />
           </>
         )}

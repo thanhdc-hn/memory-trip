@@ -1,51 +1,30 @@
 import { Mail, Sparkles } from 'lucide-react';
 
 import { type FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Float, Pop } from '@/components/animation/animation-utils';
 import { Button } from '@/components/ui/button';
 
-interface Greeting {
-  title: string;
-  subtitle: string;
-  emoji: string;
-}
-
-const GREETINGS: Greeting[] = [
-  {
-    title: 'Tiny moments become memories ✨',
-    subtitle: 'Ready for this trip?',
-    emoji: '📸',
-  },
-  {
-    title: "Collect your team's little memories 🌴",
-    subtitle: 'One photo at a time.',
-    emoji: '🌊',
-  },
-  {
-    title: 'A cozy place for your trip memories 🌞',
-    subtitle: 'Start your adventure today.',
-    emoji: '🍦',
-  },
-  {
-    title: 'Our best summer starts here 🐚',
-    subtitle: 'Share the magic together.',
-    emoji: '🍹',
-  },
-];
+const EMOJIS = ['📸', '🌊', '🍦', '🍹'];
 
 interface HomeWelcomeCardProps {
   onReadyClick: () => void;
 }
 
 export const HomeWelcomeCard: FC<HomeWelcomeCardProps> = ({ onReadyClick }) => {
-  const [greeting, setGreeting] = useState<Greeting>(GREETINGS[0]);
+  const { t } = useTranslation('home');
+  const greetings = t('greetings', { returnObjects: true }) as {
+    title: string;
+    subtitle: string;
+  }[];
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const randomGreeting =
-      GREETINGS[Math.floor(Math.random() * GREETINGS.length)];
-    setGreeting(randomGreeting);
-  }, []);
+    setIndex(Math.floor(Math.random() * greetings.length));
+  }, [greetings.length]);
+
+  const greeting = greetings[index];
 
   return (
     <div className="relative mx-auto w-full max-w-2xl text-center">
@@ -72,12 +51,12 @@ export const HomeWelcomeCard: FC<HomeWelcomeCardProps> = ({ onReadyClick }) => {
               variant="sticker"
               size="lg"
               onClick={onReadyClick}
-              className="group relative h-16 rounded-full px-12 text-2xl shadow-xl transition-all hover:scale-105"
+              className="group relative h-16 max-w-full rounded-full px-12 text-2xl shadow-xl transition-all hover:scale-105"
             >
               <Sparkles className="mr-2 h-6 w-6 animate-pulse text-yellow-300 transition-transform group-hover:scale-125" />
-              READY!
+              {t('ready')}
               <span className="ml-2 inline-block transition-transform group-hover:rotate-12">
-                {greeting.emoji}
+                {EMOJIS[index]}
               </span>
             </Button>
           </Float>
@@ -98,7 +77,7 @@ export const HomeWelcomeCard: FC<HomeWelcomeCardProps> = ({ onReadyClick }) => {
 
       <div className="mt-12 flex flex-col items-center gap-2">
         <p className="font-rounded text-text/40 text-sm">
-          Want to save memories ? Please contact me via email.
+          {t('contactPrompt')}
         </p>
         <a
           href="mailto:thanh.duong1@ntq-solution.com.vn"

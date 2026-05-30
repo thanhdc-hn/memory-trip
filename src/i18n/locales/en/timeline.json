@@ -1,0 +1,39 @@
+{
+  "closed": "This trip memory book is closed 🌙",
+  "loadingMore": "Loading more memories...",
+  "loadingTrip": "Loading trip...",
+  "headerTagline": "\"Our shared scrapbook of memories\" ✨",
+  "shareTeam": "Share Team",
+  "moreOptions": "More options",
+  "exportMemories": "Export Memories",
+  "quitTeam": "Quit Team",
+  "fab": {
+    "share": "Share",
+    "cooldown": "Next memory in {{time}}"
+  },
+  "stats": {
+    "memories_one": "{{count}} memory",
+    "memories_other": "{{count}} memories",
+    "friends_one": "{{count}} friend",
+    "friends_other": "{{count}} friends"
+  },
+  "empty": {
+    "title": "No memories yet!",
+    "subtitle": "Drop the first memory and start our shared scrapbook! 📔",
+    "hint": "Click the plus button to add a photo"
+  },
+  "newMemories_one": "{{count}} new memory",
+  "newMemories_other": "{{count}} new memories",
+  "heartHint": "✨ Tap twice to show your love",
+  "quitDialog": {
+    "title": "Leaving so soon? 🥺",
+    "description": "We will miss you and your memories! Are you sure you want to quit this team?",
+    "stay": "I'll stay!",
+    "confirm": "Yes, quit team"
+  },
+  "comingSoon": {
+    "title": "Coming Soon! 🚀",
+    "gotIt": "Got it!",
+    "body": "We're still working on post details, comments, and reactions. Stay tuned for the next update!"
+  }
+}

@@ -1,5 +1,6 @@
 import { Home } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
@@ -8,15 +9,15 @@ import { JoinCard } from './JoinCard';
 
 export function InvalidTeamState() {
   const navigate = useNavigate();
+  const { t } = useTranslation('join');
 
   return (
     <JoinCard rotation={-1}>
       <div className="text-6xl">🏜️</div>
       <div className="space-y-2">
-        <h2 className="text-2xl font-bold">Space Not Found</h2>
+        <h2 className="text-2xl font-bold">{t('invalid.title')}</h2>
         <p className="font-handwritten text-text/60">
-          This memory space doesn't seem to exist... maybe it vanished into the
-          summer breeze?
+          {t('invalid.description')}
         </p>
       </div>
 
@@ -26,7 +27,7 @@ export function InvalidTeamState() {
         onClick={() => navigate('/')}
       >
         <Home className="h-4 w-4" />
-        Back Home
+        {t('invalid.backHome')}
       </Button>
     </JoinCard>
   );

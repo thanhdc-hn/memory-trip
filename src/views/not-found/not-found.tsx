@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import errorImage from '@/assets/images/404.webp';
 
 const NotFound = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation('misc');
   const goHomePage = () => {
     navigate('/');
   };
@@ -22,17 +24,16 @@ const NotFound = () => {
           </div>
         </div>
         <div className="mb-4 text-2xl font-bold text-[#222] uppercase sm:text-3xl dark:text-white">
-          Oops! Page Not Found
+          {t('notFound.title')}
         </div>
         <p className="mb-8 text-sm font-medium text-[#222] sm:text-base dark:text-gray-400">
-          Sorry but the page you are looking for does not exist, have been
-          removed, name changed or is temporarily unavailable
+          {t('notFound.description')}
         </p>
         <button
           onClick={goHomePage}
           className="bg-accent inline-block rounded-full px-8 py-3 text-sm font-bold text-white uppercase transition-all hover:bg-[#932ee0] hover:shadow-lg active:scale-95"
         >
-          Back to homepage
+          {t('notFound.backHome')}
         </button>
       </div>
     </div>

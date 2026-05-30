@@ -10,6 +10,7 @@ export const STORAGE_KEY = {
   ADMIN_AUTH_TOKEN: 'admin_auth_token',
   ADMIN_EXPIRE_KEY: 'admin_expire_time',
   NICKNAME_TOOLTIP: 'nickname-tooltip-dismissed',
+  LANGUAGE: 'language',
 };
 
 export const URL_PATH = {

@@ -1,6 +1,7 @@
 import { Hourglass, Plus } from 'lucide-react';
 
 import { type ButtonHTMLAttributes } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -11,11 +12,12 @@ interface UploadFabButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export function UploadFabButton({
-  label = 'Post Memory',
+  label,
   className,
   loading,
   ...props
 }: UploadFabButtonProps) {
+  const { t } = useTranslation('posts');
   return (
     <div className="animate-bounce-slow hover:pause fixed bottom-8 left-1/2 z-50 -translate-x-1/2">
       <Button
@@ -33,7 +35,7 @@ export function UploadFabButton({
         ) : (
           <Plus className="h-6 w-6 stroke-[3px]" />
         )}
-        <span className="mt-1">{label}</span>
+        <span className="mt-1">{label ?? t('submit')}</span>
       </Button>
     </div>
   );

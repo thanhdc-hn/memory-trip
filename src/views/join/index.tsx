@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { Float } from '@/components/animation/animation-utils';
@@ -13,25 +14,23 @@ import { PasswordInput } from '@/components/join/PasswordInput';
 import { generateRandomNickname } from '@/features/join/utils/randomNickname';
 import { usePublicTeam } from '@/hooks/use-public-team';
 
-const WELCOME_MESSAGES = [
-  'Ready for a new adventure? 🌏',
-  'The best memories are shared! ✨',
-  'Step into our summer scrapbook 📔',
-  "Grab your sunscreen, let's go! ☀️",
-  'Your digital time capsule awaits ⏳',
-];
-
 export default function JoinPage() {
   const { inviteCode } = useParams<{ inviteCode: string }>();
+  const { t } = useTranslation('join');
   const { team, loading, joinTeam, verifyPassword } = usePublicTeam(inviteCode);
+
+  const welcomeMessages = t('welcomeMessages', {
+    returnObjects: true,
+  }) as string[];
 
   const [nickname, setNickname] = useState(() => generateRandomNickname());
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
-  const [welcomeMessage] = useState(
-    () => WELCOME_MESSAGES[Math.floor(Math.random() * WELCOME_MESSAGES.length)],
+  const [welcomeIndex] = useState(() =>
+    Math.floor(Math.random() * welcomeMessages.length),
   );
+  const welcomeMessage = welcomeMessages[welcomeIndex];
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();

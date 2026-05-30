@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@/components/ui/modal';
 import { type Post } from '@/services/posts.service';
@@ -22,6 +23,7 @@ export const CreatePostSheet: React.FC<CreatePostSheetProps> = ({
   onRollback,
   onSuccess,
 }) => {
+  const { t } = useTranslation('posts');
   const onCreatePostSuccess = () => {
     onOpenChange(false);
     onSuccess?.();
@@ -31,8 +33,8 @@ export const CreatePostSheet: React.FC<CreatePostSheetProps> = ({
     <Modal
       open={open}
       onOpenChange={onOpenChange}
-      title="New Memory"
-      description="Share a moment from your trip"
+      title={t('sheetTitle')}
+      description={t('sheetDescription')}
       contentClassName="sm:max-w-md rounded-3xl"
     >
       <div className="py-4">

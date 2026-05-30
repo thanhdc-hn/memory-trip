@@ -1,6 +1,7 @@
 import { Camera, Image as ImageIcon } from 'lucide-react';
 
 import React, { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ImagePickerProps {
   onImageSelect: (file: File) => void;
@@ -11,6 +12,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
   onImageSelect,
   disabled,
 }) => {
+  const { t } = useTranslation('posts');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
@@ -35,7 +37,9 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         className="border-accent/30 bg-accent/5 active:bg-accent/10 flex flex-1 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-6 transition-colors disabled:opacity-50"
       >
         <Camera className="text-accent h-8 w-8" />
-        <span className="text-accent text-sm font-medium">Take Photo</span>
+        <span className="text-accent text-sm font-medium">
+          {t('takePhoto')}
+        </span>
       </button>
 
       <button
@@ -45,7 +49,7 @@ export const ImagePicker: React.FC<ImagePickerProps> = ({
         className="border-primary/30 bg-primary/5 active:bg-primary/10 flex flex-1 flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed p-6 transition-colors disabled:opacity-50"
       >
         <ImageIcon className="text-primary h-8 w-8" />
-        <span className="text-primary text-sm font-medium">Gallery</span>
+        <span className="text-primary text-sm font-medium">{t('gallery')}</span>
       </button>
 
       {/* Hidden inputs */}

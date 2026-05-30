@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@/components/ui/modal';
 import { useTeamJoin } from '@/hooks/use-team-join';
@@ -14,6 +15,7 @@ interface TeamCodeModalProps {
 
 export function TeamCodeModal({ open, onOpenChange }: TeamCodeModalProps) {
   const [code, setCode] = useState('');
+  const { t } = useTranslation('join');
   const { validateAndJoin, loading, error } = useTeamJoin();
 
   const handleJoin = () => {
@@ -24,8 +26,8 @@ export function TeamCodeModal({ open, onOpenChange }: TeamCodeModalProps) {
     <Modal
       open={open}
       onOpenChange={onOpenChange}
-      title="Enter Team Code"
-      description="Type your secret code to join the trip! ✈️"
+      title={t('codeModal.title')}
+      description={t('codeModal.description')}
       contentClassName="sm:max-w-md rounded-3xl"
     >
       <div className="space-y-6 py-4">
@@ -45,7 +47,7 @@ export function TeamCodeModal({ open, onOpenChange }: TeamCodeModalProps) {
         />
 
         <p className="text-text/60 font-handwritten text-center text-sm">
-          Ask your trip organizer for the code!
+          {t('codeModal.hint')}
         </p>
       </div>
     </Modal>

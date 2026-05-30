@@ -1,0 +1,9 @@
+{
+  "title": "✨ Scan to join the trip",
+  "subtitle": "Invite friends into the journey",
+  "download": "Download",
+  "share": "Share",
+  "footer": "Share this memory space",
+  "shareTitle": "Join {{name}} on Memory Trip",
+  "shareText": "Scan this QR code to join our trip: {{name}}"
+}

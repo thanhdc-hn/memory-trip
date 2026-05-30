@@ -1,6 +1,7 @@
 import { Star } from 'lucide-react';
 
 import { type FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { Float, Tape } from '@/components/animation/animation-utils';
@@ -15,6 +16,7 @@ import storage from '@/utils/storage.ts';
 
 const Home: FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation('home');
   const [showJoinModal, setShowJoinModal] = useState(false);
 
   useEffect(() => {
@@ -53,11 +55,10 @@ const Home: FC = () => {
             </div>
           </Float>
           <p className="font-handwritten text-text mx-auto max-w-md text-2xl">
-            "Our shared scrapbook of the best summer ever!"
+            {t('brandTagline')}
           </p>
           <p className="font-rounded text-text/60 mx-auto max-w-lg text-lg">
-            Collect your team's trip photos and notes in one cozy place — then
-            relive them together.
+            {t('intro')}
           </p>
         </header>
       }
@@ -71,35 +72,35 @@ const Home: FC = () => {
       <section className="space-y-12">
         <div>
           <div className="mb-2 flex items-center gap-2 text-3xl font-bold">
-            <Star className="text-accent fill-accent" /> Recent Memories
+            <Star className="text-accent fill-accent" /> {t('recentTitle')}
           </div>
           <p className="font-rounded text-text/60 mb-6 text-lg">
-            A peek at the little moments teams are collecting together.
+            {t('recentSubtitle')}
           </p>
           <MasonryGrid>
             <MemoryPostCard
               imageUrl="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
-              title="Sunset at the beach! 🌴"
+              title={t('demo.beach')}
               author="Junie"
               date="2026-08-12"
               rotation={2}
             />
             <MemoryPostCard
               imageUrl="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80"
-              title="Night market snacks 🍡"
+              title={t('demo.market')}
               author="Alex"
               date="2026-08-13"
               rotation={-2}
             />
             <MemoryPostCard
-              title="Had the most amazing ice cream today with the team! Best summer ever. 🍦✨"
+              title={t('demo.iceCream')}
               author="Sam"
               date="2026-08-14"
               rotation={1}
             />
             <MemoryPostCard
               imageUrl="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=80"
-              title="Morning hike views 🏔️"
+              title={t('demo.hike')}
               author="Mai"
               date="2026-08-15"
               rotation={-1}

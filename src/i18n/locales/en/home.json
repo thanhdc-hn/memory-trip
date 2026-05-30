@@ -1,0 +1,47 @@
+{
+  "brandTagline": "\"Our shared scrapbook of the best summer ever!\"",
+  "intro": "Collect your team's trip photos and notes in one cozy place — then relive them together.",
+  "recentTitle": "Recent Memories",
+  "recentSubtitle": "A peek at the little moments teams are collecting together.",
+  "demo": {
+    "beach": "Sunset at the beach! 🌴",
+    "market": "Night market snacks 🍡",
+    "iceCream": "Had the most amazing ice cream today with the team! Best summer ever. 🍦✨",
+    "hike": "Morning hike views 🏔️"
+  },
+  "howItWorks": "How It Works",
+  "steps": [
+    {
+      "title": "Join your team",
+      "description": "Enter the team code your friends shared with you."
+    },
+    {
+      "title": "Snap & share",
+      "description": "Post your photos and little notes as the trip happens."
+    },
+    {
+      "title": "Relive & export",
+      "description": "Browse the timeline and save it all as a PDF album."
+    }
+  ],
+  "greetings": [
+    {
+      "title": "Tiny moments become memories ✨",
+      "subtitle": "Ready for this trip?"
+    },
+    {
+      "title": "Collect your team's little memories 🌴",
+      "subtitle": "One photo at a time."
+    },
+    {
+      "title": "A cozy place for your trip memories 🌞",
+      "subtitle": "Start your adventure today."
+    },
+    {
+      "title": "Our best summer starts here 🐚",
+      "subtitle": "Share the magic together."
+    }
+  ],
+  "ready": "READY!",
+  "contactPrompt": "Want to save memories? Please contact me via email."
+}

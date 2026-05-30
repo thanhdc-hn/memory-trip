@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { jsPDF } from 'jspdf';
 
+import i18n from '@/i18n';
 import type { Post } from '@/services/posts.service';
 import type { PublicTeam } from '@/services/public-team.service';
 
@@ -17,20 +18,31 @@ const PAPER = '#FFFDF9';
 const CELL_W = (PAGE_W - 2 * MARGIN - GAP) / 2;
 const CELL_H = (PAGE_H - 2 * MARGIN - GAP) / 2;
 
+// Indie Flower has no Vietnamese glyphs; Patrick Hand does. Load both and pick
+// the family by language so captions/labels render correct diacritics.
+const FONTS = [
+  { family: 'Indie Flower', url: '/fonts/IndieFlower-Regular.ttf' },
+  { family: 'Patrick Hand', url: '/fonts/PatrickHand-Regular.ttf' },
+];
 let fontReady = false;
 async function ensureFont() {
   if (fontReady || typeof FontFace === 'undefined') return;
   try {
-    const face = new FontFace(
-      'Indie Flower',
-      'url(/fonts/IndieFlower-Regular.ttf)',
+    await Promise.all(
+      FONTS.map(async ({ family, url }) => {
+        const face = new FontFace(family, `url(${url})`);
+        await face.load();
+        document.fonts.add(face);
+      }),
     );
-    await face.load();
-    document.fonts.add(face);
     fontReady = true;
   } catch (err) {
-    console.error('Indie Flower font failed to load, using fallback:', err);
+    console.error('Album font failed to load, using fallback:', err);
   }
+}
+
+function handFamily(): string {
+  return i18n.language === 'vi' ? 'Patrick Hand' : 'Indie Flower';
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {
@@ -42,7 +54,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-const hand = (size: number) => `${size}px "Indie Flower", cursive`;
+const hand = (size: number) => `${size}px "${handFamily()}", cursive`;
 
 function rotationFor(id: string): number {
   return ((parseInt(id.slice(0, 8), 16) % 5) - 2) * (Math.PI / 180);
@@ -221,14 +233,16 @@ function renderCover(team: PublicTeam, total: number): string {
   ctx.fillStyle = '#ff7f50';
   ctx.font = hand(PAGE_W * 0.05);
   ctx.fillText(
-    `${total} ${total === 1 ? 'memory' : 'memories'}`,
+    i18n.t('export:pdf.memories', { count: total }),
     PAGE_W / 2,
     PAGE_H * 0.5,
   );
   ctx.fillStyle = '#9a9a9a';
   ctx.font = hand(PAGE_W * 0.038);
   ctx.fillText(
-    `Exported ${dayjs().format('MMMM D, YYYY')}`,
+    i18n.t('export:pdf.exportedOn', {
+      date: dayjs().format('D MMMM, YYYY'),
+    }),
     PAGE_W / 2,
     PAGE_H * 0.55,
   );
@@ -322,7 +336,10 @@ export async function shareAlbumPdf(
 
   if (navigator.canShare?.({ files: [file] })) {
     try {
-      await navigator.share({ files: [file], title: `${team.name} memories` });
+      await navigator.share({
+        files: [file],
+        title: i18n.t('export:pdf.shareTitle', { name: team.name }),
+      });
       return;
     } catch (err) {
       if ((err as Error).name === 'AbortError') return;

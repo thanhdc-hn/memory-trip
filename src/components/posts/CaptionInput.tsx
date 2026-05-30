@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CaptionInputProps {
   value: string;
@@ -11,6 +12,7 @@ export const CaptionInput: React.FC<CaptionInputProps> = ({
   onChange,
   disabled,
 }) => {
+  const { t } = useTranslation('posts');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ export const CaptionInput: React.FC<CaptionInputProps> = ({
         value={value}
         onChange={handleChange}
         disabled={disabled}
-        placeholder="Write a memory..."
+        placeholder={t('captionPlaceholder')}
         className="font-handwritten focus:ring-accent/20 placeholder:text-text/40 min-h-[120px] w-full resize-none rounded-2xl border-none bg-white/50 p-4 text-lg placeholder:font-sans focus:ring-2"
       />
       <div className="flex justify-end pr-2">

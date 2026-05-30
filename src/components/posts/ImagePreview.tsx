@@ -1,6 +1,7 @@
 import { X } from 'lucide-react';
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ImagePreviewProps {
   file: File;
@@ -11,6 +12,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
   file,
   onRemove,
 }) => {
+  const { t } = useTranslation('posts');
   const [previewUrl, setPreviewUrl] = useState<string>('');
 
   useEffect(() => {
@@ -23,7 +25,7 @@ export const ImagePreview: React.FC<ImagePreviewProps> = ({
     <div className="animate-in zoom-in-95 relative aspect-square w-full overflow-hidden rounded-2xl shadow-lg duration-300">
       <img
         src={previewUrl}
-        alt="Preview"
+        alt={t('previewAlt')}
         className="h-full w-full object-cover"
       />
       <button

@@ -1,0 +1,47 @@
+{
+  "brandTagline": "Cuốn sổ lưu niệm chung cho những chuyến đi đáng nhớ ✨",
+  "intro": "Lưu lại ảnh, câu chuyện và những khoảnh khắc vui vẻ của cả nhóm ở một nơi riêng tư — để sau này cùng nhau nhìn lại.",
+  "recentTitle": "Kỷ niệm gần đây",
+  "recentSubtitle": "Một vài khoảnh khắc đáng yêu mà các nhóm bạn đang cùng nhau lưu giữ.",
+  "demo": {
+    "beach": "Hoàng hôn trên biển đẹp quá! 🌴",
+    "market": "Càn quét chợ đêm cùng hội bạn 🍡",
+    "iceCream": "Cả nhóm vừa tìm được quán kem siêu ngon! 🍦✨",
+    "hike": "View trên đỉnh núi sáng nay 🏔️"
+  },
+  "howItWorks": "Ghi lại chuyến đi trong 3 bước",
+  "steps": [
+    {
+      "title": "Tham gia nhóm",
+      "description": "Nhập mã nhóm mà bạn bè gửi cho bạn."
+    },
+    {
+      "title": "Đăng ảnh & chia sẻ",
+      "description": "Lưu lại ảnh và vài dòng cảm xúc ngay trong chuyến đi."
+    },
+    {
+      "title": "Xem lại & xuất album",
+      "description": "Cùng nhau xem lại hành trình và lưu thành album PDF."
+    }
+  ],
+  "greetings": [
+    {
+      "title": "Những khoảnh khắc nhỏ tạo nên kỷ niệm lớn ✨",
+      "subtitle": "Sẵn sàng cho chuyến đi tiếp theo chưa?"
+    },
+    {
+      "title": "Lưu lại những ngày vui của cả nhóm 🌴",
+      "subtitle": "Bắt đầu từ một tấm ảnh."
+    },
+    {
+      "title": "Một góc nhỏ để cất giữ kỷ niệm 🌞",
+      "subtitle": "Mọi hành trình đều đáng nhớ."
+    },
+    {
+      "title": "Những chuyến đi đẹp nhất bắt đầu từ đây 🐚",
+      "subtitle": "Cùng nhau lưu lại từng khoảnh khắc."
+    }
+  ],
+  "ready": "BẮT ĐẦU THÔI!",
+  "contactPrompt": "Muốn lưu giữ những kỷ niệm của riêng mình? Hãy liên hệ với tôi qua email."
+}

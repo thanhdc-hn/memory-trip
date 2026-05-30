@@ -1,5 +1,7 @@
 import { ArrowUp } from 'lucide-react';
 
+import { useTranslation } from 'react-i18next';
+
 import { cn } from '@/lib/utils';
 
 interface NewMemoriesPillProps {
@@ -8,6 +10,7 @@ interface NewMemoriesPillProps {
 }
 
 export function NewMemoriesPill({ count, onClick }: NewMemoriesPillProps) {
+  const { t } = useTranslation('timeline');
   const visible = count > 0;
 
   return (
@@ -24,7 +27,7 @@ export function NewMemoriesPill({ count, onClick }: NewMemoriesPillProps) {
         className="bg-primary animate-in zoom-in fade-in flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-bold text-white shadow-lg ring-2 ring-white"
       >
         <ArrowUp className="h-4 w-4" />
-        {count} new {count === 1 ? 'memory' : 'memories'}
+        {t('newMemories', { count })}
       </button>
     </div>
   );

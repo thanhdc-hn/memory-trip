@@ -1,0 +1,9 @@
+{
+  "title": "✨ Quét mã để tham gia chuyến đi",
+  "subtitle": "Mời bạn bè cùng tham gia hành trình",
+  "download": "Tải xuống",
+  "share": "Chia sẻ",
+  "footer": "Chia sẻ không gian kỷ niệm này",
+  "shareTitle": "Tham gia {{name}} trên Memory Trip",
+  "shareText": "Quét mã QR này để tham gia chuyến đi của chúng mình: {{name}}"
+}

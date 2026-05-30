@@ -1,0 +1,43 @@
+{
+  "welcomeMessages": [
+    "Sẵn sàng cho một hành trình mới chưa? 🌏",
+    "Kỷ niệm đẹp nhất là khi được sẻ chia! ✨",
+    "Bước vào cuốn sổ mùa hè của chúng mình 📔",
+    "Mang theo kem chống nắng, đi thôi nào! ☀️",
+    "Hộp ký ức số của bạn đang chờ ⏳"
+  ],
+  "nickname": {
+    "label": "Biệt danh của bạn là gì?",
+    "placeholder": "Nhập một cái tên thật dễ thương...",
+    "tooltip": "✨ Chưa ưng cái tên này? Thử tên khác nhé!",
+    "randomize": "Đổi biệt danh ngẫu nhiên"
+  },
+  "password": {
+    "label": "Mật khẩu bí mật",
+    "placeholder": "Nhập mật khẩu nhóm",
+    "error": "Ối! Sai mật khẩu rồi ✨"
+  },
+  "submit": "THAM GIA KHÔNG GIAN",
+  "joining": "ĐANG THAM GIA...",
+  "invalid": {
+    "title": "Không tìm thấy không gian",
+    "description": "Không gian kỷ niệm này dường như không tồn tại... có lẽ đã tan biến theo làn gió mùa hè rồi?",
+    "backHome": "Về trang chủ"
+  },
+  "archived": {
+    "label": "ĐÃ LƯU TRỮ",
+    "description": "Không gian kỷ niệm này đã bị khóa. Hiện tại không thể tham gia được nữa.",
+    "contact": "Liên hệ quản trị viên để mở khóa."
+  },
+  "codeModal": {
+    "title": "Nhập mã nhóm",
+    "description": "Nhập mã bí mật để tham gia chuyến đi! ✈️",
+    "submit": "Tham gia nhóm",
+    "hint": "Hỏi người tổ chức chuyến đi để lấy mã nhé!"
+  },
+  "errors": {
+    "empty": "Vui lòng nhập mã nhóm",
+    "notFound": "Ối! Không tìm thấy nhóm. Hãy hỏi người tổ chức chuyến đi nhé! 💫",
+    "network": "Lỗi mạng. Vui lòng kiểm tra kết nối! 🌐"
+  }
+}

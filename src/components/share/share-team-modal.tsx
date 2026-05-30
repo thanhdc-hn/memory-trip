@@ -1,6 +1,7 @@
 import { Download, Share2 } from 'lucide-react';
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { default as QRCode } from 'react-qr-code';
 
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,7 @@ interface ShareTeamModalProps {
 }
 
 export function ShareTeamModal({ team, isOpen, onClose }: ShareTeamModalProps) {
+  const { t } = useTranslation('share');
   const [canShare, setCanShare] = useState(false);
 
   useEffect(() => {
@@ -82,8 +84,8 @@ export function ShareTeamModal({ team, isOpen, onClose }: ShareTeamModalProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Join ${team.name} on Memory Trip`,
-          text: `Scan this QR code to join our trip: ${team.name}`,
+          title: t('shareTitle', { name: team.name }),
+          text: t('shareText', { name: team.name }),
           url: inviteUrl,
         });
       } catch (err) {
@@ -101,10 +103,10 @@ export function ShareTeamModal({ team, isOpen, onClose }: ShareTeamModalProps) {
 
           <DialogHeader className="mb-6">
             <DialogTitle className="font-serif text-2xl font-bold text-[#2b2b2b]">
-              ✨ Scan to join the trip
+              {t('title')}
             </DialogTitle>
             <p className="mt-1 text-sm font-medium text-[#8b7e6d]">
-              Invite friends into the journey
+              {t('subtitle')}
             </p>
           </DialogHeader>
 
@@ -132,7 +134,7 @@ export function ShareTeamModal({ team, isOpen, onClose }: ShareTeamModalProps) {
                 className="h-12 flex-1 rounded-2xl bg-[#2b2b2b] font-bold text-white shadow-lg shadow-black/10 transition-transform hover:bg-[#3d3d3d] active:scale-95"
               >
                 <Download className="mr-2 h-4 w-4" />
-                Download
+                {t('download')}
               </Button>
               {canShare && (
                 <Button
@@ -141,7 +143,7 @@ export function ShareTeamModal({ team, isOpen, onClose }: ShareTeamModalProps) {
                   className="h-12 flex-1 rounded-2xl border-[#e6ddd0] font-bold text-[#2b2b2b] transition-transform hover:bg-[#f7f2eb] active:scale-95"
                 >
                   <Share2 className="mr-2 h-4 w-4" />
-                  Share
+                  {t('share')}
                 </Button>
               )}
             </div>
@@ -151,12 +153,12 @@ export function ShareTeamModal({ team, isOpen, onClose }: ShareTeamModalProps) {
               onClick={onClose}
               className="w-full font-medium text-[#8b7e6d] hover:bg-transparent hover:text-[#2b2b2b]"
             >
-              Close
+              {t('common:close')}
             </Button>
           </div>
 
           <div className="mt-6 text-[10px] font-bold tracking-widest text-[#d4c8b8] uppercase">
-            Share this memory space
+            {t('footer')}
           </div>
         </div>
       </DialogContent>

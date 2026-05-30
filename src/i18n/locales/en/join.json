@@ -1,0 +1,43 @@
+{
+  "welcomeMessages": [
+    "Ready for a new adventure? 🌏",
+    "The best memories are shared! ✨",
+    "Step into our summer scrapbook 📔",
+    "Grab your sunscreen, let's go! ☀️",
+    "Your digital time capsule awaits ⏳"
+  ],
+  "nickname": {
+    "label": "What's your nickname?",
+    "placeholder": "Type something cute...",
+    "tooltip": "✨ Not feeling this one? Try another nickname!",
+    "randomize": "Randomize nickname"
+  },
+  "password": {
+    "label": "Secret Key",
+    "placeholder": "Enter team password",
+    "error": "Oops! Wrong password ✨"
+  },
+  "submit": "JOIN MEMORY SPACE",
+  "joining": "JOINING...",
+  "invalid": {
+    "title": "Space Not Found",
+    "description": "This memory space doesn't seem to exist... maybe it vanished into the summer breeze?",
+    "backHome": "Back Home"
+  },
+  "archived": {
+    "label": "ARCHIVED",
+    "description": "This memory space has been locked. New explorers cannot join at this time.",
+    "contact": "Contact the space admin to unlock it."
+  },
+  "codeModal": {
+    "title": "Enter Team Code",
+    "description": "Type your secret code to join the trip! ✈️",
+    "submit": "Join Team",
+    "hint": "Ask your trip organizer for the code!"
+  },
+  "errors": {
+    "empty": "Please enter a team code",
+    "notFound": "Oops! Team not found. Please ask your trip organizer! 💫",
+    "network": "Network error. Please check your connection! 🌐"
+  }
+}

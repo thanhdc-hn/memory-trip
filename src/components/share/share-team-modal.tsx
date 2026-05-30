@@ -10,20 +10,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import type { Team } from '@/services/team.service';
 import { URL_PATH } from '@/utils/constants';
 
-interface InviteTeamModalProps {
-  team: Team | null;
+interface ShareTeamModalProps {
+  team: { name: string; invite_code: string } | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export function InviteTeamModal({
-  team,
-  isOpen,
-  onClose,
-}: InviteTeamModalProps) {
+export function ShareTeamModal({ team, isOpen, onClose }: ShareTeamModalProps) {
   const [canShare, setCanShare] = useState(false);
 
   useEffect(() => {

@@ -16,7 +16,15 @@ import {
 import { STORAGE_KEY } from '@/utils/constants';
 import storage from '@/utils/storage';
 
-export function QuitTeamDialog() {
+interface QuitTeamDialogProps {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}
+
+export function QuitTeamDialog({
+  open,
+  onOpenChange,
+}: QuitTeamDialogProps = {}) {
   const navigate = useNavigate();
 
   const handleQuit = () => {
@@ -26,17 +34,19 @@ export function QuitTeamDialog() {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-text/60 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
-        >
-          <LogOut className="h-5 w-5" />
-          <span className="sr-only">Quit Team</span>
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {onOpenChange === undefined && (
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-text/60 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="sr-only">Quit Team</span>
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold">

@@ -8,6 +8,13 @@ export interface PublicTeam {
   has_password: boolean;
 }
 
+export interface TeamStats {
+  memory_count: number;
+  member_count: number;
+  first_memory_at: string | null;
+  last_memory_at: string | null;
+}
+
 export const publicTeamService = {
   async getTeam(id: string): Promise<PublicTeam | null> {
     const { data, error } = await supabase
@@ -47,5 +54,14 @@ export const publicTeamService = {
 
     if (error) throw error;
     return !!data;
+  },
+
+  async getTeamStats(teamId: string): Promise<TeamStats> {
+    const { data, error } = await supabase.rpc('get_team_stats', {
+      p_team_id: teamId,
+    });
+
+    if (error) throw error;
+    return data as TeamStats;
   },
 };

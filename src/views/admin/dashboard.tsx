@@ -9,10 +9,10 @@ import {
   AdminLayout,
 } from '@/components/admin/layout/admin-layout';
 import { CreateTeamSheet } from '@/components/admin/team/create-team-sheet';
-import { InviteTeamModal } from '@/components/admin/team/invite-team-modal';
 import { TeamCard } from '@/components/admin/team/team-card';
 import { TeamDetailView } from '@/components/admin/team/team-detail-view';
 import { EmptyState } from '@/components/admin/ui/admin-ui';
+import { ShareTeamModal } from '@/components/share/share-team-modal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -250,7 +250,7 @@ export default function AdminDashboard() {
         onCreate={handleCreateTeam}
       />
 
-      <InviteTeamModal
+      <ShareTeamModal
         team={teams.find((t) => t.id === qrTeamId) || null}
         isOpen={!!qrTeamId}
         onClose={() => setQrTeamId(null)}

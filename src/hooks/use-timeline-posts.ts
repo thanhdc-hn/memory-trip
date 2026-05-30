@@ -98,6 +98,21 @@ export function useTimelinePosts(teamId: string | null) {
     await fetchPosts(page + 1);
   };
 
+  const refresh = async () => {
+    if (!teamId) return;
+    try {
+      const data = await postsService.getPosts(teamId, 0, PAGE_SIZE);
+      setPosts(data);
+      setInitPostsCount(data.length);
+      setHasMore(data.length === PAGE_SIZE);
+      setPage(0);
+      setNewPostsCount(0);
+    } catch (err) {
+      console.error('Failed to refresh posts:', err);
+      setError('Failed to load memories');
+    }
+  };
+
   const resetNewPostsCount = () => {
     setNewPostsCount(0);
     setInitPostsCount(posts.length);
@@ -111,6 +126,7 @@ export function useTimelinePosts(teamId: string | null) {
     newPostsCount,
     error,
     loadMore,
+    refresh,
     resetNewPostsCount,
     addOptimisticPost: (post: Post) => {
       setPosts((prev) => {

@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 
 import { useState } from 'react';
 
@@ -14,16 +13,13 @@ import { useDoubleTap } from '@/hooks/useDoubleTap';
 import { usePostReactions } from '@/hooks/usePostReactions';
 import type { Post } from '@/services/posts.service';
 
-dayjs.extend(relativeTime);
-
 interface PostCardProps {
   post: Post;
-  onClick: () => void;
   isFirst?: boolean;
 }
 
-export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
-  const timeAgo = dayjs(post.created_at).fromNow();
+export function PostCard({ post, isFirst = false }: PostCardProps) {
+  const formattedDate = dayjs(post.created_at).format('HH:mm');
   const imageUrl = getPostImageUrl(post);
   const { hasHearted, heartCount, toggleHeart, showTooltip } = usePostReactions(
     post.id,
@@ -74,10 +70,7 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
   const rotation = (parseInt(post.id.substring(0, 8), 16) % 6) - 3;
 
   return (
-    <div
-      className="group animate-in fade-in slide-in-from-bottom-2 duration-500"
-      onClick={onClick}
-    >
+    <div className="group animate-in fade-in slide-in-from-bottom-2 duration-500">
       {imageUrl ? (
         <div className="relative touch-manipulation" onClick={onDoubleTap}>
           <InstagramHeartOverlay trigger={bigHeartTrigger} />
@@ -103,11 +96,6 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
                 @{post.author_name}
               </Badge>
             </div>
-            <div className="absolute top-2 right-2">
-              <span className="text-text/40 font-rounded rounded-full bg-white/60 px-2 py-0.5 text-[10px] backdrop-blur-sm">
-                {timeAgo}
-              </span>
-            </div>
 
             <div className="absolute right-3 bottom-10">
               <HeartButton
@@ -117,48 +105,55 @@ export function PostCard({ post, onClick, isFirst = false }: PostCardProps) {
               />
             </div>
           </ImageFrame>
-        </div>
-      ) : (
-        <div
-          className="shadow-polaroid relative flex aspect-square cursor-pointer touch-manipulation flex-col items-center justify-center rounded-sm bg-white p-6 text-center transition-transform duration-300 hover:rotate-0 active:scale-[0.98]"
-          style={{ transform: `rotate(${rotation}deg)` }}
-          onClick={onDoubleTap}
-        >
-          <InstagramHeartOverlay trigger={bigHeartTrigger} />
-          <FloatingHearts
-            trigger={floatTrigger}
-            isSad={isSadAnimation}
-            x={clickCoord?.x}
-            y={clickCoord?.y}
-            isDoubleInteraction={isDoubleInteraction}
-          />
-          <HeartTooltip show={showTooltip && isFirst} />
-          <div className="absolute top-2 left-2">
-            <Badge
-              variant="nickname"
-              className="bg-sand/20 border-none shadow-sm backdrop-blur-sm"
-            >
-              @{post.author_name}
-            </Badge>
-          </div>
-          <div className="absolute top-2 right-2">
-            <span className="text-text/40 font-rounded px-2 py-0.5 text-[10px]">
-              {timeAgo}
+          <div className="flex items-center justify-end px-2 pt-3">
+            <span className="text-text/70 font-rounded text-lg">
+              {formattedDate}
             </span>
           </div>
-          <p className="font-handwritten text-text px-4 text-xl leading-relaxed">
-            {post.caption}
-          </p>
-          <div className="absolute right-4 bottom-12">
-            <span className="text-accent text-2xl">✨</span>
-          </div>
-
-          <div className="absolute right-4 bottom-4">
-            <HeartButton
-              hasHearted={hasHearted}
-              heartCount={heartCount}
-              onClick={onHeartClick}
+        </div>
+      ) : (
+        <div>
+          <div
+            className="shadow-polaroid relative flex aspect-square cursor-pointer touch-manipulation flex-col items-center justify-center rounded-sm bg-white p-6 text-center transition-transform duration-300 hover:rotate-0 active:scale-[0.98]"
+            style={{ transform: `rotate(${rotation}deg)` }}
+            onClick={onDoubleTap}
+          >
+            <InstagramHeartOverlay trigger={bigHeartTrigger} />
+            <FloatingHearts
+              trigger={floatTrigger}
+              isSad={isSadAnimation}
+              x={clickCoord?.x}
+              y={clickCoord?.y}
+              isDoubleInteraction={isDoubleInteraction}
             />
+            <HeartTooltip show={showTooltip && isFirst} />
+            <div className="absolute top-2 left-2">
+              <Badge
+                variant="nickname"
+                className="bg-sand/20 border-none shadow-sm backdrop-blur-sm"
+              >
+                @{post.author_name}
+              </Badge>
+            </div>
+            <p className="font-handwritten text-text px-4 text-xl leading-relaxed">
+              {post.caption}
+            </p>
+            <div className="absolute right-4 bottom-12">
+              <span className="text-accent text-2xl">✨</span>
+            </div>
+
+            <div className="absolute right-4 bottom-4">
+              <HeartButton
+                hasHearted={hasHearted}
+                heartCount={heartCount}
+                onClick={onHeartClick}
+              />
+            </div>
+          </div>
+          <div className="flex items-center justify-end px-2 pt-3">
+            <span className="text-text/50 font-rounded text-lg">
+              {formattedDate}
+            </span>
           </div>
         </div>
       )}

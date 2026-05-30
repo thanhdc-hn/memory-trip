@@ -1,16 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 import { UploadFabButton } from '@/components/memory/upload-fab-button';
 import { CreatePostSheet } from '@/components/posts/CreatePostSheet';
 import { EmptyTimelineState } from '@/components/timeline/EmptyTimelineState';
-import { IncomingFeatureModal } from '@/components/timeline/IncomingFeatureModal';
+import { NewMemoriesPill } from '@/components/timeline/NewMemoriesPill';
 import { PostCard } from '@/components/timeline/PostCard';
 import { PostSkeleton } from '@/components/timeline/PostSkeleton';
+import { PullToRefresh } from '@/components/timeline/PullToRefresh';
 import { ScrollToTopButton } from '@/components/timeline/ScrollToTopButton';
 import { TimelineHeader } from '@/components/timeline/TimelineHeader';
+import { Divider } from '@/components/ui/divider';
 import { useCurrentTeam } from '@/hooks/use-current-team';
 import { useTimelinePosts } from '@/hooks/use-timeline-posts';
+import type { Post } from '@/services/posts.service';
 import { POST_WAIT_TIME } from '@/utils/constants';
 import { formatCooldown } from '@/utils/time';
 
@@ -22,6 +27,7 @@ export default function TimelinePage() {
     isLoadingMore,
     hasMore,
     loadMore,
+    refresh,
     addOptimisticPost,
     removeOptimisticPost,
     newPostsCount,
@@ -49,7 +55,6 @@ export default function TimelinePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [resetNewPostsCount]);
 
-  const [showIncomingModal, setShowIncomingModal] = useState(false);
   const [showCreateSheet, setShowCreateSheet] = useState(false);
   const [cooldown, setCooldown] = useState(0);
 
@@ -67,70 +72,100 @@ export default function TimelinePage() {
     setCooldown(Math.floor(POST_WAIT_TIME / 1000));
   }, []);
 
-  const handlePostClick = () => {
-    // setShowIncomingModal(true);
-  };
-
   const handleCreatePost = () => {
     if (team?.is_locked) return;
     setShowCreateSheet(true);
   };
 
+  const handleShowNewMemories = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    resetNewPostsCount();
+  }, [resetNewPostsCount]);
+
   const loading = teamLoading || postsLoading;
+
+  const dayGroups = useMemo(() => {
+    const groups: { day: string; posts: Post[] }[] = [];
+    for (const post of posts) {
+      const day = dayjs(post.created_at).format('MMM D, YYYY');
+      const last = groups[groups.length - 1];
+      if (last && last.day === day) last.posts.push(post);
+      else groups.push({ day, posts: [post] });
+    }
+    return groups;
+  }, [posts]);
 
   return (
     <div className="bg-surface flex min-h-screen flex-col items-center">
       <TimelineHeader team={team} />
 
-      <main className="w-full max-w-2xl flex-1 px-4 py-8">
-        {team?.is_locked && (
-          <div className="animate-in fade-in slide-in-from-top-4 mb-6 duration-500">
-            <div className="bg-primary/10 rounded-2xl p-4 text-center">
-              <p className="text-primary font-medium">
-                This trip memory book is closed 🌙
-              </p>
-            </div>
-          </div>
-        )}
+      <NewMemoriesPill count={newPostsCount} onClick={handleShowNewMemories} />
 
-        {loading ? (
-          <div className="grid grid-cols-1 gap-6">
-            {[1, 2, 3].map((i) => (
-              <PostSkeleton key={i} />
-            ))}
-          </div>
-        ) : posts.length > 0 ? (
-          <>
-            <div className="animate-in fade-in slide-in-from-bottom-4 grid grid-cols-1 gap-8 duration-700">
-              {posts.map((post, index) => (
-                <PostCard
-                  key={post.id}
-                  post={post}
-                  onClick={handlePostClick}
-                  isFirst={index === 0}
-                />
+      <PullToRefresh
+        onRefresh={refresh}
+        className="flex w-full max-w-2xl flex-1 flex-col"
+      >
+        <main className="w-full flex-1 px-4 py-8">
+          {team?.is_locked && (
+            <div className="animate-in fade-in slide-in-from-top-4 mb-6 duration-500">
+              <div className="bg-primary/10 rounded-2xl p-4 text-center">
+                <p className="text-primary font-medium">
+                  This trip memory book is closed 🌙
+                </p>
+              </div>
+            </div>
+          )}
+
+          {loading ? (
+            <div className="grid grid-cols-1 gap-6">
+              {[1, 2, 3].map((i) => (
+                <PostSkeleton key={i} />
               ))}
             </div>
-
-            {(hasMore || isLoadingMore) && (
-              <div ref={ref} className="mt-8 flex justify-center py-4">
-                {isLoadingMore ? (
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
-                    <p className="text-muted-foreground text-sm font-medium">
-                      Loading more memories...
-                    </p>
-                  </div>
-                ) : (
-                  <div className="h-8" /> // Invisible trigger
-                )}
+          ) : posts.length > 0 ? (
+            <>
+              <div className="animate-in fade-in slide-in-from-bottom-4 space-y-8 duration-700">
+                {dayGroups.map((group) => (
+                  <section key={group.day} className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <span className="font-handwritten text-text-h text-2xl">
+                        {group.day}
+                      </span>
+                      <Divider variant="dashed" className="flex-1" />
+                    </div>
+                    <div className="grid grid-cols-1 gap-8">
+                      {group.posts.map((post) => (
+                        <PostCard
+                          key={post.id}
+                          post={post}
+                          isFirst={post.id === posts[0]?.id}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                ))}
               </div>
-            )}
-          </>
-        ) : (
-          <EmptyTimelineState />
-        )}
-      </main>
+
+              {(hasMore || isLoadingMore) && (
+                <div ref={ref} className="mt-8 flex justify-center py-4">
+                  {isLoadingMore ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent" />
+                      <p className="text-muted-foreground text-sm font-medium">
+                        Loading more memories...
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="h-8" /> // Invisible trigger
+                  )}
+                </div>
+              )}
+            </>
+          ) : (
+            <EmptyTimelineState />
+          )}
+        </main>
+      </PullToRefresh>
 
       {!team?.is_locked && (
         <UploadFabButton
@@ -153,11 +188,6 @@ export default function TimelinePage() {
         onOptimisticPost={addOptimisticPost}
         onRollback={removeOptimisticPost}
         onSuccess={handlePostSuccess}
-      />
-
-      <IncomingFeatureModal
-        open={showIncomingModal}
-        onOpenChange={setShowIncomingModal}
       />
 
       <ScrollToTopButton newPostsCount={newPostsCount} />

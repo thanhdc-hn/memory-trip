@@ -14,12 +14,7 @@ export function useAdminSecret() {
 
   useEffect(() => {
     // Reset if we are already on admin page
-    if (
-      location.pathname.startsWith(URL_PATH.ADMIN) ||
-      location.pathname.includes(URL_PATH.JOIN)
-    ) {
-      return;
-    }
+    if (location.pathname !== '/') return;
 
     const handleClick = () => {
       const now = Date.now();

@@ -1,4 +1,4 @@
-import { type HTMLAttributes, forwardRef } from 'react';
+import { type HTMLAttributes, forwardRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -11,6 +11,7 @@ interface ImageFrameProps extends HTMLAttributes<HTMLDivElement> {
 
 const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
   ({ className, src, alt, caption, rotation = 0, children, ...props }, ref) => {
+    const [loaded, setLoaded] = useState(false);
     return (
       <div
         ref={ref}
@@ -22,7 +23,22 @@ const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
         {...props}
       >
         <div className="bg-sand/20 relative aspect-square overflow-hidden rounded-sm">
-          <img src={src} alt={alt} className="h-full w-full object-cover" />
+          {!loaded && (
+            <div className="bg-sand/20 absolute inset-0 animate-pulse" />
+          )}
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            ref={(node) => {
+              if (node?.complete) setLoaded(true);
+            }}
+            onLoad={() => setLoaded(true)}
+            className={cn(
+              'h-full w-full object-cover transition-opacity duration-500',
+              loaded ? 'opacity-100' : 'opacity-0',
+            )}
+          />
           {children}
         </div>
         {caption && (

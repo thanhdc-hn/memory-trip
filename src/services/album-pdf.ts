@@ -4,6 +4,7 @@ import { jsPDF } from 'jspdf';
 import i18n from '@/i18n';
 import type { Post } from '@/services/posts.service';
 import type { PublicTeam } from '@/services/public-team.service';
+import { getDateFormat } from '@/utils/time';
 
 // A4 portrait in mm and the canvas raster scale (px per mm).
 const A4_W = 210;
@@ -131,7 +132,7 @@ function wrapLines(
 }
 
 function meta(post: Post): string {
-  return `@${post.author_name} · ${dayjs(post.created_at).format('MMM D, YYYY')}`;
+  return `@${post.author_name} · ${dayjs(post.created_at).format(getDateFormat(i18n.language))}`;
 }
 
 // Draws one memory polaroid centred at (cx, cy), gently rotated.

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { Download } from 'lucide-react';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Modal } from '@/components/ui/modal';
 import { URL_PATH } from '@/utils/constants';
 import storage from '@/utils/storage';
+import { getDateFormat } from '@/utils/time';
 
 const SHOW_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
 
@@ -20,15 +21,26 @@ export function ClosureWarningModal({
   closeAt?: string | null;
 }) {
   const navigate = useNavigate();
-  const { t } = useTranslation('timeline');
-  const isScheduled = !!closeAt && dayjs(closeAt).isAfter(dayjs());
-
+  const { t, i18n } = useTranslation('timeline');
   const storageKey = `closure-warning-shown:${teamId}`;
   const [open, setOpen] = useState(() => {
+    const isScheduled = !!closeAt && dayjs(closeAt).isAfter(dayjs());
     if (!isScheduled || !teamId) return false;
     const last = storage.get<number>(storageKey) ?? 0;
     return Date.now() - last >= SHOW_INTERVAL;
   });
+
+  const isScheduled = !!closeAt && dayjs(closeAt).isAfter(dayjs());
+
+  useEffect(() => {
+    if (isScheduled && teamId) {
+      const last = storage.get<number>(storageKey) ?? 0;
+      const shouldOpen = Date.now() - last >= SHOW_INTERVAL;
+      setOpen(shouldOpen);
+    } else {
+      setOpen(false);
+    }
+  }, [isScheduled, teamId, storageKey]);
 
   const handleOpenChange = (next: boolean) => {
     if (!next) storage.set(storageKey, Date.now());
@@ -43,7 +55,7 @@ export function ClosureWarningModal({
       onOpenChange={handleOpenChange}
       title={t('closure.title')}
       description={t('closure.description', {
-        date: dayjs(closeAt).format('MMM D, YYYY'),
+        date: dayjs(closeAt).format(getDateFormat(i18n.language)),
       })}
       contentClassName="sm:max-w-[425px]"
     >

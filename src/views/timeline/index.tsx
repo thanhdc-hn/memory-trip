@@ -20,11 +20,11 @@ import { useTeamStats } from '@/hooks/use-team-stats';
 import { useTimelinePosts } from '@/hooks/use-timeline-posts';
 import type { Post } from '@/services/posts.service';
 import { POST_WAIT_TIME } from '@/utils/constants';
-import { formatCooldown } from '@/utils/time';
+import { formatCooldown, getDateFormat } from '@/utils/time';
 
 export default function TimelinePage() {
   const { team, loading: teamLoading } = useCurrentTeam();
-  const { t } = useTranslation('timeline');
+  const { t, i18n } = useTranslation('timeline');
   const stats = useTeamStats(team?.id || null);
   const limitReached =
     !!team?.post_limit && !!stats && stats.memory_count >= team.post_limit;
@@ -94,13 +94,13 @@ export default function TimelinePage() {
   const dayGroups = useMemo(() => {
     const groups: { day: string; posts: Post[] }[] = [];
     for (const post of posts) {
-      const day = dayjs(post.created_at).format('D MMM, YYYY');
+      const day = dayjs(post.created_at).format(getDateFormat(i18n.language));
       const last = groups[groups.length - 1];
       if (last && last.day === day) last.posts.push(post);
       else groups.push({ day, posts: [post] });
     }
     return groups;
-  }, [posts]);
+  }, [posts, i18n.language]);
 
   return (
     <div className="bg-surface flex min-h-screen flex-col items-center">

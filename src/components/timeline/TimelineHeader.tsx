@@ -20,7 +20,19 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
   const [showShare, setShowShare] = useState(false);
   const [showQuit, setShowQuit] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const y = window.scrollY;
+      setHidden(y > lastScrollY.current && y > 80);
+      lastScrollY.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -32,7 +44,10 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
   }, [menuOpen]);
 
   return (
-    <header className="bg-surface/80 border-border/50 safe-top sticky top-0 z-40 w-full border-b-2 px-4 pt-8 pb-2 backdrop-blur-md">
+    <header
+      className="bg-surface/80 border-border/50 safe-top sticky top-0 z-40 w-full border-b-2 px-4 pt-8 pb-2 backdrop-blur-md transition-transform duration-300"
+      style={{ transform: hidden ? 'translateY(-100%)' : 'translateY(0)' }}
+    >
       <div className="absolute top-1 right-2 flex items-center">
         <Button
           variant="ghost"

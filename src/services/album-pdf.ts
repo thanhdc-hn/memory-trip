@@ -194,11 +194,22 @@ function drawCell(
     ctx.restore();
 
     ctx.fillStyle = '#4a4a4a';
-    ctx.font = hand(pw * 0.1);
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const lines = wrapLines(ctx, post.caption || '', pw - 2 * pad, 6);
-    const lh = pw * 0.115;
+    const text = post.caption || '';
+    const maxW = pw - 2 * pad;
+    const availH = ph - 2 * pad - pw * 0.12; // leave room for the meta line
+    // Shrink the font until the whole caption fits — never truncate.
+    let size = pw * 0.1;
+    let lines: string[] = [];
+    while (size > pw * 0.035) {
+      ctx.font = hand(size);
+      lines = wrapLines(ctx, text, maxW, 999);
+      if (lines.length * size * 1.15 <= availH) break;
+      size -= pw * 0.004;
+    }
+    ctx.font = hand(size);
+    const lh = size * 1.15;
     const startY = -((lines.length - 1) * lh) / 2;
     lines.forEach((ln, i) => ctx.fillText(ln, 0, startY + i * lh));
     ctx.textBaseline = 'alphabetic';

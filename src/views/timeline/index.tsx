@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer';
 
 import { UploadFabButton } from '@/components/memory/upload-fab-button';
 import { CreatePostSheet } from '@/components/posts/CreatePostSheet';
+import { ClosureWarningModal } from '@/components/timeline/ClosureWarningModal';
 import { EmptyTimelineState } from '@/components/timeline/EmptyTimelineState';
 import { NewMemoriesPill } from '@/components/timeline/NewMemoriesPill';
 import { PostCard } from '@/components/timeline/PostCard';
@@ -15,6 +16,7 @@ import { ScrollToTopButton } from '@/components/timeline/ScrollToTopButton';
 import { TimelineHeader } from '@/components/timeline/TimelineHeader';
 import { Divider } from '@/components/ui/divider';
 import { useCurrentTeam } from '@/hooks/use-current-team';
+import { useTeamStats } from '@/hooks/use-team-stats';
 import { useTimelinePosts } from '@/hooks/use-timeline-posts';
 import type { Post } from '@/services/posts.service';
 import { POST_WAIT_TIME } from '@/utils/constants';
@@ -23,6 +25,9 @@ import { formatCooldown } from '@/utils/time';
 export default function TimelinePage() {
   const { team, loading: teamLoading } = useCurrentTeam();
   const { t } = useTranslation('timeline');
+  const stats = useTeamStats(team?.id || null);
+  const limitReached =
+    !!team?.post_limit && !!stats && stats.memory_count >= team.post_limit;
   const {
     posts,
     loading: postsLoading,
@@ -75,7 +80,7 @@ export default function TimelinePage() {
   }, []);
 
   const handleCreatePost = () => {
-    if (team?.is_locked) return;
+    if (team?.is_locked || limitReached) return;
     setShowCreateSheet(true);
   };
 
@@ -101,6 +106,10 @@ export default function TimelinePage() {
     <div className="bg-surface flex min-h-screen flex-col items-center">
       <TimelineHeader team={team} />
 
+      {!team?.is_locked && (
+        <ClosureWarningModal teamId={team?.id} closeAt={team?.close_at} />
+      )}
+
       <NewMemoriesPill count={newPostsCount} onClick={handleShowNewMemories} />
 
       <PullToRefresh
@@ -112,6 +121,16 @@ export default function TimelinePage() {
             <div className="animate-in fade-in slide-in-from-top-4 mb-6 duration-500">
               <div className="bg-primary/10 rounded-2xl p-4 text-center">
                 <p className="text-primary font-medium">{t('closed')}</p>
+              </div>
+            </div>
+          )}
+
+          {!team?.is_locked && limitReached && (
+            <div className="animate-in fade-in slide-in-from-top-4 mb-6 duration-500">
+              <div className="bg-primary/10 rounded-2xl p-4 text-center">
+                <p className="text-primary font-medium">
+                  {t('limitReached', { count: team!.post_limit! })}
+                </p>
               </div>
             </div>
           )}
@@ -167,7 +186,7 @@ export default function TimelinePage() {
         </main>
       </PullToRefresh>
 
-      {!team?.is_locked && (
+      {!team?.is_locked && !limitReached && (
         <UploadFabButton
           label={
             cooldown > 0

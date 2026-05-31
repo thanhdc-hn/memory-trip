@@ -1,5 +1,11 @@
 {
   "closed": "This trip memory book is closed 🌙",
+  "limitReached": "This trip has reached its limit of {{count}} memories 📦",
+  "closure": {
+    "title": "This trip is closing soon 🌙",
+    "description": "This memory book will become read-only on {{date}}. Save your album before then so you don't lose any memories!",
+    "export": "Export my memories"
+  },
   "loadingMore": "Loading more memories...",
   "loadingTrip": "Loading trip...",
   "headerTagline": "\"Our shared scrapbook of memories\" ✨",

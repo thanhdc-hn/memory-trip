@@ -1,5 +1,11 @@
 {
   "closed": "Cuốn sổ kỷ niệm của chuyến đi này đã đóng 🌙",
+  "limitReached": "Chuyến đi này đã đạt giới hạn {{count}} kỷ niệm 📦",
+  "closure": {
+    "title": "Chuyến đi này sắp đóng 🌙",
+    "description": "Cuốn sổ kỷ niệm sẽ chuyển sang chỉ đọc vào ngày {{date}}. Hãy lưu album của bạn trước thời điểm đó để không bỏ lỡ kỷ niệm nào nhé!",
+    "export": "Xuất album của tôi"
+  },
   "loadingMore": "Đang tải thêm kỷ niệm...",
   "loadingTrip": "Đang tải chuyến đi...",
   "headerTagline": "\"Cuốn sổ lưu niệm chung của chúng mình\" ✨",

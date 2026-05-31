@@ -1,9 +1,11 @@
 import dayjs from 'dayjs';
 import {
-  Download,
+  CalendarClock,
+  CalendarX,
   Image as ImageIcon,
   Lock,
   MessageSquare,
+  RotateCcw,
   Save,
   Settings,
   Shield,
@@ -12,7 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 
 import { StatBadge } from '@/components/admin/ui/admin-ui';
-import { DangerZone } from '@/components/admin/ui/danger-zone';
+import { ConfirmDialog, DangerZone } from '@/components/admin/ui/danger-zone';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -38,6 +40,23 @@ export function TeamDetailView({
   const [password, setPassword] = useState(team.invite_password || '');
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+
+  const closeAt = team.close_at ? dayjs(team.close_at) : null;
+  const isCloseScheduled = !!closeAt && closeAt.isAfter(dayjs());
+  const isClosed = !!closeAt && !closeAt.isAfter(dayjs());
+
+  const handleScheduleClose = () =>
+    updateTeam({
+      id: team.id,
+      input: { close_at: dayjs().add(7, 'day').toISOString() },
+    });
+
+  const handleCancelClose = () =>
+    updateTeam({
+      id: team.id,
+      input: { close_at: null, ...(isClosed && { is_locked: false }) },
+    });
 
   useEffect(() => {
     setName(team.name);
@@ -64,7 +83,7 @@ export function TeamDetailView({
         input: {
           name: name.trim(),
           invite_code: normalizedInviteCode,
-          invite_password: password.trim() || undefined,
+          invite_password: password.trim() || null,
         },
       });
     } catch (err: any) {
@@ -219,19 +238,58 @@ export function TeamDetailView({
               <span className="text-[10px] opacity-60">Prevent new posts</span>
             </div>
           </Button>
-          <Button
-            variant="outline"
-            className="h-14 cursor-not-allowed justify-start gap-3 rounded-2xl opacity-50"
-            disabled
-          >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100">
-              <Download className="h-4 w-4" />
-            </div>
-            <div className="flex flex-col items-start">
-              <span className="text-sm font-bold">Export PDF</span>
-              <span className="text-[10px] opacity-60">Coming soon...</span>
-            </div>
-          </Button>
+
+          {isCloseScheduled ? (
+            <Button
+              variant="outline"
+              className="h-14 justify-start gap-3 rounded-2xl"
+              onClick={handleCancelClose}
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+                <CalendarX className="h-4 w-4" />
+              </div>
+              <div className="flex flex-col items-start">
+                <span className="text-sm font-bold">
+                  Cancel scheduled close
+                </span>
+                <span className="text-[10px] opacity-60">
+                  Closes {closeAt!.format('MM/DD/YYYY')}
+                </span>
+              </div>
+            </Button>
+          ) : isClosed ? (
+            <Button
+              variant="outline"
+              className="h-14 justify-start gap-3 rounded-2xl"
+              onClick={handleCancelClose}
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
+                <RotateCcw className="h-4 w-4" />
+              </div>
+              <div className="flex flex-col items-start">
+                <span className="text-sm font-bold">Reopen Trip</span>
+                <span className="text-[10px] opacity-60">
+                  Closed — allow posts again
+                </span>
+              </div>
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              className="h-14 justify-start gap-3 rounded-2xl"
+              onClick={() => setShowCloseConfirm(true)}
+            >
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100">
+                <CalendarClock className="h-4 w-4" />
+              </div>
+              <div className="flex flex-col items-start">
+                <span className="text-sm font-bold">Close Trip</span>
+                <span className="text-[10px] opacity-60">
+                  Read-only in 7 days
+                </span>
+              </div>
+            </Button>
+          )}
         </div>
       </div>
 
@@ -243,6 +301,16 @@ export function TeamDetailView({
           onDeleteTeam={onDeleteTeam}
         />
       </div>
+
+      <ConfirmDialog
+        open={showCloseConfirm}
+        onOpenChange={setShowCloseConfirm}
+        title="Close Trip?"
+        description={`${team.name} will become read-only on ${dayjs().add(7, 'day').format('MM/DD/YYYY')}. Members can still view and export, but posting will be blocked. You can cancel anytime before then.`}
+        confirmText="Schedule Close"
+        confirmVariant="default"
+        onConfirm={handleScheduleClose}
+      />
     </div>
   );
 }

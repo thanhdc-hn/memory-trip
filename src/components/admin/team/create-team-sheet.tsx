@@ -17,11 +17,13 @@ export function CreateTeamSheet({
     name: string;
     invite_code: string;
     password?: string;
+    post_limit?: number | null;
   }) => Promise<void>;
 }) {
   const [name, setName] = useState('');
   const [inviteCode, setInviteCode] = useState('');
   const [password, setPassword] = useState('');
+  const [postLimit, setPostLimit] = useState<number | null>(null);
   const [isManualInviteCode, setIsManualInviteCode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +39,7 @@ export function CreateTeamSheet({
       setName('');
       setInviteCode('');
       setPassword('');
+      setPostLimit(null);
       setIsManualInviteCode(false);
       setError(null);
     }
@@ -56,6 +59,7 @@ export function CreateTeamSheet({
         name: name.trim(),
         invite_code: normalizedInviteCode,
         password: password.trim() || undefined,
+        post_limit: postLimit,
       });
       onOpenChange(false);
     } catch (err: any) {
@@ -132,6 +136,30 @@ export function CreateTeamSheet({
               onChange={(e) => setPassword(e.target.value)}
               className="rounded-xl"
             />
+          </div>
+
+          <div className="space-y-2">
+            <label className="ml-1 text-sm font-bold text-gray-700">
+              Post Limit
+            </label>
+            <div className="grid grid-cols-4 gap-2">
+              {[
+                { label: '30', value: 30 },
+                { label: '50', value: 50 },
+                { label: '100', value: 100 },
+                { label: '∞', value: null },
+              ].map((opt) => (
+                <Button
+                  key={opt.label}
+                  type="button"
+                  variant={postLimit === opt.value ? 'default' : 'outline'}
+                  className="rounded-xl"
+                  onClick={() => setPostLimit(opt.value)}
+                >
+                  {opt.label}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
         <div className="flex gap-3">

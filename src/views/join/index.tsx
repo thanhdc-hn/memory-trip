@@ -16,14 +16,16 @@ import { usePublicTeam } from '@/hooks/use-public-team';
 
 export default function JoinPage() {
   const { inviteCode } = useParams<{ inviteCode: string }>();
-  const { t } = useTranslation('join');
+  const { t, i18n } = useTranslation('join');
   const { team, loading, joinTeam, verifyPassword } = usePublicTeam(inviteCode);
 
   const welcomeMessages = t('welcomeMessages', {
     returnObjects: true,
   }) as string[];
 
-  const [nickname, setNickname] = useState(() => generateRandomNickname());
+  const [nickname, setNickname] = useState(() =>
+    generateRandomNickname(i18n.language),
+  );
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [isJoining, setIsJoining] = useState(false);
@@ -101,7 +103,9 @@ export default function JoinPage() {
             <NicknameInput
               value={nickname}
               onChange={setNickname}
-              onRandomize={() => setNickname(generateRandomNickname())}
+              onRandomize={() =>
+                setNickname(generateRandomNickname(i18n.language))
+              }
               disabled={isJoining}
             />
 

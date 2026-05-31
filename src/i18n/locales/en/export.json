@@ -8,6 +8,11 @@
   "selected_other": "{{count}} memories selected",
   "creating": "Creating…",
   "createAlbum": "Create Album",
+  "cover": {
+    "set": "Use as cover",
+    "unset": "Remove as cover",
+    "badge": "Cover"
+  },
   "preview": {
     "title": "Your album preview",
     "close": "Close preview",

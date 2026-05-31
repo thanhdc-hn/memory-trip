@@ -102,6 +102,24 @@ function drawCover(
   ctx.drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh);
 }
 
+// Like drawCover but fits the whole image inside the box (no cropping),
+// centred — used by wide cards so the full photo is visible.
+function drawContain(
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  dx: number,
+  dy: number,
+  dw: number,
+  dh: number,
+) {
+  const ir = img.width / img.height;
+  let w = dw;
+  let h = dh;
+  if (ir > dw / dh) h = dw / ir;
+  else w = dh * ir;
+  ctx.drawImage(img, dx + (dw - w) / 2, dy + (dh - h) / 2, w, h);
+}
+
 function wrapLines(
   ctx: CanvasRenderingContext2D,
   text: string,
@@ -133,6 +151,18 @@ function wrapLines(
 
 function meta(post: Post): string {
   return `@${post.author_name} · ${dayjs(post.created_at).format(getDateFormat(i18n.language))}`;
+}
+
+// True when an image caption won't fit the normal 2-line cell, so it would be
+// truncated — these posts get a full-width row instead.
+function isLongCaption(
+  ctx: CanvasRenderingContext2D,
+  caption: string,
+): boolean {
+  const pw = CELL_W * 0.92;
+  const pad = pw * 0.06;
+  ctx.font = hand(pw * 0.075);
+  return wrapLines(ctx, caption, pw - 2 * pad, 999).length > 2;
 }
 
 // Draws one memory polaroid centred at (cx, cy), gently rotated.
@@ -223,6 +253,67 @@ function drawCell(
   ctx.restore();
 }
 
+// Draws a full-width memory: photo on the left, the complete caption on the
+// right. Used for image posts whose caption is too long for a normal cell, so
+// the story is never truncated. Centred at (cx, cy).
+function drawWideCell(
+  ctx: CanvasRenderingContext2D,
+  post: Post,
+  img: HTMLImageElement,
+  cx: number,
+  cy: number,
+) {
+  const pw = (PAGE_W - 2 * MARGIN) * 0.97;
+  const ph = CELL_H * 0.94;
+  const pad = ph * 0.06;
+  const left = -pw / 2;
+  const top = -ph / 2;
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(rotationFor(post.id));
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.15)';
+  ctx.shadowBlur = 10;
+  ctx.shadowOffsetY = 4;
+  ctx.fillStyle = '#ffffff';
+  roundRect(ctx, left, top, pw, ph, 6);
+  ctx.fill();
+  ctx.restore();
+
+  // Photo fills the left ~48%, whole image visible (no crop).
+  const photoW = pw * 0.48 - pad;
+  const photoH = ph - 2 * pad;
+  drawContain(ctx, img, left + pad, top + pad, photoW, photoH);
+
+  // Caption fills the right column; shrink to fit so nothing is truncated.
+  const tx = left + pad + photoW + pad;
+  const maxW = pw - photoW - 3 * pad;
+  const availH = ph - 2 * pad - ph * 0.1; // leave room for the meta line
+  ctx.fillStyle = '#4a4a4a';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  let size = ph * 0.08;
+  let lines: string[] = [];
+  while (size > ph * 0.03) {
+    ctx.font = hand(size);
+    lines = wrapLines(ctx, post.caption || '', maxW, 999);
+    if (lines.length * size * 1.2 <= availH) break;
+    size -= ph * 0.003;
+  }
+  ctx.font = hand(size);
+  const lh = size * 1.2;
+  lines.forEach((ln, i) => ctx.fillText(ln, tx, top + pad + i * lh));
+  ctx.textBaseline = 'alphabetic';
+
+  ctx.fillStyle = '#9a9a9a';
+  ctx.font = hand(ph * 0.05);
+  ctx.fillText(meta(post), tx, top + ph - pad * 0.8);
+
+  ctx.restore();
+}
+
 function newPageCanvas(): {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
@@ -236,8 +327,54 @@ function newPageCanvas(): {
   return { canvas, ctx };
 }
 
-function renderCover(team: PublicTeam, total: number): string {
+function renderCover(
+  team: PublicTeam,
+  total: number,
+  img?: HTMLImageElement | null,
+): string {
   const { canvas, ctx } = newPageCanvas();
+
+  if (img) {
+    // Full-bleed photo cover with a dark gradient so the title stays legible.
+    drawCover(ctx, img, 0, 0, PAGE_W, PAGE_H);
+    const grad = ctx.createLinearGradient(0, PAGE_H * 0.45, 0, PAGE_H);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(1, 'rgba(0,0,0,0.6)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, PAGE_W, PAGE_H);
+
+    // Solid panel behind the text so it stays readable over any photo.
+    const panelX = MARGIN;
+    const panelY = PAGE_H * 0.74;
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.35)';
+    ctx.shadowBlur = 16;
+    ctx.fillStyle = 'rgba(0,0,0,0.45)';
+    roundRect(ctx, panelX, panelY, PAGE_W - 2 * MARGIN, PAGE_H * 0.22, 12);
+    ctx.fill();
+    ctx.restore();
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = hand(PAGE_W * 0.11);
+    ctx.fillText(team.name, PAGE_W / 2, PAGE_H * 0.82, PAGE_W - 2 * MARGIN);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = hand(PAGE_W * 0.05);
+    ctx.fillText(
+      i18n.t('export:pdf.memories', { count: total }),
+      PAGE_W / 2,
+      PAGE_H * 0.88,
+    );
+    ctx.fillStyle = 'rgba(255,255,255,0.75)';
+    ctx.font = hand(PAGE_W * 0.038);
+    ctx.fillText(
+      i18n.t('export:pdf.exportedOn', { date: dayjs().format('D MMMM, YYYY') }),
+      PAGE_W / 2,
+      PAGE_H * 0.92,
+    );
+    return canvas.toDataURL('image/jpeg', 0.85);
+  }
+
   ctx.textAlign = 'center';
   ctx.fillStyle = '#3a3a3a';
   ctx.font = hand(PAGE_W * 0.11);
@@ -262,55 +399,98 @@ function renderCover(team: PublicTeam, total: number): string {
 }
 
 /**
- * Builds a multi-page scrapbook PDF: a cover page plus 4 memories per page in a
- * 2x2 grid. Each page is composited on its own small canvas (mobile-safe) and
- * placed into the PDF as a single image. `imageMap` holds base64 photos by post
- * id; posts absent from the map render as handwritten note cards. Returns the
- * PDF blob plus the per-page JPEG data URLs so the UI can preview pages as
+ * Builds a multi-page scrapbook PDF: a cover page plus memories laid out two
+ * rows per page. Normal memories pair up two per row; an image post with a long
+ * caption takes a full-width row (photo + complete caption) so its story is
+ * never truncated. Each page is composited on its own small canvas
+ * (mobile-safe) and placed into the PDF as a single image. `imageMap` holds
+ * base64 photos by post id; posts absent from the map render as handwritten
+ * note cards. When `coverId` matches a selected image post, that photo fills
+ * the cover page (with the title overlaid); otherwise the text-only cover is
+ * used. Returns the PDF blob plus the per-page JPEG data URLs so the UI can
+ * preview pages as
  * images (Android/iOS WebViews cannot reliably render a PDF blob in an iframe).
  */
 export async function generateAlbumPdf(
   team: PublicTeam,
   posts: Post[],
   imageMap: Map<string, string>,
+  coverId?: string | null,
 ): Promise<{ blob: Blob; pages: string[] }> {
   await ensureFont();
 
   const pages: string[] = [];
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const cover = renderCover(team, posts.length);
+
+  const loadFor = async (post: Post): Promise<HTMLImageElement | null> => {
+    const data = imageMap.get(post.id);
+    if (!data) return null;
+    try {
+      return await loadImage(data);
+    } catch {
+      return null;
+    }
+  };
+
+  const coverPost = coverId ? posts.find((p) => p.id === coverId) : null;
+  const coverImg = coverPost ? await loadFor(coverPost) : null;
+  const cover = renderCover(team, posts.length, coverImg);
   pages.push(cover);
   doc.addImage(cover, 'JPEG', 0, 0, A4_W, A4_H);
 
-  const centers = [
-    [MARGIN + CELL_W / 2, MARGIN + CELL_H / 2],
-    [MARGIN + CELL_W + GAP + CELL_W / 2, MARGIN + CELL_H / 2],
-    [MARGIN + CELL_W / 2, MARGIN + CELL_H + GAP + CELL_H / 2],
-    [MARGIN + CELL_W + GAP + CELL_W / 2, MARGIN + CELL_H + GAP + CELL_H / 2],
-  ];
+  // Pack posts into rows: a long-caption image post takes a full-width row of
+  // its own (so its story isn't truncated); others pair up two per row.
+  const measure = newPageCanvas().ctx;
+  type Row = { posts: Post[]; wide: boolean };
+  const rows: Row[] = [];
+  let buf: Post[] = [];
+  const flush = () => {
+    if (buf.length) {
+      rows.push({ posts: buf, wide: false });
+      buf = [];
+    }
+  };
+  for (const post of posts) {
+    const wide =
+      imageMap.has(post.id) &&
+      !!post.caption &&
+      isLongCaption(measure, post.caption);
+    if (wide) {
+      flush();
+      rows.push({ posts: [post], wide: true });
+    } else {
+      buf.push(post);
+      if (buf.length === 2) flush();
+    }
+  }
+  flush();
 
-  for (let i = 0; i < posts.length; i += 4) {
+  const rowCY = [MARGIN + CELL_H / 2, MARGIN + CELL_H + GAP + CELL_H / 2];
+  const cellCX = [MARGIN + CELL_W / 2, MARGIN + CELL_W + GAP + CELL_W / 2];
+
+  // Two rows per page.
+  for (let r = 0; r < rows.length; r += 2) {
     const { canvas, ctx } = newPageCanvas();
-    const group = posts.slice(i, i + 4);
-    for (let j = 0; j < group.length; j++) {
-      const post = group[j];
-      const data = imageMap.get(post.id);
-      let img: HTMLImageElement | null = null;
-      if (data) {
-        try {
-          img = await loadImage(data);
-        } catch {
-          img = null;
+    const slots = rows.slice(r, r + 2);
+    for (let s = 0; s < slots.length; s++) {
+      const row = slots[s];
+      if (row.wide) {
+        const img = await loadFor(row.posts[0]);
+        if (img) drawWideCell(ctx, row.posts[0], img, PAGE_W / 2, rowCY[s]);
+        else drawCell(ctx, row.posts[0], null, cellCX[0], rowCY[s]);
+      } else {
+        for (let k = 0; k < row.posts.length; k++) {
+          const img = await loadFor(row.posts[k]);
+          drawCell(ctx, row.posts[k], img, cellCX[k], rowCY[s]);
         }
       }
-      drawCell(ctx, post, img, centers[j][0], centers[j][1]);
     }
     doc.addPage();
     const pageData = canvas.toDataURL('image/jpeg', 0.85);
     pages.push(pageData);
     doc.addImage(pageData, 'JPEG', 0, 0, A4_W, A4_H);
     // Yield to the event loop so the UI stays responsive on mobile.
-    await new Promise((r) => setTimeout(r, 0));
+    await new Promise((res) => setTimeout(res, 0));
   }
 
   return { blob: doc.output('blob'), pages };

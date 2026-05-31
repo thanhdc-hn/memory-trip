@@ -4,6 +4,11 @@ export const POST_WAIT_TIME = 15 * 1000;
 export const EXPORT_MAX_SELECTION = 40;
 export const EXPORT_WARN_SELECTION = 30;
 
+export const DATE_FORMAT = {
+  VI: 'DD MMM, YYYY',
+  DEFAULT: 'MMM DD, YYYY',
+};
+
 export const STORAGE_KEY = {
   TEAM_ID: 'team_id',
   NICKNAME: 'nickname',

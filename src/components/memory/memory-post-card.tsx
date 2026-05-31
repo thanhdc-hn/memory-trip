@@ -1,10 +1,12 @@
 import dayjs from 'dayjs';
 
 import { type HTMLAttributes, forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@/components/ui/badge';
 import { ImageFrame } from '@/components/ui/image-frame';
 import { cn } from '@/lib/utils';
+import { getDateFormat } from '@/utils/time';
 
 interface MemoryPostCardProps extends HTMLAttributes<HTMLDivElement> {
   imageUrl?: string;
@@ -19,7 +21,8 @@ export const MemoryPostCard = forwardRef<HTMLDivElement, MemoryPostCardProps>(
     { imageUrl, title, author, date, rotation = 0, className, ...props },
     ref,
   ) => {
-    const formattedDate = dayjs(date).format('MMM D, YYYY');
+    const { i18n } = useTranslation();
+    const formattedDate = dayjs(date).format(getDateFormat(i18n.language));
 
     return (
       <div

@@ -1,3 +1,13 @@
+import { DATE_FORMAT } from './constants';
+
+/**
+ * Returns the date format for the given language.
+ * `vi` uses `D MMM, YYYY`, all other languages use `MMM D, YYYY`.
+ */
+export function getDateFormat(lang: string): string {
+  return lang === 'vi' ? DATE_FORMAT.VI : DATE_FORMAT.DEFAULT;
+}
+
 /**
  * Formats seconds into a string label.
  * Format: mm:ss

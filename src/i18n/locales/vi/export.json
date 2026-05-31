@@ -8,6 +8,11 @@
   "selected_other": "Đã chọn {{count}} kỷ niệm",
   "creating": "Đang tạo…",
   "createAlbum": "Tạo album",
+  "cover": {
+    "set": "Dùng làm ảnh bìa",
+    "unset": "Bỏ làm ảnh bìa",
+    "badge": "Ảnh bìa"
+  },
   "preview": {
     "title": "Xem trước album của bạn",
     "close": "Đóng xem trước",

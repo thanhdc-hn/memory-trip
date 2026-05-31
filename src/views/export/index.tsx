@@ -1,4 +1,4 @@
-import { ArrowLeft, Check } from 'lucide-react';
+import { ArrowLeft, Check, Star } from 'lucide-react';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,8 @@ export default function ExportPage() {
   const { t } = useTranslation('export');
   const { toast } = useToast();
   const { team, loading: teamLoading } = useCurrentTeam();
-  const { selectedIds, count, toggle, clear, isSelected } = useAlbumExport();
+  const { selectedIds, count, coverId, toggle, setCover, clear, isSelected } =
+    useAlbumExport();
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
@@ -95,7 +96,12 @@ export default function ExportPage() {
         signal: controller.signal,
         onProgress: setProgress,
       });
-      const { blob, pages } = await generateAlbumPdf(team, selected, imageMap);
+      const { blob, pages } = await generateAlbumPdf(
+        team,
+        selected,
+        imageMap,
+        coverId,
+      );
       setPreviewBlob(blob);
       setPreviewPages(pages);
     } catch (err) {
@@ -184,6 +190,37 @@ export default function ExportPage() {
                     >
                       {selected && <Check className="h-4 w-4 text-white" />}
                     </span>
+                    {selected && url && (
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        aria-label={
+                          coverId === post.id
+                            ? t('cover.unset')
+                            : t('cover.set')
+                        }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCover(post.id);
+                        }}
+                        className={cn(
+                          'absolute bottom-2 left-2 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white transition-colors',
+                          coverId === post.id ? 'bg-accent' : 'bg-black/40',
+                        )}
+                      >
+                        <Star
+                          className={cn(
+                            'h-4 w-4 text-white',
+                            coverId === post.id && 'fill-white',
+                          )}
+                        />
+                      </span>
+                    )}
+                    {coverId === post.id && (
+                      <span className="bg-accent absolute bottom-2 left-10 rounded-full px-2 py-0.5 text-xs font-medium text-white">
+                        {t('cover.badge')}
+                      </span>
+                    )}
                   </button>
                 );
               })}

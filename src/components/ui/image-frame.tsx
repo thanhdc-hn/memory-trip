@@ -42,7 +42,7 @@ const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
           {children}
         </div>
         {caption && (
-          <div className="font-handwritten text-text-h mt-3 truncate px-2 text-center text-lg">
+          <div className="font-handwritten text-text-h mt-3 px-2 text-center text-lg">
             {caption}
           </div>
         )}

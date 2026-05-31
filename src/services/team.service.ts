@@ -4,9 +4,11 @@ export interface Team {
   id: string;
   name: string;
   invite_code: string;
-  invite_password?: string;
+  invite_password?: string | null;
   is_locked: boolean;
   created_at: string;
+  close_at?: string | null;
+  post_limit?: number | null;
   post_count?: number;
   image_count?: number;
 }
@@ -15,13 +17,16 @@ export type CreateTeamInput = {
   name: string;
   invite_code: string;
   invite_password?: string;
+  post_limit?: number | null;
 };
 
 export type UpdateTeamInput = {
   name?: string;
   invite_code?: string;
-  invite_password?: string;
+  invite_password?: string | null;
   is_locked?: boolean;
+  close_at?: string | null;
+  post_limit?: number | null;
 };
 
 async function apiFetch<T>(

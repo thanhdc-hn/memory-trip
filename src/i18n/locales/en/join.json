@@ -27,7 +27,7 @@
   "archived": {
     "label": "ARCHIVED",
     "description": "This memory space has been locked. New explorers cannot join at this time.",
-    "contact": "Contact the space admin to unlock it."
+    "contact": "Contact the space admin for help."
   },
   "codeModal": {
     "title": "Enter Team Code",

@@ -16,9 +16,15 @@ export const handler: Handler = async (event) => {
   if (authError) return authError;
 
   try {
-    const { id, name, invite_code, invite_password, is_locked } = JSON.parse(
-      event.body || '{}',
-    );
+    const {
+      id,
+      name,
+      invite_code,
+      invite_password,
+      is_locked,
+      close_at,
+      post_limit,
+    } = JSON.parse(event.body || '{}');
 
     if (!id) {
       return {
@@ -33,6 +39,8 @@ export const handler: Handler = async (event) => {
     if (invite_password !== undefined)
       updates.invite_password = invite_password?.trim() || null;
     if (is_locked !== undefined) updates.is_locked = is_locked;
+    if (close_at !== undefined) updates.close_at = close_at;
+    if (post_limit !== undefined) updates.post_limit = post_limit;
 
     const { data, error } = await supabase
       .from('teams')

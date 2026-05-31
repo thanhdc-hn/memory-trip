@@ -74,11 +74,13 @@ export default function AdminDashboard() {
     name: string;
     invite_code: string;
     password?: string;
+    post_limit?: number | null;
   }) => {
     await createTeam({
       name: data.name,
       invite_code: data.invite_code,
       invite_password: data.password,
+      post_limit: data.post_limit,
     });
   };
 

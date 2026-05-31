@@ -6,6 +6,8 @@ export interface PublicTeam {
   invite_code: string;
   is_locked: boolean;
   has_password: boolean;
+  close_at?: string | null;
+  post_limit?: number | null;
 }
 
 export interface TeamStats {

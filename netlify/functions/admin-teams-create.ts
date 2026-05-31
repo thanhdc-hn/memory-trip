@@ -16,7 +16,7 @@ export const handler: Handler = async (event) => {
   if (authError) return authError;
 
   try {
-    const { name, invite_code, invite_password } = JSON.parse(
+    const { name, invite_code, invite_password, post_limit } = JSON.parse(
       event.body || '{}',
     );
 
@@ -31,7 +31,14 @@ export const handler: Handler = async (event) => {
 
     const { data, error } = await supabase
       .from('teams')
-      .insert([{ name, invite_code, invite_password: password }])
+      .insert([
+        {
+          name,
+          invite_code,
+          invite_password: password,
+          post_limit: post_limit ?? null,
+        },
+      ])
       .select()
       .single();
 

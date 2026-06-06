@@ -9,7 +9,7 @@ import {
   forwardRef,
 } from 'react';
 
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/utils.ts';
 
 const ToastProvider = ToastPrimitives.Provider;
 

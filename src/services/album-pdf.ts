@@ -4,6 +4,7 @@ import { jsPDF } from 'jspdf';
 import i18n from '@/i18n';
 import type { Post } from '@/services/posts.service';
 import type { PublicTeam } from '@/services/public-team.service';
+import { slugify } from '@/utils/slugify';
 import { getDateFormat } from '@/utils/time';
 
 // A4 portrait in mm and the canvas raster scale (px per mm).
@@ -497,7 +498,7 @@ export async function generateAlbumPdf(
 }
 
 function albumFilename(team: PublicTeam): string {
-  const slug = team.name.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'memory';
+  const slug = slugify(team.name, '_') || 'memory';
   return `${slug}_album.pdf`;
 }
 

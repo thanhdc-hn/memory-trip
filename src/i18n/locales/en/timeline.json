@@ -12,7 +12,20 @@
   "shareTeam": "Share Team",
   "moreOptions": "More options",
   "exportMemories": "Export Memories",
+  "downloadPhotos": "Download Photos",
   "quitTeam": "Quit Team",
+  "zip": {
+    "title": "Downloading photos",
+    "preparing": "Preparing…",
+    "zipping": "Zipping {{loaded}}/{{total}}…",
+    "packaging": "Packaging your photos…",
+    "doNotClose": "Please keep this open until it's done.",
+    "noPhotos": "No photos to download",
+    "failedTitle": "Could not create the ZIP",
+    "failedDesc": "Please try again.",
+    "bigTitle": "That is a lot of photos 📦",
+    "bigDesc": "Large downloads may take a while on mobile."
+  },
   "fab": {
     "share": "Share",
     "cooldown": "Next memory in {{time}}"

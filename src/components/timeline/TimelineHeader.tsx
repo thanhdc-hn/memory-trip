@@ -1,4 +1,4 @@
-import { Download, LogOut, MoreVertical, Share2 } from 'lucide-react';
+import { Download, Images, LogOut, MoreVertical, Share2 } from 'lucide-react';
 
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,17 +6,20 @@ import { useNavigate } from 'react-router-dom';
 
 import { ShareTeamModal } from '@/components/share/share-team-modal';
 import { Button } from '@/components/ui/button';
+import { usePhotoZip } from '@/hooks/use-photo-zip';
 import { useTeamStats } from '@/hooks/use-team-stats';
 import type { PublicTeam } from '@/services/public-team.service';
 import { URL_PATH } from '@/utils/constants';
 
 import { QuitTeamDialog } from './QuitTeamDialog';
 import { TripStatsStrip } from './TripStatsStrip';
+import { ZipProgressModal } from './ZipProgressModal';
 
 export function TimelineHeader({ team }: { team: PublicTeam | null }) {
   const navigate = useNavigate();
   const { t } = useTranslation('timeline');
   const stats = useTeamStats(team?.id || null);
+  const photoZip = usePhotoZip();
   const [showShare, setShowShare] = useState(false);
   const [showQuit, setShowQuit] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -85,6 +88,17 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
                 {t('exportMemories')}
               </button>
               <button
+                disabled={!team || photoZip.active}
+                onClick={() => {
+                  setMenuOpen(false);
+                  photoZip.start(team);
+                }}
+                className="text-text/80 hover:bg-primary/10 hover:text-primary flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium transition-colors disabled:opacity-40"
+              >
+                <Images className="h-4 w-4" />
+                {t('downloadPhotos')}
+              </button>
+              <button
                 onClick={() => {
                   setMenuOpen(false);
                   setShowQuit(true);
@@ -115,6 +129,11 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
         onClose={() => setShowShare(false)}
       />
       <QuitTeamDialog open={showQuit} onOpenChange={setShowQuit} />
+      <ZipProgressModal
+        open={photoZip.active}
+        phase={photoZip.phase}
+        progress={photoZip.progress}
+      />
     </header>
   );
 }

@@ -11,7 +11,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { cn } from '@/utils/cn';
+import { cn } from '@/lib/utils.ts';
 
 const Dialog = DialogPrimitives.Root;
 

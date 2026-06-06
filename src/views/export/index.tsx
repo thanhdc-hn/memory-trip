@@ -11,10 +11,10 @@ import { getPostImageUrl } from '@/features/posts/utils/getPostImageUrl';
 import { useAlbumExport } from '@/hooks/use-album-export';
 import { useCurrentTeam } from '@/hooks/use-current-team';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils.ts';
 import { generateAlbumPdf } from '@/services/album-pdf';
 import { exportService } from '@/services/export.service';
 import { type Post } from '@/services/posts.service';
-import { cn } from '@/utils/cn';
 import { URL_PATH } from '@/utils/constants';
 
 const PAGE_SIZE = 20;

@@ -12,7 +12,20 @@
   "shareTeam": "Chia sẻ nhóm",
   "moreOptions": "Thêm tùy chọn",
   "exportMemories": "Xuất album",
+  "downloadPhotos": "Tải ảnh xuống",
   "quitTeam": "Rời nhóm",
+  "zip": {
+    "title": "Đang tải ảnh xuống",
+    "preparing": "Đang chuẩn bị…",
+    "zipping": "Đang nén {{loaded}}/{{total}}…",
+    "packaging": "Đang đóng gói ảnh của bạn…",
+    "doNotClose": "Vui lòng giữ cửa sổ này đến khi hoàn tất.",
+    "noPhotos": "Không có ảnh nào để tải",
+    "failedTitle": "Không thể tạo tệp ZIP",
+    "failedDesc": "Vui lòng thử lại.",
+    "bigTitle": "Khá nhiều ảnh đấy 📦",
+    "bigDesc": "Tải xuống lớn có thể mất chút thời gian trên điện thoại."
+  },
   "fab": {
     "share": "Chia sẻ",
     "cooldown": "Kỷ niệm tiếp theo sau {{time}}"

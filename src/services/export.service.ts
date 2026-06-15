@@ -75,4 +75,22 @@ export const exportService = {
 
     return imageMap;
   },
+
+  /**
+   * Fetches a single optimized image as a base64 data URL at the given width and
+   * quality. Used to pull a high-resolution cover photo (the cover is rendered
+   * full-bleed, so the 500px album thumbnail looks soft). Stored originals go up
+   * to 1920px, so 1920/q90 keeps the cover crisp.
+   */
+  async fetchImageDataUrl(
+    imagePath: string,
+    width: number,
+    quality: number,
+    signal?: AbortSignal,
+  ): Promise<string> {
+    const url = storageService.getOptimizedUrl(imagePath, width, quality);
+    const res = await fetch(url, { signal });
+    const blob = await res.blob();
+    return blobToBase64(blob);
+  },
 };

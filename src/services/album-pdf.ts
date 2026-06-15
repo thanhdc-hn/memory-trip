@@ -328,75 +328,92 @@ function newPageCanvas(): {
   return { canvas, ctx };
 }
 
+// The cover is a single full-bleed page, so it's rendered at a higher raster
+// scale than the interior content pages. A thumbnail stretched across the whole
+// page looks soft, so the caller fetches a high-res cover photo and we draw it
+// onto this larger canvas (~254 DPI) with high-quality smoothing for a crisp
+// result. Only one extra-large canvas exists at a time, so it stays mobile-safe.
+const COVER_PX = 10; // 2x the content scale → 2100 x 2970 px
+const COVER_W = A4_W * COVER_PX;
+const COVER_H = A4_H * COVER_PX;
+const COVER_MARGIN = 12 * COVER_PX;
+
 function renderCover(
   team: PublicTeam,
   total: number,
   img?: HTMLImageElement | null,
 ): string {
-  const { canvas, ctx } = newPageCanvas();
+  const canvas = document.createElement('canvas');
+  canvas.width = COVER_W;
+  canvas.height = COVER_H;
+  const ctx = canvas.getContext('2d')!;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.fillStyle = PAPER;
+  ctx.fillRect(0, 0, COVER_W, COVER_H);
+
+  const W = COVER_W;
+  const H = COVER_H;
+  const M = COVER_MARGIN;
 
   if (img) {
     // Full-bleed photo cover with a dark gradient so the title stays legible.
-    drawCover(ctx, img, 0, 0, PAGE_W, PAGE_H);
-    const grad = ctx.createLinearGradient(0, PAGE_H * 0.45, 0, PAGE_H);
+    drawCover(ctx, img, 0, 0, W, H);
+    const grad = ctx.createLinearGradient(0, H * 0.45, 0, H);
     grad.addColorStop(0, 'rgba(0,0,0,0)');
     grad.addColorStop(1, 'rgba(0,0,0,0.6)');
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, PAGE_W, PAGE_H);
+    ctx.fillRect(0, 0, W, H);
 
     // Solid panel behind the text so it stays readable over any photo.
-    const panelX = MARGIN;
-    const panelY = PAGE_H * 0.74;
+    const panelX = M;
+    const panelY = H * 0.74;
     ctx.save();
     ctx.shadowColor = 'rgba(0,0,0,0.35)';
-    ctx.shadowBlur = 16;
+    ctx.shadowBlur = 16 * (COVER_PX / PX);
     ctx.fillStyle = 'rgba(0,0,0,0.45)';
-    roundRect(ctx, panelX, panelY, PAGE_W - 2 * MARGIN, PAGE_H * 0.22, 12);
+    roundRect(ctx, panelX, panelY, W - 2 * M, H * 0.22, 12 * (COVER_PX / PX));
     ctx.fill();
     ctx.restore();
 
     ctx.textAlign = 'center';
     ctx.fillStyle = '#ffffff';
-    ctx.font = hand(PAGE_W * 0.11);
-    ctx.fillText(team.name, PAGE_W / 2, PAGE_H * 0.82, PAGE_W - 2 * MARGIN);
+    ctx.font = hand(W * 0.11);
+    ctx.fillText(team.name, W / 2, H * 0.82, W - 2 * M);
     ctx.fillStyle = 'rgba(255,255,255,0.9)';
-    ctx.font = hand(PAGE_W * 0.05);
+    ctx.font = hand(W * 0.05);
     ctx.fillText(
       i18n.t('export:pdf.memories', { count: total }),
-      PAGE_W / 2,
-      PAGE_H * 0.88,
+      W / 2,
+      H * 0.88,
     );
     ctx.fillStyle = 'rgba(255,255,255,0.75)';
-    ctx.font = hand(PAGE_W * 0.038);
+    ctx.font = hand(W * 0.038);
     ctx.fillText(
       i18n.t('export:pdf.exportedOn', { date: dayjs().format('D MMMM, YYYY') }),
-      PAGE_W / 2,
-      PAGE_H * 0.92,
+      W / 2,
+      H * 0.92,
     );
-    return canvas.toDataURL('image/jpeg', 0.85);
+    return canvas.toDataURL('image/jpeg', 0.92);
   }
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#3a3a3a';
-  ctx.font = hand(PAGE_W * 0.11);
-  ctx.fillText(team.name, PAGE_W / 2, PAGE_H * 0.42, PAGE_W - 2 * MARGIN);
+  ctx.font = hand(W * 0.11);
+  ctx.fillText(team.name, W / 2, H * 0.42, W - 2 * M);
   ctx.fillStyle = '#ff7f50';
-  ctx.font = hand(PAGE_W * 0.05);
-  ctx.fillText(
-    i18n.t('export:pdf.memories', { count: total }),
-    PAGE_W / 2,
-    PAGE_H * 0.5,
-  );
+  ctx.font = hand(W * 0.05);
+  ctx.fillText(i18n.t('export:pdf.memories', { count: total }), W / 2, H * 0.5);
   ctx.fillStyle = '#9a9a9a';
-  ctx.font = hand(PAGE_W * 0.038);
+  ctx.font = hand(W * 0.038);
   ctx.fillText(
     i18n.t('export:pdf.exportedOn', {
       date: dayjs().format('D MMMM, YYYY'),
     }),
-    PAGE_W / 2,
-    PAGE_H * 0.55,
+    W / 2,
+    H * 0.55,
   );
-  return canvas.toDataURL('image/jpeg', 0.85);
+  return canvas.toDataURL('image/jpeg', 0.92);
 }
 
 /**
@@ -417,6 +434,7 @@ export async function generateAlbumPdf(
   posts: Post[],
   imageMap: Map<string, string>,
   coverId?: string | null,
+  coverDataUrl?: string | null,
 ): Promise<{ blob: Blob; pages: string[] }> {
   await ensureFont();
 
@@ -434,7 +452,17 @@ export async function generateAlbumPdf(
   };
 
   const coverPost = coverId ? posts.find((p) => p.id === coverId) : null;
-  const coverImg = coverPost ? await loadFor(coverPost) : null;
+  // Prefer the dedicated high-res cover photo; fall back to the small thumbnail
+  // from imageMap if the high-res fetch wasn't provided or failed.
+  let coverImg: HTMLImageElement | null = null;
+  if (coverDataUrl) {
+    try {
+      coverImg = await loadImage(coverDataUrl);
+    } catch {
+      coverImg = null;
+    }
+  }
+  if (!coverImg && coverPost) coverImg = await loadFor(coverPost);
   const cover = renderCover(team, posts.length, coverImg);
   pages.push(cover);
   doc.addImage(cover, 'JPEG', 0, 0, A4_W, A4_H);

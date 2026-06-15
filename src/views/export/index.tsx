@@ -96,11 +96,28 @@ export default function ExportPage() {
         signal: controller.signal,
         onProgress: setProgress,
       });
+      // The cover is full-bleed, so fetch a high-res version of the chosen cover
+      // photo (the 500px album thumbnail looks soft when stretched to a page).
+      let coverDataUrl: string | null = null;
+      const coverPost = coverId ? selected.find((p) => p.id === coverId) : null;
+      if (coverPost?.image_path) {
+        try {
+          coverDataUrl = await exportService.fetchImageDataUrl(
+            coverPost.image_path,
+            1920,
+            90,
+            controller.signal,
+          );
+        } catch (err) {
+          console.error('High-res cover fetch failed, using thumbnail:', err);
+        }
+      }
       const { blob, pages } = await generateAlbumPdf(
         team,
         selected,
         imageMap,
         coverId,
+        coverDataUrl,
       );
       setPreviewBlob(blob);
       setPreviewPages(pages);

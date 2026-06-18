@@ -50,7 +50,7 @@ export function ZipProgressModal({
           onEscapeKeyDown={(e) => e.preventDefault()}
           onPointerDownOutside={(e) => e.preventDefault()}
           onInteractOutside={(e) => e.preventDefault()}
-          className="data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 bg-surface fixed top-[50%] left-[50%] z-50 grid w-[calc(100%-2rem)] max-w-sm translate-x-[-50%] translate-y-[-50%] gap-4 rounded-3xl border-2 border-gray-200 p-6 shadow-lg duration-200 dark:border-gray-800"
+          className="data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 bg-surface fixed top-[50%] left-[50%] z-50 grid w-[calc(100%-2rem)] max-w-sm translate-x-[-50%] translate-y-[-50%] gap-4 rounded-3xl border-2 border-gray-200 p-6 shadow-lg duration-200"
         >
           <DialogTitle className="text-text-h text-center text-lg font-bold">
             {t('zip.title')}

@@ -49,6 +49,7 @@
         "npm:i18next@26.3.0",
         "npm:jsdom@29.1.1",
         "npm:jspdf@4.2.1",
+        "npm:jszip@^3.10.1",
         "npm:lint-staged@^17.0.5",
         "npm:lucide-react@^1.16.0",
         "npm:postcss@^8.5.14",

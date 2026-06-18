@@ -57,6 +57,8 @@
 }
 
 :root {
+  color-scheme: light only;
+
   --primary: #87ceeb;
   --secondary: #40e0d0;
   --accent: #ff7f50;

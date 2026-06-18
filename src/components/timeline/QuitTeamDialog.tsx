@@ -42,7 +42,7 @@ export function QuitTeamDialog({
           <Button
             variant="ghost"
             size="icon"
-            className="text-text/60 transition-colors hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-950/30"
+            className="text-text/60 transition-colors hover:bg-red-50 hover:text-red-500"
           >
             <LogOut className="h-5 w-5" />
             <span className="sr-only">{t('quitTeam')}</span>

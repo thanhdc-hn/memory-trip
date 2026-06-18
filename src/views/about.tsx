@@ -9,9 +9,7 @@ const About: FC = () => {
       <div className="mb-4 text-4xl font-bold text-[#aa3bff]">
         {t('about.title')}
       </div>
-      <p className="mx-auto mb-8 max-w-2xl text-gray-600 dark:text-gray-400">
-        {t('about.body')}
-      </p>
+      <p className="mx-auto mb-8 max-w-2xl text-gray-600">{t('about.body')}</p>
       <div className="flex justify-center gap-4">
         <Link
           to="/"

@@ -2,30 +2,58 @@ import {
   type ReactNode,
   createContext,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useState,
 } from 'react';
 
-type Theme = 'summer' | 'sunset';
+import { STORAGE_KEY } from '@/utils/constants';
+import storage from '@/utils/storage';
+
+import { DEFAULT_THEME, getThemeById, isThemeId } from './theme-utils';
+import { type ThemeDefinition, type ThemeId } from './themes';
 
 interface ThemeContextType {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
+  theme: ThemeId;
+  setTheme: (theme: ThemeId) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('summer');
+function getInitialTheme(): ThemeId {
+  const stored = storage.get<string>(STORAGE_KEY.THEME);
+  return isThemeId(stored) ? stored : DEFAULT_THEME;
+}
 
-  useEffect(() => {
-    const root = window.document.documentElement;
-    if (theme === 'sunset') {
-      root.setAttribute('data-theme', 'sunset');
-    } else {
-      root.removeAttribute('data-theme');
-    }
+/**
+ * Apply the mood to the document: set `data-theme` (drives all Tailwind tokens)
+ * and sync the PWA `theme-color` meta to the resolved surface color so the
+ * mobile browser chrome matches. Reading the computed `--surface` keeps this
+ * registry-agnostic — a new mood needs no change here.
+ */
+function applyTheme(theme: ThemeId): void {
+  const root = window.document.documentElement;
+  root.setAttribute('data-theme', theme);
+
+  const surface = getComputedStyle(root).getPropertyValue('--surface').trim();
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta && surface) {
+    meta.setAttribute('content', surface);
+  }
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setThemeState] = useState<ThemeId>(getInitialTheme);
+
+  // useLayoutEffect applies before paint to minimize any wrong-theme frame on
+  // first mount (the pre-mount script in index.html handles the reload case).
+  useLayoutEffect(() => {
+    applyTheme(theme);
   }, [theme]);
+
+  const setTheme = (next: ThemeId) => {
+    storage.set(STORAGE_KEY.THEME, next);
+    setThemeState(next);
+  };
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
@@ -40,4 +68,10 @@ export function useTheme() {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
   return context;
+}
+
+/** Active theme metadata (label, swatch, decorative accent emoji). */
+export function useThemeMeta(): ThemeDefinition {
+  const { theme } = useTheme();
+  return getThemeById(theme);
 }

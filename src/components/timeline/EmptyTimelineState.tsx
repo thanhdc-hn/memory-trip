@@ -3,12 +3,16 @@ import { Sparkles } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { CenteredContent } from '@/components/layout/layout-primitives';
+import { useThemeMeta } from '@/components/theme/theme-provider';
 
 export function EmptyTimelineState() {
   const { t } = useTranslation('timeline');
+  const { accentEmoji } = useThemeMeta();
   return (
     <CenteredContent className="px-4 py-20">
-      <div className="animate-float text-6xl">✨</div>
+      <div className="animate-float text-6xl" aria-hidden="true">
+        {accentEmoji}
+      </div>
       <div className="space-y-2">
         <h3 className="text-text-h text-2xl font-bold">{t('empty.title')}</h3>
         <p className="font-handwritten text-text/60 text-xl">

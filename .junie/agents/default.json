@@ -1,0 +1,5 @@
+{
+  "name": "default",
+  "description": "Default agent for Memory Trip project",
+  "prompt": "After making code changes, only list the file paths that were changed. Do NOT show the code content or diffs in your response."
+}

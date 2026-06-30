@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import { FloatingControls } from '@/components/layout/floating-controls';
+import { SettingsButton } from '@/components/settings/settings-button';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -12,7 +12,7 @@ const App: FC = () => {
     <ThemeProvider>
       <main id="app">
         <RouterProvider router={router} />
-        <FloatingControls />
+        <SettingsButton />
         <Toaster />
       </main>
     </ThemeProvider>

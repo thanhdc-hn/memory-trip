@@ -4,14 +4,32 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light only" />
+    <meta name="color-scheme" content="light" />
     <title>Memory Trip</title>
     <meta
       name="description"
       content="Lưu giữ những kỷ niệm đáng nhớ trong mỗi chuyến đi"
     />
-    <meta name="theme-color" content="#aa3bff" />
+    <meta name="theme-color" content="#fffdf9" />
     <link rel="apple-touch-icon" href="/favicon-192.png" />
+    <script>
+      // No-flash theme init: apply the persisted mood before first paint.
+      // Reads the same localStorage key as STORAGE_KEY.THEME ('theme').
+      // Registry-agnostic — ThemeProvider does authoritative validation; an
+      // unknown value simply matches no [data-theme] block (Summer defaults).
+      (function () {
+        try {
+          var raw = localStorage.getItem('theme');
+          if (!raw) return;
+          var id = JSON.parse(raw);
+          if (typeof id === 'string') {
+            document.documentElement.setAttribute('data-theme', id);
+          }
+        } catch (e) {
+          /* ignore: fall back to default theme */
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

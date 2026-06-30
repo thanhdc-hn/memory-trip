@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ShareTeamModal } from '@/components/share/share-team-modal';
+import { useThemeMeta } from '@/components/theme/theme-provider';
 import { Button } from '@/components/ui/button';
 import { usePhotoZip } from '@/hooks/use-photo-zip';
 import { useTeamStats } from '@/hooks/use-team-stats';
@@ -18,6 +19,7 @@ import { ZipProgressModal } from './ZipProgressModal';
 export function TimelineHeader({ team }: { team: PublicTeam | null }) {
   const navigate = useNavigate();
   const { t } = useTranslation('timeline');
+  const { accentEmoji } = useThemeMeta();
   const stats = useTeamStats(team?.id || null);
   const photoZip = usePhotoZip();
   const [showShare, setShowShare] = useState(false);
@@ -118,7 +120,7 @@ export function TimelineHeader({ team }: { team: PublicTeam | null }) {
           {team?.name || t('loadingTrip')}
         </div>
         <p className="font-handwritten text-text/60 text-sm italic">
-          {t('headerTagline')}
+          {t('headerTagline')} <span aria-hidden="true">{accentEmoji}</span>
         </p>
         <TripStatsStrip stats={stats} />
       </div>

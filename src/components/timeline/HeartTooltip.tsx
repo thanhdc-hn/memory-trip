@@ -18,8 +18,8 @@ export function HeartTooltip({ show, className }: HeartTooltipProps) {
         className,
       )}
     >
-      <div className="flex items-center gap-1.5 rounded-full bg-rose-500 px-3 py-1.5 text-[12px] font-medium whitespace-nowrap text-white shadow-lg">
-        <div className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-rose-500" />
+      <div className="bg-heart flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[12px] font-medium whitespace-nowrap text-white shadow-lg">
+        <div className="bg-heart absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45" />
         <span>{t('heartHint')}</span>
       </div>
     </div>

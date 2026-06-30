@@ -49,8 +49,8 @@ export function HeartButton({
           className={cn(
             'h-4 w-4 transition-colors duration-300 ease-out',
             hasHearted
-              ? 'fill-rose-500 stroke-rose-500'
-              : 'stroke-text/40 fill-transparent group-hover:stroke-rose-400',
+              ? 'fill-heart stroke-heart'
+              : 'stroke-text/40 group-hover:stroke-heart fill-transparent',
           )}
         />
       </span>
@@ -58,7 +58,7 @@ export function HeartButton({
         <span
           className={cn(
             'font-rounded text-sm font-bold transition-colors duration-300',
-            hasHearted ? 'text-rose-600' : 'text-text/60',
+            hasHearted ? 'text-heart' : 'text-text/60',
           )}
         >
           {heartCount}

@@ -11,5 +11,38 @@
   "copied": "Copied!",
   "error": "Something went wrong",
   "changeLanguage": "Change language",
-  "scrollToTop": "Scroll to top"
+  "scrollToTop": "Scroll to top",
+  "changeTheme": "Switch theme (next: {{mood}})",
+  "theme": {
+    "summer": "Summer",
+    "sunset": "Sunset",
+    "ocean": "Ocean",
+    "forest": "Forest"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Personalize language, theme and effects.",
+    "open": "Open settings",
+    "hint": "Settings live here",
+    "language": "Language",
+    "theme": "Theme",
+    "effects": "Effects",
+    "autoCurrent": "Auto · currently {{effect}}",
+    "reducedMotion": "Reduced motion is on — effects are paused."
+  },
+  "effect": {
+    "auto": "Auto",
+    "off": "Off",
+    "snow": "Snow",
+    "rain": "Rain",
+    "sun": "Sun",
+    "leaves": "Leaves",
+    "blossom": "Cherry blossom",
+    "fireflies": "Fireflies",
+    "bubbles": "Bubbles",
+    "butterflies": "Butterflies",
+    "balloons": "Balloons",
+    "confetti": "Confetti",
+    "fog": "Fog"
+  }
 }

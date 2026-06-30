@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { cn } from '@/lib/utils';
 
 interface ModalProps {
   trigger?: ReactNode;
@@ -36,17 +37,21 @@ export function Modal({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={contentClassName}>
+      <DialogContent
+        className={cn('flex max-h-[90vh] flex-col', contentClassName)}
+      >
         {(title || description) && (
-          <DialogHeader>
+          <DialogHeader className="flex-shrink-0">
             {title && <DialogTitle>{title}</DialogTitle>}
             {description && (
               <DialogDescription>{description}</DialogDescription>
             )}
           </DialogHeader>
         )}
-        {children}
-        {footer && <DialogFooter>{footer}</DialogFooter>}
+        <div className="flex-1 overflow-y-auto pr-1">{children}</div>
+        {footer && (
+          <DialogFooter className="flex-shrink-0">{footer}</DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );

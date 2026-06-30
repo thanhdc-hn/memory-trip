@@ -16,6 +16,13 @@ export const STORAGE_KEY = {
   ADMIN_EXPIRE_KEY: 'admin_expire_time',
   NICKNAME_TOOLTIP: 'nickname-tooltip-dismissed',
   LANGUAGE: 'language',
+  // NOTE: the pre-mount no-flash script in index.html reads this same literal
+  // ('theme'). Keep them in sync if this value ever changes.
+  THEME: 'theme',
+  // Ambient effect selection ('auto' | 'off' | an effect id).
+  EFFECT: 'effect',
+  // Whether the first-run "settings live here" hint has been dismissed.
+  SETTINGS_HINT_SEEN: 'settings_hint_seen',
 };
 
 export const URL_PATH = {

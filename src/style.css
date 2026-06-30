@@ -1,19 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Pangolin&family=Playwrite+VN:wght@100..400&display=swap');
 @import 'tailwindcss';
 
+/*
+ * Runtime design tokens — these are the single source of truth for themeable
+ * colors. Defaults below = Summer. Each `[data-theme]` block overrides this set.
+ */
+:root {
+  color-scheme: light only;
+
+  --primary: #87ceeb; /* Sky Blue */
+  --secondary: #40e0d0; /* Ocean Teal */
+  --accent: #ff7f50; /* Coral */
+  --surface: #fffdf9; /* Shell White */
+  --card: #ffffff;
+  --text: #4a4a4a;
+  --text-h: #2c3e50;
+  --border: #f0ead6;
+  --sand: #f5deb3; /* background motif dot color */
+  --bg-pattern: radial-gradient(var(--sand) 1px, transparent 1px);
+  --heart: #f43f5e; /* heart / love accent (rose) */
+
+  --sans: 'Varela Round', system-ui, sans-serif;
+  --hand: 'Pangolin', cursive;
+
+  font: 18px/160% var(--sans);
+  letter-spacing: 0.02em;
+  color: var(--text);
+  background: var(--surface);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * Bridge Tailwind color utilities to the runtime tokens above.
+ * `@theme inline` makes utilities (e.g. `bg-primary`, `text-text/60`) resolve
+ * `var(--token)` at the use site, so `[data-theme]` overrides cascade — including
+ * opacity modifiers via color-mix. Without `inline`, the literal value would be
+ * baked into `:root` and runtime theme switching would not apply.
+ */
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-text: var(--text);
+  --color-text-h: var(--text-h);
+  --color-border: var(--border);
+  --color-sand: var(--sand);
+  --color-heart: var(--heart);
+}
+
+/* Static design tokens (not themed). */
 @theme {
-  --color-primary: #87ceeb; /* Sky Blue */
-  --color-secondary: #40e0d0; /* Ocean Teal */
-  --color-accent: #ffd700; /* Sunshine Yellow */
   --color-peach: #ffdab9;
   --color-coral: #ff7f50;
   --color-mint: #98ff98;
-  --color-sand: #f5deb3;
-  --color-text: #4a4a4a;
-  --color-text-h: #2c3e50;
-  --color-surface: #fffdf9;
-  --color-card: #ffffff;
-  --color-border: #f0ead6;
 
   --font-rounded: 'Varela Round', sans-serif;
   --font-handwritten: 'Pangolin', cursive;
@@ -56,27 +98,7 @@
   }
 }
 
-:root {
-  color-scheme: light only;
-
-  --primary: #87ceeb;
-  --secondary: #40e0d0;
-  --accent: #ff7f50;
-  --surface: #fffdf9;
-  --text: #4a4a4a;
-  --text-h: #2c3e50;
-  --border: #f0ead6;
-
-  --sans: 'Varela Round', system-ui, sans-serif;
-  --hand: 'Pangolin', cursive;
-
-  font: 18px/160% var(--sans);
-  letter-spacing: 0.02em;
-  color: var(--text);
-  background: var(--surface);
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
+/* ── Themes ──────────────────────────────────────────────────────────────── */
 
 [data-theme='sunset'] {
   --primary: #ff7f50; /* Coral */
@@ -86,12 +108,38 @@
   --text: #5d4037;
   --text-h: #3e2723;
   --border: #ffe4e1;
+  --sand: #ffd9c4; /* warm peach dots */
+  --heart: #e11d48;
+}
+
+[data-theme='ocean'] {
+  --primary: #0e7490; /* Deep Cyan */
+  --secondary: #14b8a6; /* Teal */
+  --accent: #f97316; /* Sunset Orange (pops against cool palette) */
+  --surface: #f0fbff; /* Sea Foam */
+  --card: #ffffff;
+  --text: #334155;
+  --text-h: #0f3a4d;
+  --border: #cdeef2;
+  --sand: #bfe7ee; /* cool dots */
+}
+
+[data-theme='forest'] {
+  --primary: #2f855a; /* Forest Green */
+  --secondary: #84cc16; /* Lime */
+  --accent: #d97706; /* Amber */
+  --surface: #f2fbf4; /* Misty Green */
+  --card: #ffffff;
+  --text: #3f4a3f;
+  --text-h: #1f3d2b;
+  --border: #d4ead7;
+  --sand: #c7e6cd; /* mossy dots */
 }
 
 body {
   margin: 0;
   background-color: var(--surface);
-  background-image: radial-gradient(var(--color-sand) 1px, transparent 1px);
+  background-image: var(--bg-pattern);
   background-size: 40px 40px; /* Subtle scrapbook grid/dots */
 }
 
@@ -236,6 +284,107 @@ h1,
   animation: var(--animate-pop);
 }
 
+/* ── Ambient effects (CSS-rendered) ─────────────────────────────────────────
+ * Used by AmbientEffectLayer for non-particle moods. These are decorative
+ * overlays inside a pointer-events-none, aria-hidden layer. They never use
+ * backdrop-filter, so page content underneath is not blurred or sampled.
+ */
+.mt-effect-sun {
+  background: radial-gradient(
+    130% 90% at 85% -12%,
+    rgba(255, 224, 130, 0.5),
+    rgba(255, 236, 179, 0.2) 34%,
+    transparent 62%
+  );
+}
+
+.mt-effect-sun::before {
+  content: '';
+  position: absolute;
+  top: -60%;
+  right: -30%;
+  width: 160vmax;
+  height: 160vmax;
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(255, 213, 79, 0.1) 0deg 4deg,
+    transparent 4deg 18deg
+  );
+  transform-origin: center;
+  animation: mt-sun-rays 90s linear infinite;
+  -webkit-mask-image: radial-gradient(closest-side, #000 0%, transparent 78%);
+  mask-image: radial-gradient(closest-side, #000 0%, transparent 78%);
+}
+
+@keyframes mt-sun-rays {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-effect-sun::before {
+    animation: none;
+  }
+}
+
+.mt-effect-fog {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 30%,
+    rgba(255, 255, 255, 0.15) 60%,
+    rgba(255, 255, 255, 0.25) 100%
+  );
+  mask-image: linear-gradient(to top, black, transparent);
+  -webkit-mask-image: linear-gradient(to top, black, transparent);
+}
+
+.mt-effect-fog::before,
+.mt-effect-fog::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -50%;
+  width: 200%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 70%
+  );
+  animation: mt-fog-sway 25s ease-in-out infinite;
+}
+
+.mt-effect-fog::after {
+  height: 40%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.2) 0%,
+    transparent 60%
+  );
+  animation-duration: 18s;
+  animation-direction: reverse;
+  opacity: 0.6;
+}
+
+@keyframes mt-fog-sway {
+  0%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(8%) translateY(-2%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mt-effect-fog::before,
+  .mt-effect-fog::after {
+    animation: none;
+  }
+}
+
 code {
   font-size: 15px;
   line-height: 135%;
@@ -307,7 +456,11 @@ code {
   width: 100%;
   max-width: 768px;
   margin: 0 auto;
-  background: var(--bg);
+  /* Per-theme motif over the mood surface. #app fills the viewport on mobile,
+     so the motif must live here (not only on body) to be visible there. */
+  background-color: var(--surface);
+  background-image: var(--bg-pattern);
+  background-size: 40px 40px;
   min-height: 100vh;
   min-height: 100svh;
   box-sizing: border-box;

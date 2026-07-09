@@ -14,7 +14,7 @@ export function HeartTooltip({ show, className }: HeartTooltipProps) {
   return (
     <div
       className={cn(
-        'animate-in fade-in slide-in-from-top-2 pointer-events-none absolute -bottom-12 left-1/2 z-39 -translate-x-1/2',
+        'animate-in fade-in slide-in-from-top-2 pointer-events-none absolute -bottom-3 left-1/2 z-39 -translate-x-1/2',
         className,
       )}
     >

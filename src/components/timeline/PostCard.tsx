@@ -20,7 +20,7 @@ interface PostCardProps {
 
 export function PostCard({ post, isFirst = false }: PostCardProps) {
   const formattedDate = dayjs(post.created_at).format('HH:mm');
-  const imageUrl = getPostImageUrl(post);
+  const imageUrl = getPostImageUrl(post, { useTransformation: false });
   const { hasHearted, heartCount, toggleHeart, showTooltip } = usePostReactions(
     post.id,
     post.team_id,

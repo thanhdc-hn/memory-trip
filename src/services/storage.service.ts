@@ -29,23 +29,16 @@ export const storageService = {
   },
 
   getOptimizedUrl(imagePath: string, width = 500, quality = 80): string {
-    try {
-      const { data } = supabase.storage
-        .from('memory-images')
-        .getPublicUrl(imagePath, {
-          transform: {
-            width,
-            quality,
-            resize: 'contain',
-          },
-        });
-
-      return data.publicUrl;
-    } catch (error) {
-      // Fallback to regular public URL if transformation fails
-      console.warn('Image transformation failed, using fallback URL:', error);
-      return this.getPublicUrl(imagePath);
-    }
+    const { data } = supabase.storage
+      .from('memory-images')
+      .getPublicUrl(imagePath, {
+        transform: {
+          width,
+          quality,
+          resize: 'contain',
+        },
+      });
+    return data.publicUrl;
   },
 
   getOptimizedUrlWithFallback(

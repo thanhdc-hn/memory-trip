@@ -1,0 +1,58 @@
+{
+  "closed": "この旅行の思い出帳は閉じられました 🌙",
+  "limitReached": "この旅行は思い出の上限（{{count}} 個）に達しました 📦",
+  "closure": {
+    "title": "もうすぐ旅行が終了します 🌙",
+    "description": "この思い出帳は {{date}} に読み取り専用になります。思い出を失わないように、それまでにアルバムを書き出しておきましょう！",
+    "export": "思い出を書き出す"
+  },
+  "loadingMore": "さらに思い出を読み込み中...",
+  "loadingTrip": "旅行を読み込み中...",
+  "headerTagline": "「みんなでつくる思い出のスクラップブック」",
+  "shareTeam": "チームを共有",
+  "moreOptions": "その他のオプション",
+  "exportMemories": "思い出を書き出す",
+  "downloadPhotos": "写真をダウンロード",
+  "quitTeam": "チームを脱退",
+  "zip": {
+    "title": "写真をダウンロード中",
+    "preparing": "準備中…",
+    "zipping": "圧縮中 {{loaded}}/{{total}}…",
+    "packaging": "写真をパッケージ化中…",
+    "doNotClose": "完了するまでこの画面を閉じないでください。",
+    "noPhotos": "ダウンロードする写真がありません",
+    "failedTitle": "ZIPファイルを作成できませんでした",
+    "failedDesc": "もう一度お試しください。",
+    "bigTitle": "写真がたくさんありますね 📦",
+    "bigDesc": "大量のダウンロードは、モバイル環境では時間がかかる場合があります。"
+  },
+  "fab": {
+    "share": "共有",
+    "cooldown": "次の投稿まであと {{time}}"
+  },
+  "stats": {
+    "memories_one": "{{count}} 個の思い出",
+    "memories_other": "{{count}} 個の思い出",
+    "friends_one": "{{count}} 人の友達",
+    "friends_other": "{{count}} 人の友達"
+  },
+  "empty": {
+    "title": "思い出がまだありません！",
+    "subtitle": "最初の思い出を投稿して、共有スクラップブックを始めよう！ 📔",
+    "hint": "プラスボタンをクリックして写真を追加してね"
+  },
+  "newMemories_one": "{{count}} 件の新しい思い出",
+  "newMemories_other": "{{count}} 件の新しい思い出",
+  "heartHint": "✨ ダブルタップで「いいね」を送ろう",
+  "quitDialog": {
+    "title": "もう行っちゃうの？ 🥺",
+    "description": "あなたがいなくなると寂しくなります！本当にこのチームを脱退しますか？",
+    "stay": "やっぱり残る！",
+    "confirm": "はい、脱退します"
+  },
+  "comingSoon": {
+    "title": "近日公開！ 🚀",
+    "gotIt": "了解！",
+    "body": "投稿の詳細、コメント、リアクション機能は現在開発中です。次回のアップデートをお楽しみに！"
+  }
+}

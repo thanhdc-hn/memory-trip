@@ -43,7 +43,7 @@ export function SettingsButton() {
       <div className="fixed right-3 bottom-3 z-50 flex items-center gap-2">
         {showHint && (
           <span
-            className="bg-text-h animate-in fade-in slide-in-from-right-2 rounded-full px-3 py-1.5 text-xs font-medium text-white shadow-md"
+            className="bg-accent animate-in fade-in slide-in-from-right-2 rounded-full px-3 py-1.5 text-xs font-medium text-white shadow-md"
             aria-hidden="true"
           >
             {t('settings.hint')}

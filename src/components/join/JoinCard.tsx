@@ -17,6 +17,7 @@ export function JoinCard({
 }) {
   return (
     <Card
+      variant="polaroid"
       className={cn('relative overflow-visible pt-8', className)}
       style={{ transform: `rotate(${rotation}deg)` }}
     >

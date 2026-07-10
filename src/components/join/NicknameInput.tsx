@@ -47,7 +47,10 @@ export function NicknameInput({
 
   return (
     <div className="w-full space-y-2 text-left">
-      <Label htmlFor="nickname" className="font-handwritten ml-2 text-lg">
+      <Label
+        htmlFor="nickname"
+        className="font-handwritten text-paper-text ml-2 text-lg"
+      >
         {t('nickname.label')}
       </Label>
       <div className="group relative">
@@ -61,7 +64,7 @@ export function NicknameInput({
             required
             disabled={disabled}
             autoFocus
-            className="pr-12 text-center text-[16px] sm:text-lg"
+            className="bg-paper text-paper-text pr-12 text-center text-[16px] sm:text-lg"
             onFocus={(e) => {
               requestAnimationFrame(() => {
                 e.target.select();
@@ -100,7 +103,7 @@ export function NicknameInput({
         </div>
       </div>
       <div className="px-2 text-right">
-        <span className="text-text/40 font-rounded text-xs">
+        <span className="text-paper-text-muted font-rounded text-xs">
           {value.length}/25
         </span>
       </div>

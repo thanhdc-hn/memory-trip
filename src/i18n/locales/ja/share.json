@@ -1,0 +1,9 @@
+{
+  "title": "✨ スキャンして旅行に参加",
+  "subtitle": "友達を旅行に招待しよう",
+  "download": "ダウンロード",
+  "share": "共有",
+  "footer": "この思い出スペースを共有",
+  "shareTitle": "Memory Tripで {{name}} に参加しよう",
+  "shareText": "このQRコードをスキャンして旅行に参加: {{name}}"
+}

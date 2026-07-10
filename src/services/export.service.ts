@@ -61,7 +61,10 @@ export const exportService = {
     for (const post of targets) {
       if (signal?.aborted) break;
       try {
-        const url = storageService.getOptimizedUrl(post.image_path!, 500, 90);
+        const isSupabasePro = import.meta.env.VITE_SUPABASE_PRO === 'true';
+        const url = isSupabasePro
+          ? storageService.getOptimizedUrl(post.image_path!, 500, 90)
+          : storageService.getNonTransformedUrl(post.image_path!);
         const res = await fetch(url, { signal });
         const blob = await res.blob();
         imageMap.set(post.id, await blobToBase64(blob));
@@ -88,7 +91,11 @@ export const exportService = {
     quality: number,
     signal?: AbortSignal,
   ): Promise<string> {
-    const url = storageService.getOptimizedUrl(imagePath, width, quality);
+    const isSupabasePro = import.meta.env.VITE_SUPABASE_PRO === 'true';
+    console.log({ isSupabasePro });
+    const url = isSupabasePro
+      ? storageService.getOptimizedUrl(imagePath, width, quality)
+      : storageService.getNonTransformedUrl(imagePath);
     const res = await fetch(url, { signal });
     const blob = await res.blob();
     return blobToBase64(blob);

@@ -3,7 +3,7 @@
 ## Problem Statement
 
 Add a full-app ambient visual effect layer (snow, rain, falling leaves, sun rays,
-cherry blossom, fireflies, bubbles, butterflies, balloons, confetti, fog) that
+cherry blossom, fireflies, spring leaves, bubbles, butterflies, balloons, confetti, fog) that
 auto-selects by season, can be manually overridden or turned off, and is consolidated
 — together with the existing language and theme/mood pickers — into a single Settings
 panel opened by a floating gear button.
@@ -13,7 +13,7 @@ panel opened by a floating gear button.
 - **Auto + manual override**, persisted "selection" (`auto` | `off` | a specific effect);
   default `auto`, derived from the current month.
 - Effect is **independent** of the theme mood (separate axis, freely mixable).
-- **Full effect set** (11 effects) + `Auto` + `Off`, delivered in **two phases** (see below).
+- **Full effect set** (12 effects) + `Auto` + `Off`, delivered in **two phases** (see below).
 - **Subtle** default intensity; particle density scales to viewport area with a hard ceiling.
 - Single **gear button → Settings modal** (bottom-sheet feel on mobile), replacing the
   current two-button `FloatingControls` cluster; hosts Language, Theme/Mood, and Effect.

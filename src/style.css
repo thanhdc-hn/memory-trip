@@ -136,6 +136,77 @@
   --sand: #c7e6cd; /* mossy dots */
 }
 
+[data-theme='night'] {
+  color-scheme: dark only;
+  --surface: #0b1220;
+  --card: #111827;
+  --text: #e5e7eb;
+  --text-h: #ffffff;
+  --primary: #22c55e;
+  --secondary: #84cc16;
+  --accent: #06b6d4;
+  --border: #1f2937;
+  --sand: #1b283b;
+  --heart: #f43f5e;
+  --paper: #ffffff;
+  --paper-text: #1f2937;
+  --paper-text-muted: #4b5563;
+}
+
+[data-theme='sakura'] {
+  --primary: #fbcfe8;
+  --secondary: #fb7185;
+  --accent: #f472b6;
+  --surface: #fff5f7;
+  --text: #502d3c;
+  --text-h: #301b24;
+  --border: #fce7f3;
+  --sand: #fbcfe8;
+  --heart: #fb7185;
+}
+
+[data-theme='autumn'] {
+  --primary: #d97706;
+  --secondary: #b45309;
+  --accent: #991b1b;
+  --surface: #fffbeb;
+  --text: #451a03;
+  --text-h: #1c0a00;
+  --border: #fef3c7;
+  --sand: #fde68a;
+  --heart: #dc2626;
+}
+
+[data-theme='lavender'] {
+  --primary: #a78bfa;
+  --secondary: #818cf8;
+  --accent: #4338ca;
+  --surface: #f5f3ff;
+  --text: #2e1065;
+  --text-h: #1e1b4b;
+  --border: #ede9fe;
+  --sand: #ddd6fe;
+  --heart: #7c3aed;
+}
+
+[data-theme='arctic'] {
+  --primary: #bae6fd;
+  --secondary: #22d3ee;
+  --accent: #4ade80;
+  --surface: #f0f9ff;
+  --text: #0c4a6e;
+  --text-h: #082f49;
+  --border: #e0f2fe;
+  --sand: #bae6fd;
+  --heart: #0ea5e9;
+}
+
+:root {
+  --paper: #ffffff;
+  --paper-text: #1f2937;
+  --paper-text-muted: #4b5563;
+}
+
 body {
   margin: 0;
   background-color: var(--surface);

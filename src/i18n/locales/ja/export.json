@@ -1,0 +1,38 @@
+{
+  "back": "タイムラインに戻る",
+  "title": "思い出を選ぶ",
+  "memoryAlt": "思い出",
+  "empty": "書き出す思い出がまだありません",
+  "preparing": "準備中 {{loaded}}/{{total}}…",
+  "selected_one": "{{count}} 個の思い出を選択中",
+  "selected_other": "{{count}} 個の思い出を選択中",
+  "creating": "作成中…",
+  "createAlbum": "アルバムを作成",
+  "cover": {
+    "set": "表紙にする",
+    "unset": "表紙から外す",
+    "badge": "表紙"
+  },
+  "preview": {
+    "title": "アルバムのプレビュー",
+    "close": "プレビューを閉じる",
+    "pageAlt": "アルバムの {{page}} ページ目",
+    "download": "ダウンロード",
+    "share": "共有"
+  },
+  "toasts": {
+    "pickOne": "書き出す思い出を少なくとも1つ選んでください",
+    "failedTitle": "アルバムを作成できませんでした",
+    "failedDesc": "もう一度お試しください。",
+    "maxTitle": "最大 {{max}} 個まで選択できます",
+    "maxDesc": "他のものを選ぶには、選択を解除してください。",
+    "bigTitle": "大きなアルバムですね 🐢",
+    "bigDesc": "大きなアルバムは、モバイル環境では少し時間がかかる場合があります。"
+  },
+  "pdf": {
+    "memories_one": "{{count}} 個の思い出",
+    "memories_other": "{{count}} 個の思い出",
+    "exportedOn": "{{date}} に書き出し",
+    "shareTitle": "{{name}} の思い出"
+  }
+}

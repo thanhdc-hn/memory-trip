@@ -15,10 +15,10 @@ const buttonVariants = cva(
         sticker:
           'bg-primary text-white border-4 border-white font-handwritten text-xl shadow-sticker hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none',
         secondary: 'bg-secondary text-white hover:bg-secondary/90 shadow-md',
-        outline: 'border-2 border-border bg-white hover:bg-sand/20 text-text',
+        outline: 'border-2 border-border bg-card hover:bg-sand/20 text-text',
         ghost: 'hover:bg-sand/20 text-text',
         link: 'text-primary underline-offset-4 hover:underline',
-        accent: 'bg-accent text-text hover:bg-accent/90 shadow-md',
+        accent: 'bg-accent text-white hover:bg-accent/90 shadow-md',
       },
       size: {
         default: 'h-10 px-6 py-2',

@@ -92,7 +92,20 @@ export const PARTICLE_CONFIGS: Partial<Record<EffectId, ParticleEffectSpec>> = {
       spin: [0, 0],
       opacity: [0.2, 0.8],
     },
-    render: { kind: 'circle', colors: ['#ffff88', '#ffff00', '#ccff00'] },
+    render: { kind: 'circle', colors: ['#ccff00', '#a8ff00', '#eaff66'] },
+  },
+  'spring-leaves': {
+    config: {
+      density: 2.0,
+      maxCount: 35,
+      speed: [35, 85],
+      size: [16, 28],
+      drift: [-30, 30],
+      sway: { amplitude: [20, 60], frequency: [0.4, 1.0] },
+      spin: [-60, 60],
+      opacity: [0.7, 0.95],
+    },
+    render: { kind: 'glyph', glyphs: ['🍃', '🌿'] },
   },
   bubbles: {
     config: {

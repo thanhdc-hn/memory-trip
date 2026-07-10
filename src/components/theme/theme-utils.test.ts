@@ -44,9 +44,9 @@ describe('theme-utils', () => {
       }
     });
 
-    it('wraps from the last theme back to the first (Forest → Summer)', () => {
+    it('wraps from the last theme back to the first (Night → Summer)', () => {
       const last = THEMES[THEMES.length - 1].id;
-      expect(last).toBe('forest');
+      expect(last).toBe('night');
       expect(THEMES[0].id).toBe('summer');
       expect(getNextTheme(last)).toBe(THEMES[0].id);
     });

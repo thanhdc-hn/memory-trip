@@ -76,6 +76,13 @@ export const EFFECTS = [
     seasonal: false,
   },
   {
+    id: 'spring-leaves',
+    labelKey: 'effect.springLeaves',
+    icon: '🍃',
+    kind: 'particle',
+    seasonal: false,
+  },
+  {
     id: 'bubbles',
     labelKey: 'effect.bubbles',
     icon: '🫧',

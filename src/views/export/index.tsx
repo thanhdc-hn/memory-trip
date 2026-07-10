@@ -169,7 +169,13 @@ export default function ExportPage() {
             <div className="grid grid-cols-2 gap-3">
               {posts.map((post) => {
                 const selected = isSelected(post.id);
-                const url = getPostImageUrl(post, { width: 300, quality: 60 });
+                const isSupabasePro =
+                  import.meta.env.VITE_SUPABASE_PRO === 'true';
+                const url = getPostImageUrl(post, {
+                  width: 300,
+                  quality: 60,
+                  useTransformation: isSupabasePro,
+                });
                 return (
                   <button
                     key={post.id}

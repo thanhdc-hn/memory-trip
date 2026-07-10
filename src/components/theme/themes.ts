@@ -44,6 +44,36 @@ export const THEMES = [
     swatch: '#2f855a',
     accentEmoji: '🌿',
   },
+  {
+    id: 'night',
+    labelKey: 'theme.night',
+    swatch: '#0b1220',
+    accentEmoji: '🌙',
+  },
+  {
+    id: 'sakura',
+    labelKey: 'theme.sakura',
+    swatch: '#fbcfe8',
+    accentEmoji: '🌸',
+  },
+  {
+    id: 'autumn',
+    labelKey: 'theme.autumn',
+    swatch: '#d97706',
+    accentEmoji: '🍂',
+  },
+  {
+    id: 'lavender',
+    labelKey: 'theme.lavender',
+    swatch: '#a78bfa',
+    accentEmoji: '🪻',
+  },
+  {
+    id: 'arctic',
+    labelKey: 'theme.arctic',
+    swatch: '#bae6fd',
+    accentEmoji: '❄️',
+  },
 ] as const satisfies readonly ThemeMeta[];
 
 export type ThemeId = (typeof THEMES)[number]['id'];

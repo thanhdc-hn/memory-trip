@@ -90,7 +90,7 @@ export default function JoinPage() {
         <JoinCard>
           <div className="space-y-1">
             <h1 className="text-primary text-3xl font-bold">{team.name}</h1>
-            <p className="font-handwritten text-text/60 text-lg italic">
+            <p className="font-handwritten text-paper-text-muted text-lg italic">
               {welcomeMessage}
             </p>
           </div>

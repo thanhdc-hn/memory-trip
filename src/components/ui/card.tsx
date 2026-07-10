@@ -11,7 +11,7 @@ const Card = forwardRef<
     className={cn(
       'bg-card text-text shadow-soft border-border/50 rounded-xl border',
       variant === 'polaroid' &&
-        'shadow-polaroid rotate-1 rounded-sm bg-white p-4 pb-12 transition-transform duration-300 hover:rotate-0',
+        'shadow-polaroid bg-paper rotate-1 rounded-sm p-4 pb-12 transition-transform duration-300 hover:rotate-0',
       className,
     )}
     {...props}

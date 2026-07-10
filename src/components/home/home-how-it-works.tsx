@@ -22,19 +22,19 @@ export const HomeHowItWorks: FC = () => {
         {steps.map((step, index) => (
           <Pop key={step.title}>
             <div
-              className="shadow-polaroid relative flex flex-col items-center gap-3 rounded-sm bg-white p-6 pt-8 text-center transition-transform duration-300 hover:rotate-0"
+              className="shadow-polaroid bg-paper relative flex flex-col items-center gap-3 rounded-sm p-6 pt-8 text-center transition-transform duration-300 hover:rotate-0"
               style={{ transform: `rotate(${ROTATIONS[index]}deg)` }}
             >
-              <div className="bg-accent text-text-h absolute -top-4 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-4 border-white text-lg font-bold shadow-sm">
+              <div className="bg-accent border-card absolute -top-4 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-4 text-lg font-bold text-white shadow-sm">
                 {index + 1}
               </div>
               <Float delay={index * 0.2}>
                 <span className="text-5xl">{EMOJIS[index]}</span>
               </Float>
-              <p className="font-handwritten text-text-h text-2xl font-bold">
+              <p className="font-handwritten text-paper-text text-2xl font-bold">
                 {step.title}
               </p>
-              <p className="font-rounded text-text/60 text-base leading-relaxed">
+              <p className="font-rounded text-paper-text-muted text-base leading-relaxed">
                 {step.description}
               </p>
             </div>

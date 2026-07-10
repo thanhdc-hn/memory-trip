@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import 'dayjs/locale/ja';
 import 'dayjs/locale/vi';
 import i18n from 'i18next';
 
@@ -9,16 +10,30 @@ import storage from '@/utils/storage';
 
 import { defaultNS, resources } from './resources';
 
-export const SUPPORTED_LANGUAGES = ['vi', 'en'] as const;
+export const SUPPORTED_LANGUAGES = ['vi', 'en', 'ja'] as const;
 export type Language = (typeof SUPPORTED_LANGUAGES)[number];
-export const DEFAULT_LANGUAGE: Language = 'vi';
+export const DEFAULT_LANGUAGE: Language = 'en';
 
-const stored = storage.get<string>(STORAGE_KEY.LANGUAGE);
-const initialLanguage: Language = (
-  SUPPORTED_LANGUAGES as readonly string[]
-).includes(stored ?? '')
-  ? (stored as Language)
-  : DEFAULT_LANGUAGE;
+const getInitialLanguage = (): Language => {
+  // 1. Check storage
+  const stored = storage.get<string>(STORAGE_KEY.LANGUAGE);
+  if (stored && (SUPPORTED_LANGUAGES as readonly string[]).includes(stored)) {
+    return stored as Language;
+  }
+
+  // 2. Check browser language
+  if (typeof navigator !== 'undefined') {
+    const browserLang = navigator.language.split('-')[0];
+    if ((SUPPORTED_LANGUAGES as readonly string[]).includes(browserLang)) {
+      return browserLang as Language;
+    }
+  }
+
+  // 3. Fallback
+  return DEFAULT_LANGUAGE;
+};
+
+const initialLanguage = getInitialLanguage();
 
 function applyLanguage(lng: string): void {
   document.documentElement.setAttribute('data-lang', lng);

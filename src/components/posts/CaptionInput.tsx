@@ -35,11 +35,11 @@ export const CaptionInput: React.FC<CaptionInputProps> = ({
         onChange={handleChange}
         disabled={disabled}
         placeholder={t('captionPlaceholder')}
-        className="font-handwritten focus:ring-accent/20 placeholder:text-text/40 min-h-[120px] w-full resize-none rounded-2xl border-none bg-white/50 p-4 text-lg placeholder:font-sans focus:ring-2"
+        className="font-handwritten focus:ring-accent/20 placeholder:text-text/40 bg-card/50 min-h-[120px] w-full resize-none rounded-2xl border-none p-4 text-lg placeholder:font-sans focus:ring-2"
       />
       <div className="flex justify-end pr-2">
         <span
-          className={`text-xs font-medium ${value.length >= 300 ? 'text-red-500' : 'text-text/40'}`}
+          className={`text-xs font-medium ${value.length >= 300 ? 'text-red-500' : 'text-text/60'}`}
         >
           {value.length}/300
         </span>

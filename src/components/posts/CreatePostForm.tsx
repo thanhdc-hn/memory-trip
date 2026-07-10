@@ -3,6 +3,7 @@ import { Heart, Send } from 'lucide-react';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@/components/ui/button';
 import { useCreatePost } from '@/hooks/posts/use-create-post';
 import { type Post } from '@/services/posts.service';
 import storage from '@/utils/storage.ts';
@@ -87,10 +88,11 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
         </div>
       )}
 
-      <button
+      <Button
         type="submit"
         disabled={!isValid || isCreating}
-        className="bg-accent flex w-full items-center justify-center gap-2 rounded-2xl px-6 py-4 text-lg font-bold text-white shadow-lg transition-all active:scale-[0.98] disabled:scale-100 disabled:opacity-50 disabled:shadow-none"
+        variant="accent"
+        className="w-full rounded-2xl py-8 text-lg font-bold"
       >
         {isCreating ? (
           <div className="flex items-center gap-2">
@@ -103,7 +105,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
             <span>{t('submit')}</span>
           </>
         )}
-      </button>
+      </Button>
     </form>
   );
 };

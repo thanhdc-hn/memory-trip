@@ -57,8 +57,8 @@ export function TeamCodeInput({
         onKeyDown={handleKeyDown}
         disabled={disabled}
         className={cn(
-          'focus-visible:ring-secondary h-14 rounded-2xl border-4 border-dashed text-center text-xl font-bold transition-all',
-          'placeholder:text-text/20 placeholder:font-normal',
+          'focus-visible:ring-secondary bg-paper text-paper-text h-14 rounded-2xl border-4 border-dashed text-center text-xl font-bold transition-all',
+          'placeholder:text-paper-text-muted/30 placeholder:font-normal',
         )}
         autoFocus
       />

@@ -20,7 +20,8 @@ interface PostCardProps {
 
 export function PostCard({ post, isFirst = false }: PostCardProps) {
   const formattedDate = dayjs(post.created_at).format('HH:mm');
-  const imageUrl = getPostImageUrl(post, { useTransformation: false });
+  const isSupabasePro = import.meta.env.VITE_SUPABASE_PRO === 'true';
+  const imageUrl = getPostImageUrl(post, { useTransformation: isSupabasePro });
   const { hasHearted, heartCount, toggleHeart, showTooltip } = usePostReactions(
     post.id,
     post.team_id,
@@ -86,12 +87,12 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
             src={imageUrl}
             caption={post.caption || undefined}
             rotation={rotation}
-            className="w-full cursor-pointer touch-manipulation transition-transform select-none active:scale-[0.98]"
+            className="bg-paper w-full cursor-pointer touch-manipulation transition-transform select-none active:scale-[0.98]"
           >
             <div className="absolute top-2 left-2">
               <Badge
                 variant="nickname"
-                className="border-none bg-white/80 shadow-sm backdrop-blur-sm"
+                className="bg-paper-text/10 text-paper-text border-none shadow-sm backdrop-blur-sm"
               >
                 @{post.author_name}
               </Badge>
@@ -114,7 +115,7 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
       ) : (
         <div>
           <div
-            className="shadow-polaroid relative flex aspect-square cursor-pointer touch-manipulation flex-col items-center justify-center rounded-sm bg-white p-6 text-center transition-transform duration-300 hover:rotate-0 active:scale-[0.98]"
+            className="shadow-polaroid bg-paper relative flex aspect-square cursor-pointer touch-manipulation flex-col items-center justify-center rounded-sm p-6 text-center transition-transform duration-300 hover:rotate-0 active:scale-[0.98]"
             style={{ transform: `rotate(${rotation}deg)` }}
             onClick={onDoubleTap}
           >
@@ -130,12 +131,12 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
             <div className="absolute top-2 left-2">
               <Badge
                 variant="nickname"
-                className="bg-sand/20 border-none shadow-sm backdrop-blur-sm"
+                className="bg-sand/20 text-paper-text border-none shadow-sm backdrop-blur-sm"
               >
                 @{post.author_name}
               </Badge>
             </div>
-            <p className="font-handwritten text-text px-4 text-xl leading-relaxed">
+            <p className="font-handwritten text-paper-text px-4 text-xl leading-relaxed">
               {post.caption}
             </p>
             <div className="absolute right-4 bottom-12">

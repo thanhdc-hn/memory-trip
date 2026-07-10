@@ -6,6 +6,14 @@ import enMisc from './locales/en/misc.json';
 import enPosts from './locales/en/posts.json';
 import enShare from './locales/en/share.json';
 import enTimeline from './locales/en/timeline.json';
+import jaCommon from './locales/ja/common.json';
+import jaExport from './locales/ja/export.json';
+import jaHome from './locales/ja/home.json';
+import jaJoin from './locales/ja/join.json';
+import jaMisc from './locales/ja/misc.json';
+import jaPosts from './locales/ja/posts.json';
+import jaShare from './locales/ja/share.json';
+import jaTimeline from './locales/ja/timeline.json';
 import viCommon from './locales/vi/common.json';
 import viExport from './locales/vi/export.json';
 import viHome from './locales/vi/home.json';
@@ -37,5 +45,15 @@ export const resources = {
     share: viShare,
     export: viExport,
     misc: viMisc,
+  },
+  ja: {
+    common: jaCommon,
+    home: jaHome,
+    join: jaJoin,
+    timeline: jaTimeline,
+    posts: jaPosts,
+    share: jaShare,
+    export: jaExport,
+    misc: jaMisc,
   },
 } as const;

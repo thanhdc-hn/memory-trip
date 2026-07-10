@@ -17,7 +17,12 @@
     "summer": "Summer",
     "sunset": "Sunset",
     "ocean": "Ocean",
-    "forest": "Forest"
+    "forest": "Forest",
+    "night": "Night",
+    "sakura": "Sakura",
+    "autumn": "Autumn",
+    "lavender": "Lavender",
+    "arctic": "Arctic"
   },
   "settings": {
     "title": "Settings",
@@ -39,6 +44,7 @@
     "leaves": "Leaves",
     "blossom": "Cherry blossom",
     "fireflies": "Fireflies",
+    "springLeaves": "Spring leaves",
     "bubbles": "Bubbles",
     "butterflies": "Butterflies",
     "balloons": "Balloons",

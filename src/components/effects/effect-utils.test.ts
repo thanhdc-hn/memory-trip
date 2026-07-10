@@ -25,6 +25,7 @@ describe('effect-utils', () => {
       expect(isEffectId('auto')).toBe(false);
       expect(isEffectId('off')).toBe(false);
       expect(isEffectId('storm')).toBe(false);
+      expect(isEffectId('spring-leaf')).toBe(false); // typo
       expect(isEffectId('')).toBe(false);
       expect(isEffectId(null)).toBe(false);
       expect(isEffectId(undefined)).toBe(false);

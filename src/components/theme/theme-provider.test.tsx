@@ -57,4 +57,14 @@ describe('ThemeProvider', () => {
     expect(result.current.id).toBe('forest');
     expect(result.current.accentEmoji).toBe('🌿');
   });
+
+  it('supports the night theme', () => {
+    const { result } = renderHook(() => useTheme(), { wrapper });
+    act(() => result.current.setTheme('night'));
+    expect(result.current.theme).toBe('night');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('night');
+    expect(localStorage.getItem(STORAGE_KEY.THEME)).toBe(
+      JSON.stringify('night'),
+    );
+  });
 });

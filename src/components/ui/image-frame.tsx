@@ -16,7 +16,7 @@ const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
       <div
         ref={ref}
         className={cn(
-          'shadow-polaroid inline-block rounded-sm bg-white p-3 pb-10 transition-transform duration-300 hover:rotate-0',
+          'shadow-polaroid bg-paper inline-block rounded-sm p-3 pb-10 transition-transform duration-300 hover:rotate-0',
           className,
         )}
         style={{ transform: `rotate(${rotation}deg)` }}
@@ -42,7 +42,7 @@ const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
           {children}
         </div>
         {caption && (
-          <div className="font-handwritten text-text-h mt-3 px-2 text-center text-lg">
+          <div className="font-handwritten text-paper-text mt-3 px-2 text-center text-lg">
             {caption}
           </div>
         )}

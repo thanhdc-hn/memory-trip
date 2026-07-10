@@ -46,7 +46,7 @@ export function TeamCodeModal({ open, onOpenChange }: TeamCodeModalProps) {
           disabled={!code.trim()}
         />
 
-        <p className="text-text/60 font-handwritten text-center text-sm">
+        <p className="font-handwritten text-text/60 text-center text-sm">
           {t('codeModal.hint')}
         </p>
       </div>

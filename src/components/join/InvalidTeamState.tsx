@@ -15,8 +15,10 @@ export function InvalidTeamState() {
     <JoinCard rotation={-1}>
       <div className="text-6xl">🏜️</div>
       <div className="space-y-2">
-        <h2 className="text-2xl font-bold">{t('invalid.title')}</h2>
-        <p className="font-handwritten text-text/60">
+        <h2 className="text-paper-text text-2xl font-bold">
+          {t('invalid.title')}
+        </h2>
+        <p className="font-handwritten text-paper-text-muted">
           {t('invalid.description')}
         </p>
       </div>

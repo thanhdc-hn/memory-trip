@@ -18,7 +18,10 @@ export function PasswordInput({
   const { t } = useTranslation('join');
   return (
     <div className="w-full space-y-2 text-left">
-      <Label htmlFor="password" className="font-handwritten ml-2 block text-lg">
+      <Label
+        htmlFor="password"
+        className="font-handwritten text-paper-text ml-2 block text-lg"
+      >
         {t('password.label')}
       </Label>
       <Input
@@ -29,7 +32,7 @@ export function PasswordInput({
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         className={cn(
-          'text-center text-[16px] transition-transform sm:text-lg',
+          'bg-paper text-paper-text text-center text-[16px] transition-transform sm:text-lg',
           error && 'border-coral animate-shake',
         )}
       />

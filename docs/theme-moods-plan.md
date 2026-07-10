@@ -13,10 +13,10 @@ application-logic changes.
 - Per-user, per-device; persisted to localStorage; extends existing `summer`/`sunset` model.
 - Palette + named mood + matching background motif + a decorative accent emoji (icon-level, not font
   family).
-- Set: Summer, Sunset, Ocean, Forest (4). (A dark "Night" mood was considered and removed for
-  legibility — all moods are light.)
-- Switcher in `FloatingControls`, beside language, cycling through moods — **cycle order derived from
-  the registry, never hardcoded**.
+- Set: Summer, Sunset, Ocean, Forest, Night, Sakura, Autumn, Lavender, Arctic (9).
+- Switcher in `Settings` panel (originally `FloatingControls`).
+- Night theme provides a dark palette with `color-scheme: dark`.
+- Switcher order derived from the registry, never hardcoded.
 - Export stays as-is.
 - **Acceptance:** a 5th mood = one registry entry + one `[data-theme]` CSS block + two i18n label keys
   (en + vi `common.json`), with zero application-logic edits.
@@ -112,7 +112,7 @@ flowchart LR
 
 - Objective: Single source of truth for themes and all lookup/cycle/validation logic.
 - Add `src/components/theme/themes.ts`: ordered array of `{ id, labelKey, swatch, accentEmoji }` for
-  summer, sunset, ocean, forest (`accentEmoji` explicitly decorative-only).
+  summer, sunset, ocean, forest, night, sakura, autumn, lavender, arctic (`accentEmoji` explicitly decorative-only).
 - Add `src/components/theme/theme-utils.ts`: `getThemeById(id)` (fallback to first/summer on miss),
   `getNextTheme(id)` (registry-order, wraps Forest→Summer), `isThemeId(value)`.
 - Test (vitest): valid lookup; invalid lookup → fallback; `isThemeId` true/false; `getNextTheme`
@@ -122,7 +122,7 @@ flowchart LR
 ### Task 3: New palettes + per-theme background motif in CSS
 
 - Objective: Add Ocean/Forest palettes and themed backgrounds, visible on mobile and desktop.
-- In `style.css`, add `[data-theme='ocean'|'forest']` token blocks (keep summer default /
+- In `style.css`, add `[data-theme='ocean'|'forest'|'night'|'sakura'|'autumn'|'lavender'|'arctic']` token blocks (keep summer default /
   sunset). Introduce `--bg-pattern` with a per-theme motif.
 - **Render `--bg-pattern` on the `#app` container** (`background-image: var(--bg-pattern)`), not only on
   `body`. On mobile `#app` fills the viewport, so a `body`-only pattern would be hidden. If `#app` also
@@ -162,15 +162,15 @@ flowchart LR
 - In `floating-controls.tsx`, add a button beside language that computes the next theme via
   `getNextTheme(theme)` (never a hardcoded order) and shows the active mood's swatch/`accentEmoji`;
   `aria-label` announces the next mood label.
-- Add the 4 mood label keys to the `common` namespace, **en + vi** (parity test enforces both).
+- Add the 9 mood label keys to the `common` namespace, **en + vi** (parity test enforces both).
 - **Color cleanup (from audit):** introduce a `--color-heart` token in the `@theme inline` block (with
   per-`[data-theme]` overrides) and replace the heart rose classes with theme utilities —
   `HeartTooltip` `bg-rose-500` → `bg-heart` (incl. the arrow), `HeartButton`
   `fill-rose-500 stroke-rose-500` → `fill-heart stroke-heart`, `text-rose-600` → `text-heart`. Leave
   semantic-destructive `red-*` in `QuitTeamDialog`/`TimelineHeader` untouched.
 - **Update `floating-controls.test.tsx`:** keep the language assertion working with the added button,
-  and add a cycle test — clicking the theme button advances through all four in registry order and
-  wraps Forest→Summer (assert `document.documentElement` `data-theme` and the persisted storage value).
+  and add a cycle test — clicking the theme button advances through all nine in registry order and
+  wraps Arctic→Summer (assert `document.documentElement` `data-theme` and the persisted storage value).
 - Test: clicking cycles through all four in registry order and wraps; hearts retint per mood; build +
   i18n parity + the new/updated vitest suites green.
 - Demo: tapping the control rotates all four moods live, and heart UI recolors with the mood.

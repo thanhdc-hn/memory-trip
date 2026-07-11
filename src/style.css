@@ -201,6 +201,44 @@
   --heart: #0ea5e9;
 }
 
+[data-theme='matcha'] {
+  --primary: #a7c080; /* Sage Green */
+  --secondary: #83c092; /* Minty Green */
+  --accent: #dbbc7f; /* Muted Gold */
+  --surface: #f3f5d9; /* Creamy Matcha */
+  --text: #4b565c;
+  --text-h: #2d353b;
+  --border: #e6eab8;
+  --sand: #d3d8a7;
+  --heart: #e67e80;
+}
+
+[data-theme='honey'] {
+  --primary: #f59e0b; /* Amber Gold */
+  --secondary: #fbbf24; /* Honey Yellow */
+  --accent: #ea580c; /* Deep Orange */
+  --surface: #fffbeb; /* Warm Honey Glow */
+  --text: #78350f;
+  --text-h: #451a03;
+  --border: #fde68a;
+  --sand: #fcd34d;
+  --heart: #b91c1c;
+}
+
+[data-theme='cosmos'] {
+  color-scheme: dark only;
+  --primary: #c084fc; /* Bright Violet */
+  --secondary: #818cf8; /* Indigo */
+  --accent: #22d3ee; /* Cyan Sparkle */
+  --surface: #0f172a; /* Deep Space */
+  --card: #1e293b;
+  --text: #e2e8f0;
+  --text-h: #f8fafc;
+  --border: #334155;
+  --sand: #1e293b;
+  --heart: #f472b6;
+}
+
 :root {
   --paper: #ffffff;
   --paper-text: #1f2937;

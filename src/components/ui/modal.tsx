@@ -53,7 +53,11 @@ export function Modal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
-        className={cn('flex max-h-[90vh] flex-col', contentClassName)}
+        className={cn(
+          'bg-card text-card-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] fixed top-[50%] left-[50%] z-50 flex w-full max-w-lg translate-x-[-50%] translate-y-[-50%] flex-col border p-6 shadow-lg duration-200 focus:outline-none sm:rounded-3xl',
+          'flex max-h-[95vh] flex-col overflow-hidden',
+          contentClassName,
+        )}
       >
         {(title || description) && (
           <DialogHeader className="shrink-0">

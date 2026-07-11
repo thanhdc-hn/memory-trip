@@ -100,7 +100,13 @@ Hàm `clear` có hỗ trợ tùy chọn `keep` để giữ lại các key cần 
 - Các class Tailwind CSS cũng được tự động sắp xếp lại theo chuẩn.
 - Husky sẽ chạy `lint` và `format` trước mỗi lần commit.
 
-### 6. Các quy tắc phát triển tốt nhất (React Best Practices)
+### 6. Tài liệu phát triển (Developer Documentation)
+
+Để hiểu sâu hơn về kiến trúc, hệ thống Theme, hiệu ứng Ambient và logic của Radial Wheel Picker, vui lòng tham khảo:
+
+- **[Developer Documentation](./docs/README.md)**
+
+### 7. Các quy tắc phát triển tốt nhất (React Best Practices)
 
 - Sử dụng named imports cho React (ví dụ: `import { useState, useEffect } from 'react'`) thay vì `React.useState`.
 - Sử dụng `src/utils/storage.ts` cho tất cả các thao tác với `localStorage`.

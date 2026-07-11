@@ -2,11 +2,8 @@ import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getEffectById } from '@/components/effects/effect-utils';
-import { EFFECTS, type EffectSelection } from '@/components/effects/effects';
 import { usePrefersReducedMotion } from '@/components/effects/use-prefers-reduced-motion';
 import { useResolvedEffect } from '@/components/effects/use-resolved-effect';
-import { useTheme } from '@/components/theme/theme-provider';
-import { THEMES } from '@/components/theme/themes';
 import {
   Select,
   SelectContent,
@@ -17,22 +14,14 @@ import {
 import { type Language, SUPPORTED_LANGUAGES } from '@/i18n';
 import { useEffectSelection } from '@/store/effect.store';
 
+import { EffectWheelControl } from './wheel/effect-wheel-control';
+import { ThemeWheelControl } from './wheel/theme-wheel-control';
+
 const LANGUAGE_LABELS: Record<Language, string> = {
   vi: 'Tiếng Việt',
   en: 'English',
   ja: '日本語',
 };
-
-/** Effect picker options: Auto + Off pseudo-options, then the registry. */
-const EFFECT_OPTIONS: {
-  id: EffectSelection;
-  labelKey: string;
-  icon: string;
-}[] = [
-  { id: 'auto', labelKey: 'effect.auto', icon: '🪄' },
-  { id: 'off', labelKey: 'effect.off', icon: '🚫' },
-  ...EFFECTS.map((e) => ({ id: e.id, labelKey: e.labelKey, icon: e.icon })),
-];
 
 function SectionTitle({ children, id }: { children: ReactNode; id?: string }) {
   return (
@@ -52,8 +41,7 @@ function SectionTitle({ children, id }: { children: ReactNode; id?: string }) {
  */
 export function SettingsPanel() {
   const { t, i18n } = useTranslation();
-  const { theme, setTheme } = useTheme();
-  const { selection, setSelection } = useEffectSelection();
+  const { selection } = useEffectSelection();
   const resolved = useResolvedEffect();
   const reducedMotion = usePrefersReducedMotion();
 
@@ -82,49 +70,14 @@ export function SettingsPanel() {
 
       <section>
         <SectionTitle id="setting-theme">{t('settings.theme')}</SectionTitle>
-        <Select value={theme} onValueChange={(val) => setTheme(val as any)}>
-          <SelectTrigger aria-labelledby="setting-theme">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {THEMES.map((th) => (
-              <SelectItem key={th.id} value={th.id}>
-                <div className="flex items-center gap-2">
-                  <span
-                    className="h-4 w-4 shrink-0 rounded-full ring-1 ring-black/10"
-                    style={{ backgroundColor: th.swatch }}
-                    aria-hidden="true"
-                  />
-                  <span>{t(th.labelKey)}</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <ThemeWheelControl />
       </section>
 
       <section>
         <SectionTitle id="setting-effects">
           {t('settings.effects')}
         </SectionTitle>
-        <Select
-          value={selection}
-          onValueChange={(val) => setSelection(val as EffectSelection)}
-        >
-          <SelectTrigger aria-labelledby="setting-effects">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {EFFECT_OPTIONS.map((opt) => (
-              <SelectItem key={opt.id} value={opt.id}>
-                <div className="flex items-center gap-2">
-                  <span aria-hidden="true">{opt.icon}</span>
-                  <span>{t(opt.labelKey)}</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <EffectWheelControl />
 
         {selection === 'auto' && resolved && (
           <p className="text-text/60 mt-2 text-xs">

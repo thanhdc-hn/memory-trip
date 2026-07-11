@@ -30,7 +30,7 @@ function getInitialTheme(): ThemeId {
  * mobile browser chrome matches. Reading the computed `--surface` keeps this
  * registry-agnostic — a new mood needs no change here.
  */
-function applyTheme(theme: ThemeId): void {
+export function applyTheme(theme: ThemeId): void {
   const root = window.document.documentElement;
   root.setAttribute('data-theme', theme);
 
@@ -67,7 +67,10 @@ export function useTheme() {
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider');
   }
-  return context;
+  return {
+    ...context,
+    previewTheme: applyTheme,
+  };
 }
 
 /** Active theme metadata (label, swatch, decorative accent emoji). */

@@ -22,7 +22,10 @@
     "sakura": "Sakura",
     "autumn": "Autumn",
     "lavender": "Lavender",
-    "arctic": "Arctic"
+    "arctic": "Arctic",
+    "matcha": "Matcha",
+    "honey": "Honey",
+    "cosmos": "Cosmos"
   },
   "settings": {
     "title": "Settings",

@@ -74,6 +74,24 @@ export const THEMES = [
     swatch: '#bae6fd',
     accentEmoji: '❄️',
   },
+  {
+    id: 'matcha',
+    labelKey: 'theme.matcha',
+    swatch: '#a7c080',
+    accentEmoji: '🍵',
+  },
+  {
+    id: 'honey',
+    labelKey: 'theme.honey',
+    swatch: '#f59e0b',
+    accentEmoji: '🍯',
+  },
+  {
+    id: 'cosmos',
+    labelKey: 'theme.cosmos',
+    swatch: '#c084fc',
+    accentEmoji: '🌌',
+  },
 ] as const satisfies readonly ThemeMeta[];
 
 export type ThemeId = (typeof THEMES)[number]['id'];

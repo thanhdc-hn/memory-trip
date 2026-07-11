@@ -20,36 +20,42 @@ export const storageService = {
     return filePath;
   },
 
-  getPublicUrl(imagePath: string): string {
-    const { data } = supabase.storage
+  async getPublicUrl(imagePath: string): Promise<string> {
+    const { data, error } = await supabase.storage
       .from('memory-images')
-      .getPublicUrl(imagePath);
+      .createSignedUrl(imagePath, 3600); // 1 hour expiry
 
-    return data.publicUrl;
+    if (error) throw error;
+    return data.signedUrl;
   },
 
-  getOptimizedUrl(imagePath: string, width = 500, quality = 80): string {
-    const { data } = supabase.storage
+  async getOptimizedUrl(
+    imagePath: string,
+    width = 500,
+    quality = 80,
+  ): Promise<string> {
+    const { data, error } = await supabase.storage
       .from('memory-images')
-      .getPublicUrl(imagePath, {
+      .createSignedUrl(imagePath, 3600, {
         transform: {
           width,
           quality,
           resize: 'contain',
         },
       });
-    return data.publicUrl;
+    if (error) throw error;
+    return data.signedUrl;
   },
 
-  getOptimizedUrlWithFallback(
+  async getOptimizedUrlWithFallback(
     imagePath: string,
     width = 500,
     quality = 80,
-  ): string {
-    return this.getOptimizedUrl(imagePath, width, quality);
+  ): Promise<string> {
+    return await this.getOptimizedUrl(imagePath, width, quality);
   },
 
-  getNonTransformedUrl(imagePath: string): string {
-    return this.getPublicUrl(imagePath);
+  async getNonTransformedUrl(imagePath: string): Promise<string> {
+    return await this.getPublicUrl(imagePath);
   },
 };

@@ -63,8 +63,8 @@ export const exportService = {
       try {
         const isSupabasePro = import.meta.env.VITE_SUPABASE_PRO === 'true';
         const url = isSupabasePro
-          ? storageService.getOptimizedUrl(post.image_path!, 500, 90)
-          : storageService.getNonTransformedUrl(post.image_path!);
+          ? await storageService.getOptimizedUrl(post.image_path!, 500, 90)
+          : await storageService.getNonTransformedUrl(post.image_path!);
         const res = await fetch(url, { signal });
         const blob = await res.blob();
         imageMap.set(post.id, await blobToBase64(blob));
@@ -94,8 +94,8 @@ export const exportService = {
     const isSupabasePro = import.meta.env.VITE_SUPABASE_PRO === 'true';
     console.log({ isSupabasePro });
     const url = isSupabasePro
-      ? storageService.getOptimizedUrl(imagePath, width, quality)
-      : storageService.getNonTransformedUrl(imagePath);
+      ? await storageService.getOptimizedUrl(imagePath, width, quality)
+      : await storageService.getNonTransformedUrl(imagePath);
     const res = await fetch(url, { signal });
     const blob = await res.blob();
     return blobToBase64(blob);

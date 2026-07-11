@@ -102,7 +102,7 @@ create policy "public read posts"
     on posts
     for select
     to anon
-    using (true);
+    using (team_id::text = current_setting('request.headers')::json->>'x-team-id');
 
 create policy "public insert posts"
     on posts
@@ -145,7 +145,7 @@ insert into storage.buckets (id,
                              allowed_mime_types)
 values ('memory-images',
         'memory-images',
-        true,
+        false,
         5242880,
         array['image/*']);
 
@@ -157,13 +157,19 @@ create policy "public upload"
     on storage.objects
     for insert
     to anon
-    with check (bucket_id = 'memory-images');
+    with check (
+        bucket_id = 'memory-images' AND
+        (storage.foldername(name))[1] = current_setting('request.headers')::json->>'x-team-id'
+    );
 
-create policy "public read"
+create policy "team members can read images"
     on storage.objects
     for select
     to anon
-    using (bucket_id = 'memory-images');
+    using (
+        bucket_id = 'memory-images' AND
+        (storage.foldername(name))[1] = current_setting('request.headers')::json->>'x-team-id'
+    );
 
 -- =========================================================
 -- STORAGE GRANTS

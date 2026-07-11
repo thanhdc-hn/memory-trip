@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, Star } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,15 +7,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { AlbumPreview } from '@/components/timeline/AlbumPreview';
 import { Button } from '@/components/ui/button';
-import { getPostImageUrl } from '@/features/posts/utils/getPostImageUrl';
 import { useAlbumExport } from '@/hooks/use-album-export';
 import { useCurrentTeam } from '@/hooks/use-current-team';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils.ts';
 import { generateAlbumPdf } from '@/services/album-pdf';
 import { exportService } from '@/services/export.service';
 import { type Post } from '@/services/posts.service';
 import { URL_PATH } from '@/utils/constants';
+
+import { PostThumbnail } from './PostThumbnail';
 
 const PAGE_SIZE = 20;
 
@@ -167,86 +167,18 @@ export default function ExportPage() {
         ) : posts.length > 0 ? (
           <>
             <div className="grid grid-cols-2 gap-3">
-              {posts.map((post) => {
-                const selected = isSelected(post.id);
-                const isSupabasePro =
-                  import.meta.env.VITE_SUPABASE_PRO === 'true';
-                const url = getPostImageUrl(post, {
-                  width: 300,
-                  quality: 60,
-                  useTransformation: isSupabasePro,
-                });
-                return (
-                  <button
-                    key={post.id}
-                    type="button"
-                    disabled={generating}
-                    onClick={() => toggle(post.id)}
-                    className={cn(
-                      'relative aspect-square overflow-hidden rounded-xl transition-transform active:scale-[0.98]',
-                      selected && 'ring-primary ring-4',
-                      generating && 'pointer-events-none',
-                    )}
-                  >
-                    {url ? (
-                      <img
-                        src={url}
-                        alt={post.caption || t('memoryAlt')}
-                        loading="lazy"
-                        className={cn(
-                          'h-full w-full object-cover transition-opacity',
-                          selected ? 'opacity-100' : 'opacity-90',
-                        )}
-                      />
-                    ) : (
-                      <div className="bg-sand/20 flex h-full w-full items-center justify-center p-4">
-                        <p className="font-handwritten text-text line-clamp-5 text-center text-lg leading-snug">
-                          {post.caption}
-                        </p>
-                      </div>
-                    )}
-                    <span
-                      className={cn(
-                        'absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white transition-colors',
-                        selected ? 'bg-primary' : 'bg-black/30',
-                      )}
-                    >
-                      {selected && <Check className="h-4 w-4 text-white" />}
-                    </span>
-                    {selected && url && (
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        aria-label={
-                          coverId === post.id
-                            ? t('cover.unset')
-                            : t('cover.set')
-                        }
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setCover(post.id);
-                        }}
-                        className={cn(
-                          'absolute bottom-2 left-2 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white transition-colors',
-                          coverId === post.id ? 'bg-accent' : 'bg-black/40',
-                        )}
-                      >
-                        <Star
-                          className={cn(
-                            'h-4 w-4 text-white',
-                            coverId === post.id && 'fill-white',
-                          )}
-                        />
-                      </span>
-                    )}
-                    {coverId === post.id && (
-                      <span className="bg-accent absolute bottom-2 left-10 rounded-full px-2 py-0.5 text-xs font-medium text-white">
-                        {t('cover.badge')}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
+              {posts.map((post) => (
+                <PostThumbnail
+                  key={post.id}
+                  post={post}
+                  isSelected={isSelected(post.id)}
+                  isCover={coverId === post.id}
+                  generating={generating}
+                  onToggle={toggle}
+                  onSetCover={setCover}
+                  t={t}
+                />
+              ))}
             </div>
             {hasMore && (
               <div

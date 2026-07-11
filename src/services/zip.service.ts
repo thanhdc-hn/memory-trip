@@ -67,7 +67,7 @@ export async function generateImagesZip(
     if (signal?.aborted) break;
     const post = targets[i];
     try {
-      const url = storageService.getPublicUrl(post.image_path!);
+      const url = await storageService.getPublicUrl(post.image_path!);
       const res = await fetch(url, { signal });
       const blob = await res.blob();
       const prefix = String(i + 1).padStart(3, '0');

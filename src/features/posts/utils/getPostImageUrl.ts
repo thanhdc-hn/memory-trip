@@ -12,10 +12,10 @@ interface GetPostImageUrlOptions {
  * Tries to use transformed URL first, falls back to direct URL if transformation fails.
  * For fresh uploads (blob URLs), it uses the direct URL.
  */
-export function getPostImageUrl(
+export async function getPostImageUrl(
   post: Post,
   options: GetPostImageUrlOptions = {},
-): string | null {
+): Promise<string | null> {
   if (!post.image_path) return null;
   // Handle optimistic posts with blob URLs
   if (post.image_path.startsWith('blob:')) {
@@ -27,15 +27,24 @@ export function getPostImageUrl(
   try {
     if (useTransformation) {
       // Try to get transformed URL
-      return storageService.getOptimizedUrl(post.image_path, width, quality);
+      return await storageService.getOptimizedUrl(
+        post.image_path,
+        width,
+        quality,
+      );
     } else {
       // Use direct non-transformed URL
-      return storageService.getNonTransformedUrl(post.image_path);
+      return await storageService.getNonTransformedUrl(post.image_path);
     }
   } catch (error) {
     console.warn('Failed to get optimized image URL, using fallback:', error);
     // Fallback to direct URL
-    return storageService.getNonTransformedUrl(post.image_path);
+    try {
+      return await storageService.getNonTransformedUrl(post.image_path);
+    } catch (fallbackError) {
+      console.error('Failed to get fallback image URL:', fallbackError);
+      return null;
+    }
   }
 }
 
@@ -43,11 +52,18 @@ export function getPostImageUrl(
  * Backup function that always uses non-transformed URLs.
  * Use this when Supabase image transformation is disabled.
  */
-export function getPostImageUrlDirect(post: Post): string | null {
+export async function getPostImageUrlDirect(
+  post: Post,
+): Promise<string | null> {
   if (!post.image_path) return null;
   if (post.image_path.startsWith('blob:')) {
     return post.image_path;
   }
 
-  return storageService.getNonTransformedUrl(post.image_path);
+  try {
+    return await storageService.getNonTransformedUrl(post.image_path);
+  } catch (error) {
+    console.error('Failed to get direct image URL:', error);
+    return null;
+  }
 }

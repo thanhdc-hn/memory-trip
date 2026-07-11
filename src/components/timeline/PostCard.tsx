@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { FloatingHearts } from '@/components/timeline/FloatingHearts';
 import { HeartButton } from '@/components/timeline/HeartButton';
@@ -8,7 +8,7 @@ import { HeartTooltip } from '@/components/timeline/HeartTooltip';
 import { InstagramHeartOverlay } from '@/components/timeline/InstagramHeartOverlay';
 import { Badge } from '@/components/ui/badge';
 import { ImageFrame } from '@/components/ui/image-frame';
-import { getPostImageUrl } from '@/features/posts/utils/getPostImageUrl';
+import { usePostImageUrl } from '@/hooks/posts/use-post-image-url';
 import { useDoubleTap } from '@/hooks/useDoubleTap';
 import { usePostReactions } from '@/hooks/usePostReactions';
 import type { Post } from '@/services/posts.service';
@@ -21,7 +21,11 @@ interface PostCardProps {
 export function PostCard({ post, isFirst = false }: PostCardProps) {
   const formattedDate = dayjs(post.created_at).format('HH:mm');
   const isSupabasePro = import.meta.env.VITE_SUPABASE_PRO === 'true';
-  const imageUrl = getPostImageUrl(post, { useTransformation: isSupabasePro });
+  const options = useMemo(
+    () => ({ useTransformation: isSupabasePro }),
+    [isSupabasePro],
+  );
+  const { imageUrl } = usePostImageUrl(post, options);
   const { hasHearted, heartCount, toggleHeart, showTooltip } = usePostReactions(
     post.id,
     post.team_id,

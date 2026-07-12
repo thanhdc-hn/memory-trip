@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { type FC } from 'react';
+import { type FC, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { AmbientEffectLayer } from '@/components/effects/ambient-effect-layer';
@@ -11,7 +11,8 @@ import { useAdminSecret } from '@/hooks/use-admin-secret';
 const EFFECT_ROUTES = new Set(['/', '/timeline']);
 
 const MainLayout: FC = () => {
-  useAdminSecret();
+  const footerRef = useRef<HTMLElement>(null);
+  useAdminSecret(footerRef);
   const { pathname } = useLocation();
   const showEffects = EFFECT_ROUTES.has(pathname);
 
@@ -21,7 +22,10 @@ const MainLayout: FC = () => {
       <main className="grow">
         <Outlet />
       </main>
-      <footer className="border-t border-gray-100 p-4 text-center text-sm text-gray-500">
+      <footer
+        ref={footerRef}
+        className="border-t border-gray-100 p-4 text-center text-sm text-gray-500"
+      >
         © {dayjs().year()} Memory Trip
       </footer>
       <Toaster />

@@ -1,6 +1,7 @@
-import { Loader2, Shield } from 'lucide-react';
+import { ArrowLeft, Loader2, Shield } from 'lucide-react';
 
 import { type FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,7 @@ export function AdminAuthModal({
 }: {
   onLogin: (password: string) => Promise<boolean>;
 }) {
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -77,6 +79,19 @@ export function AdminAuthModal({
             Invalid credentials. Please try again.
           </p>
         )}
+
+        <div className="mt-4 flex flex-col items-center gap-2">
+          <p className="text-sm text-gray-400">Lost your way? 🧐</p>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate('/')}
+            className="text-primary hover:bg-primary/5 gap-2 rounded-xl text-xs font-semibold"
+          >
+            <ArrowLeft className="h-3 w-3" />
+            Back to safety
+          </Button>
+        </div>
       </div>
     </div>
   );

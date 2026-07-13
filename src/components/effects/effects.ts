@@ -28,7 +28,7 @@ interface EffectMeta {
 
 /**
  * Phase 1 ships the four seasonal effects. Phase 2 appends the "fun" effects
- * (blossom, fireflies, bubbles, butterflies, balloons, confetti) + fog as pure
+ * (blossom, meteor, bubbles, butterflies, balloons, fire) + fog as pure
  * data/draw additions — no logic changes (see docs/ambient-effects-plan.md).
  */
 export const EFFECTS = [
@@ -69,9 +69,9 @@ export const EFFECTS = [
     seasonal: false,
   },
   {
-    id: 'fireflies',
-    labelKey: 'effect.fireflies',
-    icon: '✨',
+    id: 'meteor',
+    labelKey: 'effect.meteor',
+    icon: '☄️',
     kind: 'particle',
     seasonal: false,
   },
@@ -104,10 +104,10 @@ export const EFFECTS = [
     seasonal: false,
   },
   {
-    id: 'confetti',
-    labelKey: 'effect.confetti',
-    icon: '🎉',
-    kind: 'particle',
+    id: 'fire',
+    labelKey: 'effect.fire',
+    icon: '🔥',
+    kind: 'css',
     seasonal: false,
   },
   {

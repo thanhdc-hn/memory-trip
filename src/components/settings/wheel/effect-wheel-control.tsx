@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { EFFECTS, type EffectSelection } from '@/components/effects/effects';
 import { usePrefersReducedMotion } from '@/components/effects/use-prefers-reduced-motion';
 import { Button } from '@/components/ui/button';
-import { useEffectSelection } from '@/store/effect.store';
+import { useEffectPreview, useEffectSelection } from '@/store/effect.store';
 
 import { WheelPickerModal } from './wheel-picker-modal';
 
@@ -17,10 +17,9 @@ const EFFECT_OPTIONS = [
 export function EffectWheelControl() {
   const { t } = useTranslation();
   const { selection, setSelection } = useEffectSelection();
+  const { setPreview, clearPreview } = useEffectPreview();
   const reducedMotion = usePrefersReducedMotion();
   const [isOpen, setIsOpen] = useState(false);
-  const [originalSelection, setOriginalSelection] =
-    useState<EffectSelection>(selection);
 
   const activeOption = EFFECT_OPTIONS.find((o) => o.id === selection);
 
@@ -31,23 +30,24 @@ export function EffectWheelControl() {
   }));
 
   const handleOpen = () => {
-    setOriginalSelection(selection);
     setIsOpen(true);
   };
 
   const handleConfirm = (val: string) => {
+    // Commit the selection (this also clears the transient preview).
     setSelection(val as EffectSelection);
     setIsOpen(false);
   };
 
   const handlePreview = (val: string) => {
-    setSelection(val as EffectSelection);
+    // Live, non-persisted preview while the user rotates the wheel.
+    setPreview(val as EffectSelection);
   };
 
   const handleOpenChange = (open: boolean) => {
     if (!open) {
-      // Revert to original selection if closed without confirming
-      setSelection(originalSelection);
+      // Discard the preview so we fall back to the persisted selection.
+      clearPreview();
     }
     setIsOpen(open);
   };

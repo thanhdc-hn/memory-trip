@@ -81,18 +81,23 @@ export const PARTICLE_CONFIGS: Partial<Record<EffectId, ParticleEffectSpec>> = {
     },
     render: { kind: 'glyph', glyphs: ['🌸'] },
   },
-  fireflies: {
+  meteor: {
     config: {
-      density: 1.5,
-      maxCount: 25,
-      speed: [-10, 10],
-      size: [2, 5],
-      drift: [-15, 15],
-      sway: { amplitude: [10, 30], frequency: [0.2, 0.6] },
+      density: 1.0,
+      maxCount: 20,
+      speed: [600, 950], // fast fall — shooting stars streak by quickly
+      size: [1, 3],
+      drift: [-560, -320], // steep diagonal, top-right → bottom-left
+      sway: { amplitude: [0, 0], frequency: [0, 0] }, // meteors travel straight
       spin: [0, 0],
-      opacity: [0.2, 0.8],
+      opacity: [0.5, 0.95],
     },
-    render: { kind: 'circle', colors: ['#ccff00', '#a8ff00', '#eaff66'] },
+    render: {
+      kind: 'line',
+      colors: ['#ffffff', '#dbeafe', '#bfdbfe'],
+      length: 50,
+      width: 2,
+    },
   },
   'spring-leaves': {
     config: {
@@ -146,39 +151,6 @@ export const PARTICLE_CONFIGS: Partial<Record<EffectId, ParticleEffectSpec>> = {
     },
     render: { kind: 'glyph', glyphs: ['🎈'] },
   },
-  confetti: {
-    config: {
-      density: 3.5,
-      maxCount: 60,
-      speed: [120, 280],
-      size: [8, 14],
-      drift: [-50, 50],
-      sway: { amplitude: [20, 50], frequency: [1, 3] },
-      spin: [180, 720],
-      opacity: [0.8, 1],
-    },
-    render: {
-      kind: 'circle',
-      colors: [
-        '#ff5252',
-        '#ff4081',
-        '#e040fb',
-        '#7c4dff',
-        '#536dfe',
-        '#448aff',
-        '#40c4ff',
-        '#18ffff',
-        '#64ffda',
-        '#69f0ae',
-        '#b2ff59',
-        '#eeff41',
-        '#ffff00',
-        '#ffd740',
-        '#ffab40',
-        '#ff6e40',
-      ],
-    },
-  },
 };
 
 /**
@@ -189,4 +161,5 @@ export const PARTICLE_CONFIGS: Partial<Record<EffectId, ParticleEffectSpec>> = {
 export const CSS_EFFECT_CLASSES: Partial<Record<EffectId, string>> = {
   sun: 'mt-effect-sun',
   fog: 'mt-effect-fog',
+  fire: 'mt-effect-fire',
 };

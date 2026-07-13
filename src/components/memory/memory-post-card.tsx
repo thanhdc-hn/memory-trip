@@ -40,7 +40,7 @@ export const MemoryPostCard = forwardRef<HTMLDivElement, MemoryPostCardProps>(
             <div className="absolute top-2 left-2">
               <Badge
                 variant="nickname"
-                className="bg-paper-text/10 text-paper-text border-none shadow-sm backdrop-blur-sm"
+                className="bg-paper-text/10 border-none text-white shadow-sm backdrop-blur-sm"
               >
                 {author}
               </Badge>
@@ -54,7 +54,7 @@ export const MemoryPostCard = forwardRef<HTMLDivElement, MemoryPostCardProps>(
             <div className="absolute top-2 left-2">
               <Badge
                 variant="nickname"
-                className="bg-paper-text/10 text-paper-text border-none shadow-sm backdrop-blur-sm"
+                className="bg-paper-text/10 border-none text-white shadow-sm backdrop-blur-sm"
               >
                 {author}
               </Badge>

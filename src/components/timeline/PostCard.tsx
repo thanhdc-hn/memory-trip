@@ -2,10 +2,10 @@ import dayjs from 'dayjs';
 
 import { useMemo, useState } from 'react';
 
-import { FloatingHearts } from '@/components/timeline/FloatingHearts';
+import { FloatingHeart } from '@/components/timeline/FloatingHeart';
 import { HeartButton } from '@/components/timeline/HeartButton';
 import { HeartTooltip } from '@/components/timeline/HeartTooltip';
-import { InstagramHeartOverlay } from '@/components/timeline/InstagramHeartOverlay';
+import { PostDetailModal } from '@/components/timeline/PostDetailModal';
 import { Badge } from '@/components/ui/badge';
 import { ImageFrame } from '@/components/ui/image-frame';
 import { usePostImageUrl } from '@/hooks/posts/use-post-image-url';
@@ -31,61 +31,72 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
     post.team_id,
   );
 
-  const [bigHeartTrigger, setBigHeartTrigger] = useState(0);
-  const [floatTrigger, setFloatTrigger] = useState(0);
-  const [isSadAnimation, setIsSadAnimation] = useState(false);
-  const [isDoubleInteraction, setIsDoubleInteraction] = useState(false);
-  const [clickCoord, setClickCoord] = useState<{ x: number; y: number } | null>(
-    null,
-  );
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [flyingHearts, setFlyingHearts] = useState<
+    { id: number; x: number; y: number; color: string }[]
+  >([]);
 
-  const triggerReactionAnimation = (
-    coords: { x: number; y: number } | null,
-    fromDoubleTap: boolean,
-  ) => {
-    const willAdd = !hasHearted;
-
-    setClickCoord(coords);
-    setIsDoubleInteraction(fromDoubleTap);
-    setIsSadAnimation(!willAdd);
-
-    if (willAdd && fromDoubleTap) {
-      setBigHeartTrigger((t) => t + 1);
-    }
-    setFloatTrigger((t) => t + 1);
-    toggleHeart();
-  };
+  const HEART_COLORS = [
+    '#FF4B4B', // Red
+    '#FF69B4', // HotPink
+    '#FF1493', // DeepPink
+    '#FF8C00', // DarkOrange
+    '#FFD700', // Gold
+    '#9370DB', // MediumPurple
+    '#00CED1', // DarkTurquoise
+    '#FF7F50', // Coral
+  ];
 
   const onDoubleTap = useDoubleTap({
-    onDoubleTap: (coords) => triggerReactionAnimation(coords, true),
+    onDoubleTap: (coords) => {
+      if (!hasHearted) {
+        toggleHeart();
+      }
+      const randomColor =
+        HEART_COLORS[Math.floor(Math.random() * HEART_COLORS.length)];
+      const newHeart = {
+        id: Date.now(),
+        x: coords.x,
+        y: coords.y,
+        color: randomColor,
+      };
+      setFlyingHearts((prev) => [...prev, newHeart]);
+    },
+    onSingleTap: () => {
+      if (imageUrl) {
+        setIsDetailOpen(true);
+      }
+    },
   });
-
-  const onHeartClick = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    triggerReactionAnimation(
-      {
-        x: e.clientX - rect.left + rect.width / 2,
-        y: e.clientY - rect.top + rect.height / 2,
-      },
-      false,
-    );
-  };
 
   // Generate a semi-random rotation based on post ID
   const rotation = (parseInt(post.id.substring(0, 8), 16) % 6) - 3;
 
   return (
     <div className="group animate-in fade-in slide-in-from-bottom-2 duration-500">
+      {imageUrl && (
+        <PostDetailModal
+          post={post}
+          imageUrl={imageUrl}
+          isOpen={isDetailOpen}
+          onOpenChange={setIsDetailOpen}
+        />
+      )}
       {imageUrl ? (
         <div className="relative touch-manipulation" onClick={onDoubleTap}>
-          <InstagramHeartOverlay trigger={bigHeartTrigger} />
-          <FloatingHearts
-            trigger={floatTrigger}
-            isSad={isSadAnimation}
-            x={clickCoord?.x}
-            y={clickCoord?.y}
-            isDoubleInteraction={isDoubleInteraction}
-          />
+          {flyingHearts.map((heart) => (
+            <FloatingHeart
+              key={heart.id}
+              x={heart.x}
+              y={heart.y}
+              color={heart.color}
+              onComplete={() => {
+                setFlyingHearts((prev) =>
+                  prev.filter((h) => h.id !== heart.id),
+                );
+              }}
+            />
+          ))}
           <HeartTooltip show={showTooltip && isFirst} />
           <ImageFrame
             src={imageUrl}
@@ -96,7 +107,7 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
             <div className="absolute top-2 left-2">
               <Badge
                 variant="nickname"
-                className="bg-paper-text/10 text-paper-text border-none shadow-sm backdrop-blur-sm"
+                className="bg-paper-text/10 border-none text-white shadow-sm backdrop-blur-sm"
               >
                 @{post.author_name}
               </Badge>
@@ -106,7 +117,10 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
               <HeartButton
                 hasHearted={hasHearted}
                 heartCount={heartCount}
-                onClick={onHeartClick}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleHeart();
+                }}
               />
             </div>
           </ImageFrame>
@@ -123,19 +137,24 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
             style={{ transform: `rotate(${rotation}deg)` }}
             onClick={onDoubleTap}
           >
-            <InstagramHeartOverlay trigger={bigHeartTrigger} />
-            <FloatingHearts
-              trigger={floatTrigger}
-              isSad={isSadAnimation}
-              x={clickCoord?.x}
-              y={clickCoord?.y}
-              isDoubleInteraction={isDoubleInteraction}
-            />
+            {flyingHearts.map((heart) => (
+              <FloatingHeart
+                key={heart.id}
+                x={heart.x}
+                y={heart.y}
+                color={heart.color}
+                onComplete={() => {
+                  setFlyingHearts((prev) =>
+                    prev.filter((h) => h.id !== heart.id),
+                  );
+                }}
+              />
+            ))}
             <HeartTooltip show={showTooltip && isFirst} />
             <div className="absolute top-2 left-2">
               <Badge
                 variant="nickname"
-                className="bg-sand/20 text-paper-text border-none shadow-sm backdrop-blur-sm"
+                className="bg-sand/20 border-none text-white shadow-sm backdrop-blur-sm"
               >
                 @{post.author_name}
               </Badge>
@@ -151,7 +170,10 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
               <HeartButton
                 hasHearted={hasHearted}
                 heartCount={heartCount}
-                onClick={onHeartClick}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleHeart();
+                }}
               />
             </div>
           </div>

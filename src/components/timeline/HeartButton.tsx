@@ -35,7 +35,7 @@ export function HeartButton({
       }}
       className={cn(
         'group flex items-center gap-1.5 rounded-full px-3 py-1.5',
-        'bg-white/80 shadow-sm backdrop-blur-sm hover:bg-white',
+        'bg-card/80 hover:bg-card border-border/40 border shadow-sm backdrop-blur-sm',
         'transition-colors duration-300 active:scale-95',
         className,
       )}

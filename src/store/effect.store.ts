@@ -12,8 +12,18 @@ import { STORAGE_KEY } from '@/utils/constants';
 interface EffectState {
   /** The persisted user selection (`auto` | `off` | an effect id). */
   selection: EffectSelection;
-  /** Update + persist the selection. */
+  /**
+   * Transient, non-persisted preview override (`null` when not previewing).
+   * Lets the wheel picker show a live preview while the user rotates, without
+   * committing the value until they confirm.
+   */
+  previewSelection: EffectSelection | null;
+  /** Update + persist the selection (and clear any active preview). */
   setSelection: (selection: EffectSelection) => void;
+  /** Set a transient preview override (not persisted). */
+  setPreview: (selection: EffectSelection) => void;
+  /** Discard the preview override and fall back to the persisted selection. */
+  clearPreview: () => void;
 }
 
 /**
@@ -29,7 +39,10 @@ export const useEffectStore = create<EffectState>()(
   persist(
     (set) => ({
       selection: DEFAULT_SELECTION,
-      setSelection: (selection) => set({ selection }),
+      previewSelection: null,
+      setSelection: (selection) => set({ selection, previewSelection: null }),
+      setPreview: (previewSelection) => set({ previewSelection }),
+      clearPreview: () => set({ previewSelection: null }),
     }),
     {
       name: STORAGE_KEY.EFFECT,
@@ -56,6 +69,16 @@ export function useEffectSelection() {
     useShallow((state) => ({
       selection: state.selection,
       setSelection: state.setSelection,
+    })),
+  );
+}
+
+/** Transient preview actions (non-persisted), used by the wheel picker. */
+export function useEffectPreview() {
+  return useEffectStore(
+    useShallow((state) => ({
+      setPreview: state.setPreview,
+      clearPreview: state.clearPreview,
     })),
   );
 }

@@ -15,7 +15,9 @@ import { type EffectId } from './effects';
  * here, so this hook stays a pure selection→effect resolver.
  */
 export function useResolvedEffect(): EffectId | null {
-  const selection = useEffectStore((state) => state.selection);
+  const selection = useEffectStore(
+    (state) => state.previewSelection ?? state.selection,
+  );
   const [now, setNow] = useState<Date>(() => new Date());
 
   useEffect(() => {

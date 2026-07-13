@@ -34,12 +34,12 @@ Ambient effects provide environmental "weather" overlays. They can be particle-b
 | `sun`           | Sun            | ☀️   | CSS      | Yes      |
 | `leaves`        | Leaves         | 🍂   | Particle | Yes      |
 | `blossom`       | Cherry blossom | 🌸   | Particle | No       |
-| `fireflies`     | Fireflies      | ✨   | Particle | No       |
+| `meteor`        | Meteor shower  | ☄️   | Particle | No       |
 | `spring-leaves` | Spring leaves  | 🍃   | Particle | No       |
 | `bubbles`       | Bubbles        | 🫧   | Particle | No       |
 | `butterflies`   | Butterflies    | 🦋   | Particle | No       |
 | `balloons`      | Balloons       | 🎈   | Particle | No       |
-| `confetti`      | Confetti       | 🎉   | Particle | No       |
+| `fire`          | Fire           | 🔥   | CSS      | No       |
 | `fog`           | Fog            | 🌫️   | CSS      | No       |
 
 ---

@@ -3,7 +3,7 @@
 ## Problem Statement
 
 Add a full-app ambient visual effect layer (snow, rain, falling leaves, sun rays,
-cherry blossom, fireflies, spring leaves, bubbles, butterflies, balloons, confetti, fog) that
+cherry blossom, fireflies, spring leaves, ink, nebula, water, confetti, aurora) that
 auto-selects by season, can be manually overridden or turned off, and is consolidated
 — together with the existing language and theme/mood pickers — into a single Settings
 panel opened by a floating gear button.
@@ -20,7 +20,7 @@ panel opened by a floating gear button.
   Modal chosen over a route (few controls, live preview, no deep-link need); panel body is a
   standalone component so it can be promoted to a `/settings` route later with no rework.
 - **Hybrid rendering**, no new dependency: one `<canvas>` particle engine for moving-particle
-  effects; non-blurring CSS layers for sun rays and fog.
+  effects; non-blurring CSS layers for sun rays.
 - Respect `prefers-reduced-motion`; pause when tab hidden; effects are `pointer-events-none`,
   `aria-hidden`, screen-only (export/PDF unaffected).
 
@@ -43,8 +43,9 @@ migrated into the new Settings tests.
 
 - **Phase 1 (Tasks 1–9):** engine + Settings + the 4 seasonal effects (Snow, Rain, Leaves,
   Sun) + `Auto` + `Off`. Fully shippable.
-- **Phase 2 (Task 10):** the 6 "fun" effects (Cherry blossom, Fireflies, Bubbles, Butterflies,
-  Balloons, Confetti) + Fog — proving the extensibility criterion in practice (data/draw-only).
+- **Phase 2 (Task 10):** the 6 "fun" effects (Cherry blossom, Fireflies, Ink, Nebula,
+  Water, Confetti) + Fog — proving the extensibility criterion in practice (data/draw-only).
+  Update: Bubbles was replaced by Ink effect, Balloons was replaced by Water effect, Fog was replaced by Aurora effect, and Butterflies was replaced by Nebula effect.
 
 ## Background (from code investigation)
 
@@ -64,8 +65,8 @@ migrated into the new Settings tests.
 - **Z-order map** (low → high): page background/motif → **ambient effect layer** → page content →
   floating UI (gear, FAB, ScrollToTop, sticky header) → modals/toasts. The ambient layer renders
   **behind content** so text stays readable and it never covers the Settings modal or toasts.
-- **Fog** is a translucent animated gradient/mask. It **must not** use `backdrop-filter`/blur on
-  the content (no sampling of underlying pixels) — atmosphere via opacity layers only.
+- **Aurora** is a flowing northern lights effect rendered on a canvas.
+- **Nebula** is a deep-space cosmic effect rendered on a canvas.
 - **Route scoping:** effects render only on user-facing experience routes (home, timeline).
   Suppressed on `/admin`, `/export`, and `/join` so confetti/snow never cover the admin dashboard
   or the export/album screen. The layer mounts where these routes share a layout, not above the
@@ -87,19 +88,21 @@ migrated into the new Settings tests.
 
 ```mermaid
 flowchart TD
-  R[effects.ts registry] --> U[effect-utils: resolve/isEffect/getSeasonalEffect]
-  U --> ST0[Zustand effect.store: selection + persist]
-  ST0 --> H1[useEffectSelection]
-  ST0 --> H2[useResolvedEffect -> EffectId|null]
-  H2 --> L[AmbientEffectLayer (behind content, route-scoped)]
-  L -->|kind=particle| C[ParticleCanvas: rAF + sprite cache]
-  C --> S[stepParticles (pure, tested)]
-  L -->|kind=css| CSS[CSS sun/fog layers (no backdrop blur)]
-  L -->|off / reduced-motion| N[nothing + Settings note]
-  R --> SP[SettingsPanel: language + theme + effect]
+  R["effects.ts registry"] --> U["effect-utils: resolve/isEffect/getSeasonalEffect"]
+  U --> ST0["Zustand effect.store: selection + persist"]
+  ST0 --> H1["useEffectSelection"]
+  ST0 --> H2["useResolvedEffect -> EffectId|null"]
+  H2 --> L["AmbientEffectLayer (behind content, route-scoped)"]
+  L -->|kind=particle| C["ParticleCanvas: rAF + sprite cache"]
+  C --> S["stepParticles (pure, tested)"]
+  L -->|kind=css| CSS["CSS sun/fire layers (no backdrop blur)"]
+  L -->|kind=aurora| A["AuroraCanvas: rAF + ribbons"]
+  L -->|kind=nebula| Neb["NebulaCanvas: rAF + clouds/stars"]
+  L -->|off / reduced-motion| N["nothing + Settings note"]
+  R --> SP["SettingsPanel: language + theme + effect"]
   THEMES --> SP
-  SP --> SM[SettingsModal] --> GB[SettingsButton gear]
-  ST0 -.persist.-> STK[localStorage STORAGE_KEY.EFFECT]
+  SP --> SM["SettingsModal"] --> GB["SettingsButton gear"]
+  ST0 -.persist.-> STK["localStorage STORAGE_KEY.EFFECT"]
 ```
 
 - `EffectSelection = 'auto' | 'off' | EffectId`. `getSeasonalEffect(date)` maps month → seasonal
@@ -152,13 +155,13 @@ flowchart TD
 - Demo: full-app snow falls behind content; readable text; pauses when hidden/reduced-motion; absent
   on admin/export.
 
-### Task 5: Remaining Phase-1 particle configs (Rain, Leaves) + Sun/Fog CSS layers
+### Task 5: Remaining Phase-1 particle configs (Rain, Leaves) + Sun CSS layer
 
 - Objective: complete the 4 seasonal effects across both render kinds.
 - Add Rain + Leaves particle configs (Leaves via emoji sprite). Add non-blurring CSS layers for Sun
-  rays and Fog in `style.css`; layer routes `kind:'css'` to a div instead of canvas.
+  rays in `style.css`; layer routes `kind:'css'` to a div instead of canvas.
 - Tests: layer renders canvas vs CSS element per effect kind; nothing under reduced-motion.
-- Demo: all four seasonal effects render distinctly; fog does not blur content.
+- Demo: all three seasonal effects render distinctly.
 
 ### Task 6: Settings panel (standalone) — language + theme + effect + i18n
 
@@ -194,11 +197,11 @@ flowchart TD
   reduced-motion, tab-hidden pause, battery sanity); confirm export/PDF and excluded routes untouched.
 - Demo: 4 effects + Auto + Off, persistent, season-aware, accessible, route-scoped.
 
-### Task 10 (Phase 2): The 6 fun effects + Fog tuning
+### Task 10 (Phase 2): The 6 fun effects + Aurora tuning
 
 - Objective: extend via data/draw only, validating the acceptance criterion.
-- Add Cherry blossom, Fireflies, Bubbles, Butterflies, Balloons, Confetti as registry entries
-  (+ sprite/draw config); keep confetti/balloons gentle to avoid "relentless" ambience (optionally
+- Add Cherry blossom, Fireflies, Ink, Nebula, Water, Confetti as registry entries
+  (+ sprite/draw config); keep confetti/water gentle to avoid "relentless" ambience (optionally
   also expose confetti as a one-shot burst on a celebratory moment — out of scope here, noted).
 - Tests: each renders; parity for new labels; no provider/layer/settings logic edits required.
 - Demo: all 11 effects selectable; adding the 12th is one registry entry + one draw fn/CSS class +

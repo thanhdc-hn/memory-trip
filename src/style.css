@@ -407,6 +407,12 @@ h1,
   );
 }
 
+/* Water Refraction: subtle wavy distortion applied to everything behind it. */
+.mt-effect-water-refraction {
+  backdrop-filter: url(#mt-water-refraction);
+  -webkit-backdrop-filter: url(#mt-water-refraction);
+}
+
 .mt-effect-sun::before {
   content: '';
   position: absolute;
@@ -433,63 +439,6 @@ h1,
 
 @media (prefers-reduced-motion: reduce) {
   .mt-effect-sun::before {
-    animation: none;
-  }
-}
-
-.mt-effect-fog {
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(255, 255, 255, 0.05) 30%,
-    rgba(255, 255, 255, 0.15) 60%,
-    rgba(255, 255, 255, 0.25) 100%
-  );
-  mask-image: linear-gradient(to top, black, transparent);
-  -webkit-mask-image: linear-gradient(to top, black, transparent);
-}
-
-.mt-effect-fog::before,
-.mt-effect-fog::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -50%;
-  width: 200%;
-  height: 60%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0.15) 0%,
-    transparent 70%
-  );
-  animation: mt-fog-sway 25s ease-in-out infinite;
-}
-
-.mt-effect-fog::after {
-  height: 40%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 255, 255, 0.2) 0%,
-    transparent 60%
-  );
-  animation-duration: 18s;
-  animation-direction: reverse;
-  opacity: 0.6;
-}
-
-@keyframes mt-fog-sway {
-  0%,
-  100% {
-    transform: translateX(0) translateY(0);
-  }
-  50% {
-    transform: translateX(8%) translateY(-2%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mt-effect-fog::before,
-  .mt-effect-fog::after {
     animation: none;
   }
 }

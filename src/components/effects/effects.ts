@@ -16,7 +16,13 @@
  * - `seasonal` : whether the effect participates in the `auto` season rotation.
  *                Non-seasonal effects are manual-only.
  */
-export type EffectKind = 'particle' | 'css';
+export type EffectKind =
+  | 'particle'
+  | 'css'
+  | 'water'
+  | 'ink'
+  | 'aurora'
+  | 'nebula';
 
 interface EffectMeta {
   readonly id: string;
@@ -28,7 +34,7 @@ interface EffectMeta {
 
 /**
  * Phase 1 ships the four seasonal effects. Phase 2 appends the "fun" effects
- * (blossom, meteor, bubbles, butterflies, balloons, fire) + fog as pure
+ * (blossom, meteor, ink, butterflies, water, fire) + fog as pure
  * data/draw additions — no logic changes (see docs/ambient-effects-plan.md).
  */
 export const EFFECTS = [
@@ -83,24 +89,24 @@ export const EFFECTS = [
     seasonal: false,
   },
   {
-    id: 'bubbles',
-    labelKey: 'effect.bubbles',
-    icon: '🫧',
-    kind: 'particle',
+    id: 'ink',
+    labelKey: 'effect.ink',
+    icon: '🖋️',
+    kind: 'ink',
     seasonal: false,
   },
   {
-    id: 'butterflies',
-    labelKey: 'effect.butterflies',
-    icon: '🦋',
-    kind: 'particle',
+    id: 'nebula',
+    labelKey: 'effect.nebula',
+    icon: '✨',
+    kind: 'nebula',
     seasonal: false,
   },
   {
-    id: 'balloons',
-    labelKey: 'effect.balloons',
-    icon: '🎈',
-    kind: 'particle',
+    id: 'water',
+    labelKey: 'effect.water',
+    icon: '🌊',
+    kind: 'water',
     seasonal: false,
   },
   {
@@ -111,10 +117,10 @@ export const EFFECTS = [
     seasonal: false,
   },
   {
-    id: 'fog',
-    labelKey: 'effect.fog',
-    icon: '🌫️',
-    kind: 'css',
+    id: 'aurora',
+    labelKey: 'effect.aurora',
+    icon: '🌌',
+    kind: 'aurora',
     seasonal: false,
   },
 ] as const satisfies readonly EffectMeta[];

@@ -4,7 +4,7 @@ import { type ParticleEffectConfig } from './engine/particle-system';
 /**
  * How a particle is painted. The renderer is generic; per-effect visuals live
  * here as data so adding an effect stays a data-only change.
- * - `circle` : filled dots (snow, bubbles).
+ * - `circle` : filled dots (snow).
  * - `line`   : thin streaks (rain).
  * - `glyph`  : a cached emoji sprite (leaves, blossom, …).
  */
@@ -112,45 +112,6 @@ export const PARTICLE_CONFIGS: Partial<Record<EffectId, ParticleEffectSpec>> = {
     },
     render: { kind: 'glyph', glyphs: ['🍃', '🌿'] },
   },
-  bubbles: {
-    config: {
-      density: 1.8,
-      maxCount: 30,
-      speed: [-50, -20],
-      size: [10, 30],
-      drift: [-10, 10],
-      sway: { amplitude: [5, 20], frequency: [0.4, 1.2] },
-      spin: [0, 0],
-      opacity: [0.1, 0.4],
-    },
-    render: { kind: 'circle', colors: ['#ffffff'] },
-  },
-  butterflies: {
-    config: {
-      density: 1.0,
-      maxCount: 15,
-      speed: [-20, 20],
-      size: [20, 35],
-      drift: [-40, 40],
-      sway: { amplitude: [30, 80], frequency: [0.5, 1.5] },
-      spin: [-20, 20],
-      opacity: [0.8, 1],
-    },
-    render: { kind: 'glyph', glyphs: ['🦋'] },
-  },
-  balloons: {
-    config: {
-      density: 0.6,
-      maxCount: 10,
-      speed: [-80, -40],
-      size: [30, 50],
-      drift: [-20, 20],
-      sway: { amplitude: [10, 40], frequency: [0.2, 0.8] },
-      spin: [-10, 10],
-      opacity: [0.8, 1],
-    },
-    render: { kind: 'glyph', glyphs: ['🎈'] },
-  },
 };
 
 /**
@@ -160,6 +121,5 @@ export const PARTICLE_CONFIGS: Partial<Record<EffectId, ParticleEffectSpec>> = {
  */
 export const CSS_EFFECT_CLASSES: Partial<Record<EffectId, string>> = {
   sun: 'mt-effect-sun',
-  fog: 'mt-effect-fog',
   fire: 'mt-effect-fire',
 };

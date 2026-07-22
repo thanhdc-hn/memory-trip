@@ -67,6 +67,46 @@ describe('AmbientEffectLayer', () => {
     expect(container.querySelector('[data-effect="sun"]')).not.toBeNull();
   });
 
+  it('renders a canvas for the water effect', () => {
+    mockMatchMedia(false);
+    useEffectStore.setState({ selection: 'water' });
+    const { container } = render(<AmbientEffectLayer />);
+    expect(container.querySelector('canvas')).not.toBeNull();
+    expect(container.querySelector('[data-effect="water"]')).not.toBeNull();
+  });
+
+  it('renders a canvas for the ink effect', () => {
+    mockMatchMedia(false);
+    useEffectStore.setState({ selection: 'ink' });
+    const { container } = render(<AmbientEffectLayer />);
+    expect(container.querySelector('canvas')).not.toBeNull();
+    expect(container.querySelector('[data-effect="ink"]')).not.toBeNull();
+  });
+
+  it('renders a canvas for the aurora effect', () => {
+    mockMatchMedia(false);
+    useEffectStore.setState({ selection: 'aurora' });
+    const { container } = render(<AmbientEffectLayer />);
+    expect(container.querySelector('canvas')).not.toBeNull();
+    expect(container.querySelector('[data-effect="aurora"]')).not.toBeNull();
+  });
+
+  it('renders a canvas for the nebula effect', () => {
+    mockMatchMedia(false);
+    useEffectStore.setState({ selection: 'nebula' });
+    const { container } = render(<AmbientEffectLayer />);
+    expect(container.querySelector('canvas')).not.toBeNull();
+    expect(container.querySelector('[data-effect="nebula"]')).not.toBeNull();
+  });
+
+  it('renders nebula even when the user prefers reduced motion', () => {
+    mockMatchMedia(true);
+    useEffectStore.setState({ selection: 'nebula' });
+    const { container } = render(<AmbientEffectLayer />);
+    expect(container.querySelector('canvas')).not.toBeNull();
+    expect(container.querySelector('[data-effect="nebula"]')).not.toBeNull();
+  });
+
   it('renders nothing when the effect is off', () => {
     mockMatchMedia(false);
     useEffectStore.setState({ selection: 'off' });

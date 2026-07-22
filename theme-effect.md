@@ -8,7 +8,7 @@ Themes define the overall color palette, typography, and mood of the application
 
 | ID         | Name     | Swatch    | Accent |
 | :--------- | :------- | :-------- | :----- |
-| `summer`   | Summer   | `#87ceeb` | ✨     |
+| `summer`   | Summer   | `#87ceeb` | 🌌     |
 | `sunset`   | Sunset   | `#ff7f50` | 🌅     |
 | `ocean`    | Ocean    | `#0e7490` | 🌊     |
 | `forest`   | Forest   | `#2f855a` | 🌿     |
@@ -19,7 +19,7 @@ Themes define the overall color palette, typography, and mood of the application
 | `arctic`   | Arctic   | `#bae6fd` | ❄️     |
 | `matcha`   | Matcha   | `#a7c080` | 🍵     |
 | `honey`    | Honey    | `#f59e0b` | 🍯     |
-| `cosmos`   | Cosmos   | `#c084fc` | 🌌     |
+| `cosmos`   | Cosmos   | `#c084fc` | ✨     |
 
 ## 2. Ambient Effects
 
@@ -36,11 +36,11 @@ Ambient effects provide environmental "weather" overlays. They can be particle-b
 | `blossom`       | Cherry blossom | 🌸   | Particle | No       |
 | `meteor`        | Meteor shower  | ☄️   | Particle | No       |
 | `spring-leaves` | Spring leaves  | 🍃   | Particle | No       |
-| `bubbles`       | Bubbles        | 🫧   | Particle | No       |
-| `butterflies`   | Butterflies    | 🦋   | Particle | No       |
-| `balloons`      | Balloons       | 🎈   | Particle | No       |
+| `ink`           | Ink diffusion  | 🖋️   | Ink      | No       |
+| `aurora`        | Aurora         | ✨   | Aurora   | No       |
+| `nebula`        | Nebula         | 🌌   | Nebula   | No       |
+| `water`         | Water          | 🌊   | Water    | No       |
 | `fire`          | Fire           | 🔥   | CSS      | No       |
-| `fog`           | Fog            | 🌫️   | CSS      | No       |
 
 ---
 

@@ -1,10 +1,15 @@
 import { cn } from '@/lib/utils';
 
+import { AuroraCanvas } from './aurora-canvas';
 import { CSS_EFFECT_CLASSES, PARTICLE_CONFIGS } from './effect-configs';
 import { getEffectById } from './effect-utils';
+import { InkCanvas } from './ink-canvas';
+import { NebulaCanvas } from './nebula-canvas';
 import { ParticleCanvas } from './particle-canvas';
 import { usePrefersReducedMotion } from './use-prefers-reduced-motion';
 import { useResolvedEffect } from './use-resolved-effect';
+import { WaterCanvas } from './water-canvas';
+import { WaterFilters } from './water-filters';
 
 /**
  * Full-app ambient effect overlay.
@@ -19,11 +24,13 @@ export function AmbientEffectLayer() {
   const effect = useResolvedEffect();
   const reducedMotion = usePrefersReducedMotion();
 
-  if (!effect || reducedMotion) return null;
+  if (!effect) return null;
 
   const definition = getEffectById(effect);
   const particle = PARTICLE_CONFIGS[effect];
   const cssClass = CSS_EFFECT_CLASSES[effect];
+
+  if (reducedMotion && definition.kind !== 'nebula') return null;
 
   return (
     <div
@@ -34,6 +41,22 @@ export function AmbientEffectLayer() {
       {definition.kind === 'particle' && particle && (
         <ParticleCanvas spec={particle} />
       )}
+      {definition.kind === 'water' && (
+        <>
+          <WaterFilters />
+          <div className="mt-effect-water-refraction absolute inset-0" />
+          <WaterCanvas />
+        </>
+      )}
+      {definition.kind === 'ink' && (
+        <>
+          <WaterFilters />
+          <div className="mt-effect-water-refraction absolute inset-0" />
+          <InkCanvas />
+        </>
+      )}
+      {definition.kind === 'aurora' && <AuroraCanvas />}
+      {definition.kind === 'nebula' && <NebulaCanvas />}
       {definition.kind === 'css' && cssClass && (
         <div className={cn('absolute inset-0', cssClass)} />
       )}

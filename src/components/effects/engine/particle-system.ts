@@ -155,7 +155,7 @@ export function stepParticleSystem(
     else if (p.x > bounds.width + RESPAWN_MARGIN) p.x -= wrapWidth;
 
     if (p.vy < 0) {
-      // Moving up (bubbles, balloons)
+      // Moving up (e.g. rising particles)
       if (p.y + p.size < 0) {
         Object.assign(
           p,

@@ -30,6 +30,13 @@ export default defineConfig(({ command }) => {
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: ['favicon.svg', 'apple-touch-icon.png'],
+        workbox: {
+          // Make sure the browser never keeps serving assets/caches from a
+          // previous deployment once a new service worker takes over.
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+          skipWaiting: true,
+        },
         manifest: {
           name: 'Memory Trip',
           short_name: 'MemoryTrip',

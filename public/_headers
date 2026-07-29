@@ -1,0 +1,21 @@
+# Never let the browser/CDN cache the service worker or the files it
+# depends on to detect a new deployment. Without this, an update can be
+# masked for a long time even though a new version has already been
+# deployed, since the browser keeps reusing a cached copy of these files.
+/sw.js
+  Cache-Control: no-cache
+
+/registerSW.js
+  Cache-Control: no-cache
+
+/manifest.webmanifest
+  Cache-Control: no-cache
+
+/index.html
+  Cache-Control: no-cache
+
+# The precached, content-hashed assets referenced by the service worker can
+# be cached aggressively and forever, since a new deployment always ships
+# them under new hashed file names.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

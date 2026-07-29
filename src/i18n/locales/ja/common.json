@@ -22,7 +22,10 @@
     "sakura": "桜",
     "autumn": "秋",
     "lavender": "ラベンダー",
-    "arctic": "極地"
+    "arctic": "極地",
+    "matcha": "抹茶",
+    "honey": "ハニー",
+    "cosmos": "宇宙"
   },
   "settings": {
     "title": "設定",
@@ -45,10 +48,10 @@
     "blossom": "桜吹雪",
     "meteor": "流星群",
     "springLeaves": "新緑",
-    "ink": "墨の拡散",
     "nebula": "星雲",
     "water": "水",
     "fire": "炎",
-    "aurora": "オーロラ"
+    "cats": "猫の雨",
+    "spooky": "不気味な雰囲気"
   }
 }

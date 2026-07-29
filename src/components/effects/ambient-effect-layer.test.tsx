@@ -45,7 +45,7 @@ describe('AmbientEffectLayer', () => {
     expect(container.querySelector('[data-effect="snow"]')).not.toBeNull();
   });
 
-  it.each(['rain', 'leaves'] as const)(
+  it.each(['rain', 'leaves', 'cats', 'spooky'] as const)(
     'renders a canvas for the %s particle effect',
     (effect) => {
       mockMatchMedia(false);
@@ -73,22 +73,6 @@ describe('AmbientEffectLayer', () => {
     const { container } = render(<AmbientEffectLayer />);
     expect(container.querySelector('canvas')).not.toBeNull();
     expect(container.querySelector('[data-effect="water"]')).not.toBeNull();
-  });
-
-  it('renders a canvas for the ink effect', () => {
-    mockMatchMedia(false);
-    useEffectStore.setState({ selection: 'ink' });
-    const { container } = render(<AmbientEffectLayer />);
-    expect(container.querySelector('canvas')).not.toBeNull();
-    expect(container.querySelector('[data-effect="ink"]')).not.toBeNull();
-  });
-
-  it('renders a canvas for the aurora effect', () => {
-    mockMatchMedia(false);
-    useEffectStore.setState({ selection: 'aurora' });
-    const { container } = render(<AmbientEffectLayer />);
-    expect(container.querySelector('canvas')).not.toBeNull();
-    expect(container.querySelector('[data-effect="aurora"]')).not.toBeNull();
   });
 
   it('renders a canvas for the nebula effect', () => {

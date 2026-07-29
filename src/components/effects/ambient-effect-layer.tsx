@@ -1,9 +1,7 @@
 import { cn } from '@/lib/utils';
 
-import { AuroraCanvas } from './aurora-canvas';
 import { CSS_EFFECT_CLASSES, PARTICLE_CONFIGS } from './effect-configs';
 import { getEffectById } from './effect-utils';
-import { InkCanvas } from './ink-canvas';
 import { NebulaCanvas } from './nebula-canvas';
 import { ParticleCanvas } from './particle-canvas';
 import { usePrefersReducedMotion } from './use-prefers-reduced-motion';
@@ -48,14 +46,6 @@ export function AmbientEffectLayer() {
           <WaterCanvas />
         </>
       )}
-      {definition.kind === 'ink' && (
-        <>
-          <WaterFilters />
-          <div className="mt-effect-water-refraction absolute inset-0" />
-          <InkCanvas />
-        </>
-      )}
-      {definition.kind === 'aurora' && <AuroraCanvas />}
       {definition.kind === 'nebula' && <NebulaCanvas />}
       {definition.kind === 'css' && cssClass && (
         <div className={cn('absolute inset-0', cssClass)} />

@@ -112,6 +112,32 @@ export const PARTICLE_CONFIGS: Partial<Record<EffectId, ParticleEffectSpec>> = {
     },
     render: { kind: 'glyph', glyphs: ['🍃', '🌿'] },
   },
+  cats: {
+    config: {
+      density: 2.5,
+      maxCount: 40,
+      speed: [50, 100],
+      size: [24, 38],
+      drift: [-20, 20],
+      sway: { amplitude: [15, 40], frequency: [0.3, 0.8] },
+      spin: [-80, 80],
+      opacity: [0.8, 1],
+    },
+    render: { kind: 'glyph', glyphs: ['🐱', '😸', '😹', '😼', '😻'] },
+  },
+  spooky: {
+    config: {
+      density: 1.5,
+      maxCount: 25,
+      speed: [20, 50],
+      size: [30, 50],
+      drift: [-40, 40],
+      sway: { amplitude: [30, 80], frequency: [0.2, 0.6] },
+      spin: [0, 0],
+      opacity: [0.1, 0.4],
+    },
+    render: { kind: 'glyph', glyphs: ['👻', '💀', '🎃', '🦇', '⚰️'] },
+  },
 };
 
 /**

@@ -22,7 +22,10 @@
     "sakura": "Hoa anh đào",
     "autumn": "Mùa thu",
     "lavender": "Oải hương",
-    "arctic": "Bắc cực"
+    "arctic": "Bắc cực",
+    "matcha": "Matcha",
+    "honey": "Mật ong",
+    "cosmos": "Vũ trụ"
   },
   "settings": {
     "title": "Cài đặt",
@@ -45,10 +48,10 @@
     "blossom": "Hoa anh đào",
     "meteor": "Mưa sao băng",
     "springLeaves": "Lá xuân",
-    "ink": "Mực loang",
     "nebula": "Tinh vân",
     "water": "Nước",
     "fire": "Lửa cháy",
-    "aurora": "Cực quang"
+    "cats": "Mưa mèo",
+    "spooky": "Không khí rùng rợn"
   }
 }

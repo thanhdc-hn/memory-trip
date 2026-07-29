@@ -16,13 +16,7 @@
  * - `seasonal` : whether the effect participates in the `auto` season rotation.
  *                Non-seasonal effects are manual-only.
  */
-export type EffectKind =
-  | 'particle'
-  | 'css'
-  | 'water'
-  | 'ink'
-  | 'aurora'
-  | 'nebula';
+export type EffectKind = 'particle' | 'css' | 'water' | 'nebula';
 
 interface EffectMeta {
   readonly id: string;
@@ -34,7 +28,7 @@ interface EffectMeta {
 
 /**
  * Phase 1 ships the four seasonal effects. Phase 2 appends the "fun" effects
- * (blossom, meteor, ink, butterflies, water, fire) + fog as pure
+ * (blossom, meteor, nebula, water, fire) as pure
  * data/draw additions — no logic changes (see docs/ambient-effects-plan.md).
  */
 export const EFFECTS = [
@@ -89,13 +83,6 @@ export const EFFECTS = [
     seasonal: false,
   },
   {
-    id: 'ink',
-    labelKey: 'effect.ink',
-    icon: '🖋️',
-    kind: 'ink',
-    seasonal: false,
-  },
-  {
     id: 'nebula',
     labelKey: 'effect.nebula',
     icon: '✨',
@@ -117,10 +104,17 @@ export const EFFECTS = [
     seasonal: false,
   },
   {
-    id: 'aurora',
-    labelKey: 'effect.aurora',
-    icon: '🌌',
-    kind: 'aurora',
+    id: 'cats',
+    labelKey: 'effect.cats',
+    icon: '🐱',
+    kind: 'particle',
+    seasonal: false,
+  },
+  {
+    id: 'spooky',
+    labelKey: 'effect.spooky',
+    icon: '👻',
+    kind: 'particle',
     seasonal: false,
   },
 ] as const satisfies readonly EffectMeta[];

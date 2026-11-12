@@ -12,6 +12,7 @@ import { usePostImageUrl } from '@/hooks/posts/use-post-image-url';
 import { useDoubleTap } from '@/hooks/useDoubleTap';
 import { usePostReactions } from '@/hooks/usePostReactions';
 import type { Post } from '@/services/posts.service';
+import { getFrameDecoration } from '@/utils/polaroid';
 
 interface PostCardProps {
   post: Post;
@@ -71,6 +72,7 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
 
   // Generate a semi-random rotation based on post ID
   const rotation = (parseInt(post.id.substring(0, 8), 16) % 6) - 3;
+  const decoration = getFrameDecoration(post.id);
 
   return (
     <div className="group animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -102,7 +104,8 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
             src={imageUrl}
             caption={post.caption || undefined}
             rotation={rotation}
-            className="bg-paper w-full cursor-pointer touch-manipulation transition-transform select-none active:scale-[0.98]"
+            decoration={decoration}
+            className="w-full cursor-pointer touch-manipulation transition-transform select-none active:scale-[0.98]"
           >
             <div className="absolute top-2 left-2">
               <Badge
@@ -133,7 +136,8 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
       ) : (
         <div>
           <div
-            className="shadow-polaroid bg-paper relative flex aspect-square cursor-pointer touch-manipulation flex-col items-center justify-center rounded-sm p-6 text-center transition-transform duration-300 hover:rotate-0 active:scale-[0.98]"
+            className="polaroid-frame flex aspect-square cursor-pointer touch-manipulation flex-col items-center justify-center p-6 text-center transition-transform duration-300 hover:rotate-0 active:scale-[0.98]"
+            data-deco={decoration}
             style={{ transform: `rotate(${rotation}deg)` }}
             onClick={onDoubleTap}
           >
@@ -154,7 +158,7 @@ export function PostCard({ post, isFirst = false }: PostCardProps) {
             <div className="absolute top-2 left-2">
               <Badge
                 variant="nickname"
-                className="bg-sand/20 border-none text-white shadow-sm backdrop-blur-sm"
+                className="bg-paper-text/10 text-paper-text border-none shadow-sm backdrop-blur-sm"
               >
                 @{post.author_name}
               </Badge>

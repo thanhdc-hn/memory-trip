@@ -22,7 +22,7 @@ export const HomeHowItWorks: FC = () => {
         {steps.map((step, index) => (
           <Pop key={step.title}>
             <div
-              className="shadow-polaroid bg-paper relative flex flex-col items-center gap-3 rounded-sm p-6 pt-8 text-center transition-transform duration-300 hover:rotate-0"
+              className="polaroid-frame flex flex-col items-center gap-3 p-6 pt-8 text-center transition-transform duration-300 hover:rotate-0"
               style={{ transform: `rotate(${ROTATIONS[index]}deg)` }}
             >
               <div className="bg-accent border-card absolute -top-4 left-1/2 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-4 text-lg font-bold text-white shadow-sm">

@@ -25,14 +25,19 @@ function getInitialTheme(): ThemeId {
 }
 
 /**
- * Apply the mood to the document: set `data-theme` (drives all Tailwind tokens)
- * and sync the PWA `theme-color` meta to the resolved surface color so the
- * mobile browser chrome matches. Reading the computed `--surface` keeps this
- * registry-agnostic — a new mood needs no change here.
+ * Apply the mood to the document: set `data-theme` (drives all Tailwind tokens),
+ * publish the mood's accent emoji as `--theme-emoji` (used by the polaroid
+ * frame sticker) and sync the PWA `theme-color` meta to the resolved surface
+ * color so the mobile browser chrome matches. Reading the computed `--surface`
+ * keeps this registry-agnostic — a new mood needs no change here.
  */
 export function applyTheme(theme: ThemeId): void {
   const root = window.document.documentElement;
   root.setAttribute('data-theme', theme);
+  root.style.setProperty(
+    '--theme-emoji',
+    JSON.stringify(getThemeById(theme).accentEmoji),
+  );
 
   const surface = getComputedStyle(root).getPropertyValue('--surface').trim();
   const meta = document.querySelector('meta[name="theme-color"]');

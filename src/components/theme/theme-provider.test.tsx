@@ -14,6 +14,7 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 beforeEach(() => {
   localStorage.clear();
   document.documentElement.removeAttribute('data-theme');
+  document.documentElement.style.removeProperty('--theme-emoji');
 });
 
 afterEach(() => {
@@ -56,6 +57,20 @@ describe('ThemeProvider', () => {
     const { result } = renderHook(() => useThemeMeta(), { wrapper });
     expect(result.current.id).toBe('forest');
     expect(result.current.accentEmoji).toBe('🌿');
+  });
+
+  it('publishes the active mood accent emoji for the polaroid sticker', () => {
+    const { result } = renderHook(() => useTheme(), { wrapper });
+    const read = () =>
+      document.documentElement.style.getPropertyValue('--theme-emoji');
+
+    expect(read()).toBe(JSON.stringify('✨'));
+
+    act(() => result.current.setTheme('sakura'));
+    expect(read()).toBe(JSON.stringify('🌸'));
+
+    act(() => result.current.previewTheme('forest'));
+    expect(read()).toBe(JSON.stringify('🌿'));
   });
 
   it('supports the night theme', () => {

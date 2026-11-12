@@ -3,14 +3,20 @@
  *
  * Ordering here defines the order moods appear in the Settings theme picker
  * and by `getNextTheme`. Adding a mood = one entry here + one matching
- * `[data-theme]` block in `style.css` + two i18n label keys (en/vi `common.json`).
- * No application-logic edits are required.
+ * `[data-theme]` block in `style.css` + one matching polaroid-frame block
+ * (`--frame-*` tokens, see the "Polaroid frames" section of `style.css`) + two
+ * i18n label keys (en/vi `common.json`). No application-logic edits are required.
+ *
+ * `accentEmoji` also becomes the sticker on the themed polaroid frames, in the
+ * timeline and in the exported PDF album (`src/services/album-frame.ts` reads
+ * the same `--frame-*` tokens, so the PDF needs no per-mood code either).
  *
  * Fields:
  * - `id`          : value written to `<html data-theme>` and persisted.
  * - `labelKey`    : i18n key (in the `common` namespace) for the display name.
  * - `swatch`      : representative color for the switcher button preview.
- * - `accentEmoji` : decorative-only accent shown in a few signature spots.
+ * - `accentEmoji` : decorative-only accent shown in a few signature spots
+ *                   (e.g. the polaroid frame sticker via `--theme-emoji`).
  */
 interface ThemeMeta {
   readonly id: string;

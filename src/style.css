@@ -20,6 +20,24 @@
   --bg-pattern: radial-gradient(var(--sand) 1px, transparent 1px);
   --heart: #f43f5e; /* heart / love accent (rose) */
 
+  /* Paper surface used by form fields / cards. `.polaroid-frame` re-points
+     these at the per-theme frame tokens below so descendants adapt. */
+  --paper: #ffffff;
+  --paper-text: #1f2937;
+  --paper-text-muted: #4b5563;
+
+  /* Polaroid frame defaults (= Summer). Every other mood overrides these in the
+     "Polaroid frames" section below. */
+  --frame-paper: #ffffff; /* frame surface */
+  --frame-ink: #1f2937; /* caption / text on the frame */
+  --frame-ink-muted: #4b5563;
+  --frame-edge: rgba(135, 206, 235, 0.4); /* hairline border */
+  --frame-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  --frame-tape: rgba(135, 206, 235, 0.55); /* washi tape */
+  --frame-texture: none; /* optional paper motif on the margin */
+  --frame-texture-size: auto;
+  --frame-radius: 4px;
+
   --sans: 'Varela Round', system-ui, sans-serif;
   --hand: 'Pangolin', cursive;
 
@@ -49,6 +67,9 @@
   --color-border: var(--border);
   --color-sand: var(--sand);
   --color-heart: var(--heart);
+  --color-paper: var(--paper);
+  --color-paper-text: var(--paper-text);
+  --color-paper-text-muted: var(--paper-text-muted);
 }
 
 /* Static design tokens (not themed). */
@@ -239,10 +260,201 @@
   --heart: #f472b6;
 }
 
-:root {
-  --paper: #ffffff;
-  --paper-text: #1f2937;
-  --paper-text-muted: #4b5563;
+/* ── Polaroid frames ─────────────────────────────────────────────────────────
+ * Per-mood photo-frame tokens (Summer = the `:root` defaults above). Each mood
+ * tints the paper, ink, hairline edge, shadow and washi tape, and may add a
+ * subtle margin texture / corner radius. Adding a mood = add a block here too
+ * (a unit test enforces that every registry theme defines the required tokens).
+ */
+
+[data-theme='sunset'] {
+  --frame-paper: #fffaf3;
+  --frame-ink: #5d4037;
+  --frame-ink-muted: #7d5f55;
+  --frame-edge: rgba(255, 127, 80, 0.28);
+  --frame-shadow: 0 5px 12px rgba(255, 127, 80, 0.28);
+  --frame-tape: rgba(255, 127, 80, 0.5);
+}
+
+[data-theme='ocean'] {
+  --frame-paper: #fbffff;
+  --frame-ink: #0f3a4d;
+  --frame-ink-muted: #3b6b7d;
+  --frame-edge: rgba(14, 116, 144, 0.25);
+  --frame-shadow: 0 5px 12px rgba(14, 116, 144, 0.22);
+  --frame-tape: rgba(20, 184, 166, 0.5);
+}
+
+[data-theme='forest'] {
+  --frame-paper: #fcfdf7;
+  --frame-ink: #1f3d2b;
+  --frame-ink-muted: #4d6b57;
+  --frame-edge: rgba(47, 133, 90, 0.3);
+  --frame-shadow: 0 5px 12px rgba(47, 133, 90, 0.22);
+  --frame-tape: rgba(132, 204, 22, 0.5);
+  --frame-radius: 3px;
+}
+
+[data-theme='night'] {
+  --frame-paper: #1c2638;
+  --frame-ink: #e5e7eb;
+  --frame-ink-muted: #9ca3af;
+  --frame-edge: rgba(34, 197, 94, 0.45);
+  --frame-shadow:
+    0 0 14px rgba(34, 197, 94, 0.28), 0 4px 10px rgba(0, 0, 0, 0.45);
+  --frame-tape: rgba(6, 182, 212, 0.5);
+  /* faint stars on the frame margin */
+  --frame-texture: radial-gradient(
+    rgba(255, 255, 255, 0.18) 1px,
+    transparent 1px
+  );
+  --frame-texture-size: 18px 18px;
+}
+
+[data-theme='sakura'] {
+  --frame-paper: #fffafb;
+  --frame-ink: #502d3c;
+  --frame-ink-muted: #85596b;
+  --frame-edge: rgba(244, 114, 182, 0.35);
+  --frame-shadow: 0 5px 12px rgba(244, 114, 182, 0.28);
+  --frame-tape: rgba(251, 113, 133, 0.45);
+  /* tiny blossom dots */
+  --frame-texture: radial-gradient(
+    rgba(244, 114, 182, 0.16) 1.2px,
+    transparent 1.2px
+  );
+  --frame-texture-size: 14px 14px;
+  --frame-radius: 10px;
+}
+
+[data-theme='autumn'] {
+  --frame-paper: #fff8e6;
+  --frame-ink: #451a03;
+  --frame-ink-muted: #7c4a1e;
+  --frame-edge: rgba(217, 119, 6, 0.35);
+  --frame-shadow: 0 5px 12px rgba(153, 27, 27, 0.22);
+  --frame-tape: rgba(217, 119, 6, 0.5);
+  /* aged-paper vignette */
+  --frame-texture: radial-gradient(
+    120% 90% at 50% 0%,
+    transparent 55%,
+    rgba(180, 83, 9, 0.12)
+  );
+  --frame-radius: 3px;
+}
+
+[data-theme='lavender'] {
+  --frame-paper: #fdfcff;
+  --frame-ink: #2e1065;
+  --frame-ink-muted: #5b3f9a;
+  --frame-edge: rgba(124, 58, 237, 0.28);
+  --frame-shadow: 0 5px 12px rgba(124, 58, 237, 0.22);
+  --frame-tape: rgba(167, 139, 250, 0.55);
+  --frame-radius: 6px;
+}
+
+[data-theme='arctic'] {
+  --frame-paper: #fcfeff;
+  --frame-ink: #0c4a6e;
+  --frame-ink-muted: #3f7499;
+  --frame-edge: rgba(14, 165, 233, 0.3);
+  --frame-shadow: 0 5px 12px rgba(14, 165, 233, 0.22);
+  --frame-tape: rgba(34, 211, 238, 0.45);
+  /* frosty sheen */
+  --frame-texture: linear-gradient(
+    135deg,
+    transparent 40%,
+    rgba(186, 230, 253, 0.35)
+  );
+}
+
+[data-theme='matcha'] {
+  --frame-paper: #fbfcf0;
+  --frame-ink: #2d353b;
+  --frame-ink-muted: #5c676d;
+  --frame-edge: rgba(131, 192, 146, 0.45);
+  --frame-shadow: 0 5px 12px rgba(131, 192, 146, 0.3);
+  --frame-tape: rgba(167, 192, 128, 0.55);
+  --frame-radius: 8px;
+}
+
+[data-theme='honey'] {
+  --frame-paper: #fffdf0;
+  --frame-ink: #451a03;
+  --frame-ink-muted: #854d0e;
+  --frame-edge: rgba(245, 158, 11, 0.4);
+  --frame-shadow: 0 5px 12px rgba(245, 158, 11, 0.32);
+  --frame-tape: rgba(251, 191, 36, 0.6);
+  --frame-radius: 6px;
+}
+
+[data-theme='cosmos'] {
+  --frame-paper: #1b2540;
+  --frame-ink: #e2e8f0;
+  --frame-ink-muted: #94a3b8;
+  --frame-edge: rgba(192, 132, 252, 0.5);
+  --frame-shadow:
+    0 0 18px rgba(192, 132, 252, 0.35), 0 4px 10px rgba(0, 0, 0, 0.5);
+  --frame-tape: rgba(34, 211, 238, 0.45);
+  /* distant stars */
+  --frame-texture: radial-gradient(
+    rgba(226, 232, 240, 0.35) 1px,
+    transparent 1px
+  );
+  --frame-texture-size: 22px 22px;
+  --frame-radius: 2px;
+}
+
+/*
+ * `.polaroid-frame` — the themed photo / card frame. Re-points `--paper*` at the
+ * frame tokens so `bg-paper` / `text-paper-text` descendants (captions, inputs,
+ * labels) follow the mood. Unlayered on purpose: it wins over the Tailwind
+ * utilities (`bg-*`, `rounded-*`, `shadow-*`) that the host element may carry.
+ *
+ * `data-deco` picks the corner decoration: `tape` (washi tape) or `sticker`
+ * (the mood's accent emoji, published as `--theme-emoji` by `applyTheme`).
+ */
+.polaroid-frame {
+  --paper: var(--frame-paper);
+  --paper-text: var(--frame-ink);
+  --paper-text-muted: var(--frame-ink-muted);
+  position: relative;
+  color: var(--frame-ink);
+  background-color: var(--frame-paper);
+  background-image: var(--frame-texture);
+  background-size: var(--frame-texture-size);
+  border: 1px solid var(--frame-edge);
+  border-radius: var(--frame-radius);
+  box-shadow: var(--frame-shadow);
+}
+
+.polaroid-frame[data-deco='tape']::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  z-index: 1;
+  width: 3.75rem;
+  height: 1.25rem;
+  background: var(--frame-tape);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  transform: translateX(-50%) rotate(-3deg);
+  pointer-events: none;
+}
+
+.polaroid-frame[data-deco='sticker']::after {
+  content: var(--theme-emoji, none);
+  position: absolute;
+  top: -10px;
+  right: -4px;
+  z-index: 1;
+  font-size: 1.5rem;
+  line-height: 1;
+  filter: drop-shadow(1px 0 0 #fff) drop-shadow(-1px 0 0 #fff)
+    drop-shadow(0 1px 0 #fff) drop-shadow(0 -1px 0 #fff)
+    drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+  transform: rotate(12deg);
+  pointer-events: none;
 }
 
 body {

@@ -2,8 +2,18 @@ import dayjs from 'dayjs';
 import { jsPDF } from 'jspdf';
 
 import i18n from '@/i18n';
+import {
+  type FrameRect,
+  type PolaroidFrame,
+  WEB_FRAME_WIDTH,
+  paintDecoration,
+  paintFrame,
+  readPolaroidFrame,
+  roundRect,
+} from '@/services/album-frame';
 import type { Post } from '@/services/posts.service';
 import type { PublicTeam } from '@/services/public-team.service';
+import { getFrameDecoration } from '@/utils/polaroid';
 import { slugify } from '@/utils/slugify';
 import { getDateFormat } from '@/utils/time';
 
@@ -19,6 +29,10 @@ const PAPER = '#FFFDF9';
 
 const CELL_W = (PAGE_W - 2 * MARGIN - GAP) / 2;
 const CELL_H = (PAGE_H - 2 * MARGIN - GAP) / 2;
+
+// Canvas px per CSS px of the themed frame tokens (shadow, tape, radius, …),
+// sized so a normal cell matches a polaroid on the timeline.
+const FRAME_SCALE = (CELL_W * 0.92) / WEB_FRAME_WIDTH;
 
 // Indie Flower has no Vietnamese glyphs; Patrick Hand does. Load both and pick
 // the family by language so captions/labels render correct diacritics.
@@ -60,23 +74,6 @@ const hand = (size: number) => `${size}px "${handFamily()}", cursive`;
 
 function rotationFor(id: string): number {
   return ((parseInt(id.slice(0, 8), 16) % 5) - 2) * (Math.PI / 180);
-}
-
-function roundRect(
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  r: number,
-) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
 }
 
 function drawCover(
@@ -166,9 +163,11 @@ function isLongCaption(
   return wrapLines(ctx, caption, pw - 2 * pad, 999).length > 2;
 }
 
-// Draws one memory polaroid centred at (cx, cy), gently rotated.
+// Draws one memory polaroid centred at (cx, cy), gently rotated, in the
+// active theme's frame (paper, ink, edge, shadow, texture, tape / sticker).
 function drawCell(
   ctx: CanvasRenderingContext2D,
+  frame: PolaroidFrame,
   post: Post,
   img: HTMLImageElement | null,
   cx: number,
@@ -176,6 +175,7 @@ function drawCell(
 ) {
   const pw = CELL_W * 0.92;
   const pad = pw * 0.06;
+  let rect: FrameRect;
 
   ctx.save();
   ctx.translate(cx, cy);
@@ -187,27 +187,21 @@ function drawCell(
     const ph = pad + photo + captionH;
     const left = -pw / 2;
     const top = -ph / 2;
+    rect = { left, top, width: pw, height: ph };
 
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.15)';
-    ctx.shadowBlur = 10;
-    ctx.shadowOffsetY = 4;
-    ctx.fillStyle = '#ffffff';
-    roundRect(ctx, left, top, pw, ph, 6);
-    ctx.fill();
-    ctx.restore();
+    paintFrame(ctx, frame, rect, FRAME_SCALE);
 
     drawCover(ctx, img, left + pad, top + pad, photo, photo);
 
     const textTop = top + pad + photo + captionH * 0.36;
-    ctx.fillStyle = '#4a4a4a';
+    ctx.fillStyle = frame.ink;
     ctx.font = hand(pw * 0.075);
     ctx.textAlign = 'center';
     if (post.caption) {
       const lines = wrapLines(ctx, post.caption, pw - 2 * pad, 2);
       lines.forEach((ln, i) => ctx.fillText(ln, 0, textTop + i * pw * 0.085));
     }
-    ctx.fillStyle = '#9a9a9a';
+    ctx.fillStyle = frame.inkMuted;
     ctx.font = hand(pw * 0.05);
     ctx.fillText(meta(post), 0, top + ph - pad * 0.8);
   } else {
@@ -215,17 +209,11 @@ function drawCell(
     const ph = CELL_H * 0.86;
     const left = -pw / 2;
     const top = -ph / 2;
+    rect = { left, top, width: pw, height: ph };
 
-    ctx.save();
-    ctx.shadowColor = 'rgba(0,0,0,0.15)';
-    ctx.shadowBlur = 10;
-    ctx.shadowOffsetY = 4;
-    ctx.fillStyle = '#fffdf5';
-    roundRect(ctx, left, top, pw, ph, 6);
-    ctx.fill();
-    ctx.restore();
+    paintFrame(ctx, frame, rect, FRAME_SCALE);
 
-    ctx.fillStyle = '#4a4a4a';
+    ctx.fillStyle = frame.ink;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const text = post.caption || '';
@@ -246,10 +234,13 @@ function drawCell(
     lines.forEach((ln, i) => ctx.fillText(ln, 0, startY + i * lh));
     ctx.textBaseline = 'alphabetic';
 
-    ctx.fillStyle = '#9a9a9a';
+    ctx.fillStyle = frame.inkMuted;
     ctx.font = hand(pw * 0.05);
     ctx.fillText(meta(post), 0, top + ph - pad * 0.8);
   }
+
+  // Tape / sticker last so it sits on top of the photo and caption.
+  paintDecoration(ctx, frame, rect, getFrameDecoration(post.id), FRAME_SCALE);
 
   ctx.restore();
 }
@@ -259,6 +250,7 @@ function drawCell(
 // the story is never truncated. Centred at (cx, cy).
 function drawWideCell(
   ctx: CanvasRenderingContext2D,
+  frame: PolaroidFrame,
   post: Post,
   img: HTMLImageElement,
   cx: number,
@@ -269,19 +261,13 @@ function drawWideCell(
   const pad = ph * 0.06;
   const left = -pw / 2;
   const top = -ph / 2;
+  const rect = { left, top, width: pw, height: ph };
 
   ctx.save();
   ctx.translate(cx, cy);
   ctx.rotate(rotationFor(post.id));
 
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.15)';
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetY = 4;
-  ctx.fillStyle = '#ffffff';
-  roundRect(ctx, left, top, pw, ph, 6);
-  ctx.fill();
-  ctx.restore();
+  paintFrame(ctx, frame, rect, FRAME_SCALE);
 
   // Photo fills the left ~48%, whole image visible (no crop).
   const photoW = pw * 0.48 - pad;
@@ -292,7 +278,7 @@ function drawWideCell(
   const tx = left + pad + photoW + pad;
   const maxW = pw - photoW - 3 * pad;
   const availH = ph - 2 * pad - ph * 0.1; // leave room for the meta line
-  ctx.fillStyle = '#4a4a4a';
+  ctx.fillStyle = frame.ink;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   let size = ph * 0.08;
@@ -308,9 +294,11 @@ function drawWideCell(
   lines.forEach((ln, i) => ctx.fillText(ln, tx, top + pad + i * lh));
   ctx.textBaseline = 'alphabetic';
 
-  ctx.fillStyle = '#9a9a9a';
+  ctx.fillStyle = frame.inkMuted;
   ctx.font = hand(ph * 0.05);
   ctx.fillText(meta(post), tx, top + ph - pad * 0.8);
+
+  paintDecoration(ctx, frame, rect, getFrameDecoration(post.id), FRAME_SCALE);
 
   ctx.restore();
 }
@@ -425,8 +413,9 @@ function renderCover(
  * base64 photos by post id; posts absent from the map render as handwritten
  * note cards. When `coverId` matches a selected image post, that photo fills
  * the cover page (with the title overlaid); otherwise the text-only cover is
- * used. Returns the PDF blob plus the per-page JPEG data URLs so the UI can
- * preview pages as
+ * used. Every memory card is drawn in the polaroid frame of the active theme
+ * (`frame` defaults to the mood currently applied to the document). Returns the
+ * PDF blob plus the per-page JPEG data URLs so the UI can preview pages as
  * images (Android/iOS WebViews cannot reliably render a PDF blob in an iframe).
  */
 export async function generateAlbumPdf(
@@ -435,6 +424,7 @@ export async function generateAlbumPdf(
   imageMap: Map<string, string>,
   coverId?: string | null,
   coverDataUrl?: string | null,
+  frame: PolaroidFrame = readPolaroidFrame(),
 ): Promise<{ blob: Blob; pages: string[] }> {
   await ensureFont();
 
@@ -505,12 +495,15 @@ export async function generateAlbumPdf(
       const row = slots[s];
       if (row.wide) {
         const img = await loadFor(row.posts[0]);
-        if (img) drawWideCell(ctx, row.posts[0], img, PAGE_W / 2, rowCY[s]);
-        else drawCell(ctx, row.posts[0], null, cellCX[0], rowCY[s]);
+        if (img) {
+          drawWideCell(ctx, frame, row.posts[0], img, PAGE_W / 2, rowCY[s]);
+        } else {
+          drawCell(ctx, frame, row.posts[0], null, cellCX[0], rowCY[s]);
+        }
       } else {
         for (let k = 0; k < row.posts.length; k++) {
           const img = await loadFor(row.posts[k]);
-          drawCell(ctx, row.posts[k], img, cellCX[k], rowCY[s]);
+          drawCell(ctx, frame, row.posts[k], img, cellCX[k], rowCY[s]);
         }
       }
     }

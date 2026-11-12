@@ -45,7 +45,7 @@ export function Tape({
   return (
     <div
       className={cn(
-        'absolute -top-4 left-1/2 z-10 h-8 w-24 -translate-x-1/2 border border-white/20 bg-white/40 shadow-sm backdrop-blur-[2px]',
+        'absolute -top-4 left-1/2 z-10 h-8 w-24 -translate-x-1/2 border border-white/20 bg-(--frame-tape) shadow-sm backdrop-blur-[2px]',
         className,
       )}
       style={{ transform: `translateX(-50%) rotate(${rotation}deg)` }}

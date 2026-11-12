@@ -1,24 +1,40 @@
 import { type HTMLAttributes, forwardRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
+import type { FrameDecoration } from '@/utils/polaroid';
 
 interface ImageFrameProps extends HTMLAttributes<HTMLDivElement> {
   src: string;
   alt?: string;
   caption?: string;
   rotation?: number;
+  /** Corner decoration: washi tape or the mood's emoji sticker. */
+  decoration?: FrameDecoration | 'none';
 }
 
 const ImageFrame = forwardRef<HTMLDivElement, ImageFrameProps>(
-  ({ className, src, alt, caption, rotation = 0, children, ...props }, ref) => {
+  (
+    {
+      className,
+      src,
+      alt,
+      caption,
+      rotation = 0,
+      decoration = 'tape',
+      children,
+      ...props
+    },
+    ref,
+  ) => {
     const [loaded, setLoaded] = useState(false);
     return (
       <div
         ref={ref}
         className={cn(
-          'shadow-polaroid bg-paper inline-block rounded-sm p-3 pb-10 transition-transform duration-300 hover:rotate-0',
+          'polaroid-frame inline-block p-3 pb-10 transition-transform duration-300 hover:rotate-0',
           className,
         )}
+        data-deco={decoration}
         style={{ transform: `rotate(${rotation}deg)` }}
         {...props}
       >

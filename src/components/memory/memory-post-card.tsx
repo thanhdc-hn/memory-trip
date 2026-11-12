@@ -35,7 +35,7 @@ export const MemoryPostCard = forwardRef<HTMLDivElement, MemoryPostCardProps>(
             src={imageUrl}
             caption={title}
             rotation={rotation}
-            className="bg-paper w-full"
+            className="w-full"
           >
             <div className="absolute top-2 left-2">
               <Badge
@@ -48,13 +48,14 @@ export const MemoryPostCard = forwardRef<HTMLDivElement, MemoryPostCardProps>(
           </ImageFrame>
         ) : (
           <div
-            className="shadow-polaroid bg-paper relative flex aspect-square flex-col items-center justify-center rounded-sm p-6 text-center transition-transform duration-300 hover:rotate-0"
+            className="polaroid-frame flex aspect-square flex-col items-center justify-center p-6 text-center transition-transform duration-300 hover:rotate-0"
+            data-deco="tape"
             style={{ transform: `rotate(${rotation}deg)` }}
           >
             <div className="absolute top-2 left-2">
               <Badge
                 variant="nickname"
-                className="bg-paper-text/10 border-none text-white shadow-sm backdrop-blur-sm"
+                className="bg-paper-text/10 text-paper-text border-none shadow-sm backdrop-blur-sm"
               >
                 {author}
               </Badge>
